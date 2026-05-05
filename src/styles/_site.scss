@@ -1,0 +1,1124 @@
+// Wrapped in `.site-marketing` so these rules do not cascade into Starlight
+// docs pages, which render outside this wrapper.
+
+.site-marketing {
+
+.eyebrow {
+	display: block;
+	font-size: $small-font-size;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: $ember;
+	margin-bottom: 0.75rem;
+}
+
+.hr-short {
+	width: 100px;
+	height: 1px;
+	margin: 1.5rem auto;
+	border: 0;
+	background-color: $stone;
+	opacity: 1;
+}
+
+.prose {
+	max-width: 64ch;
+
+	p {
+		margin-bottom: 1rem;
+	}
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// Inline pronunciation play button.
+.btn-pronounce {
+	background: none;
+	border: 1px solid $rule;
+	border-radius: 50%;
+	width: 1.5em;
+	height: 1.5em;
+	font-size: 0.625rem;
+	line-height: 1;
+	padding: 0;
+	cursor: pointer;
+	color: $ember;
+	vertical-align: middle;
+	margin-left: 0.25rem;
+
+	&:hover,
+	&:focus {
+		border-color: $ember;
+		background-color: rgba($ember, 0.08);
+	}
+}
+
+.text-ember {
+	color: $ember;
+
+	&:hover,
+	&:focus {
+		color: $ember;
+		text-decoration: underline;
+	}
+}
+
+// Rocky section dividers.
+$rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 16' preserveAspectRatio='none'%3E%3Cpath d='M0 10 L30 6 L55 12 L80 4 L120 9 L150 3 L185 11 L210 5 L250 12 L280 4 L310 9 L345 3 L380 11 L410 6 L440 12 L475 4 L510 9 L540 3 L575 11 L610 5 L640 12 L680 4 L710 9 L745 3 L780 11 L810 6 L845 12 L880 4 L910 9 L950 3 L980 11 L1010 5 L1040 12 L1080 4 L1120 9 L1150 3 L1200 8' stroke='%23b8b3a8' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+
+.section-border-top {
+	border-top: none;
+	padding-top: 0;
+	position: relative;
+
+	&::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 16px;
+		background-image: $rocky-edge;
+		background-size: 100% 16px;
+		background-repeat: no-repeat;
+		margin-bottom: 4rem;
+
+		@media (min-width: 768px) {
+			margin-bottom: 5rem;
+		}
+	}
+}
+
+.section-border-top.section-pad {
+	padding-top: 0;
+}
+
+.section-border-bottom {
+	border-bottom: none;
+	position: relative;
+
+	&::after {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 16px;
+		background-image: $rocky-edge;
+		background-size: 100% 16px;
+		background-repeat: no-repeat;
+		margin-top: 4rem;
+
+		@media (min-width: 768px) {
+			margin-top: 5rem;
+		}
+	}
+}
+
+.callout-moss {
+	background-color: $moss;
+	border-color: darken($moss, 8%);
+}
+
+// Slightly irregular edges on filled buttons.
+.btn-primary {
+	color: $paper;
+
+	&:hover,
+	&:focus {
+		color: $paper;
+	}
+
+	clip-path: polygon(
+		0% 4%,
+		10% 0%,
+		40% 1%,
+		70% 0%,
+		95% 2%,
+		100% 5%,
+		100% 40%,
+		99% 75%,
+		100% 96%,
+		92% 100%,
+		60% 98%,
+		30% 100%,
+		5% 99%,
+		0% 95%,
+		1% 55%,
+		0% 25%
+	);
+}
+
+.btn-outline-dark {
+	&:hover,
+	&:focus {
+		background-color: transparent;
+		color: $ember;
+		border-color: $ember;
+		box-shadow: none;
+	}
+}
+
+.navbar {
+	border-bottom: none;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	background-color: $stone;
+
+	.navbar-brand {
+		font-weight: 500;
+		color: $paper;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+
+		img {
+			width: 24px;
+			height: auto;
+		}
+	}
+
+	.nav-link {
+		color: rgba($paper, 0.8);
+		font-weight: 500;
+
+		&:hover,
+		&:focus {
+			color: $ember;
+		}
+	}
+
+	.navbar-toggler {
+		border-color: rgba($paper, 0.3);
+	}
+
+	.navbar-toggler-icon {
+		filter: invert(1);
+	}
+}
+
+.hero-section {
+	position: relative;
+	overflow: hidden;
+	background-color: $paper;
+	color: $stone;
+
+	h1 {
+		color: $stone;
+	}
+
+	.eyebrow {
+		color: $ember;
+	}
+
+	.lead {
+		color: $stone;
+	}
+}
+
+// Speckled sandstone texture.
+.textured-section {
+	position: relative;
+}
+
+.speckle-texture {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.06;
+	pointer-events: none;
+	z-index: 0;
+	// Three irregular chip shapes (small shard, medium flake, tiny wedge)
+	// scattered at different positions, sizes, and rotations across a
+	// 120x120 tile. Each is a small polygon, not a circle.
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3C!-- shard: narrow angular chip --%3E%3Cpolygon points='5,3 7,1 9,4 7,6' fill='%23c8552e'/%3E%3Cpolygon points='45,8 48,5 51,7 49,11 46,10' fill='%23c8552e'/%3E%3Cpolygon points='95,6 98,3 100,6 97,8' fill='%23c8552e'/%3E%3Cpolygon points='28,28 31,25 34,27 32,31 29,30' fill='%23c8552e'/%3E%3Cpolygon points='72,22 74,19 77,21 76,24 73,24' fill='%23c8552e'/%3E%3C!-- flake: wider irregular shape --%3E%3Cpolygon points='18,16 22,14 24,17 22,20 18,19' fill='%23c8552e'/%3E%3Cpolygon points='62,38 66,35 69,38 67,42 63,41' fill='%23c8552e'/%3E%3Cpolygon points='108,32 111,29 114,32 112,35 109,34' fill='%23c8552e'/%3E%3Cpolygon points='8,52 11,49 14,51 12,55 9,54' fill='%23c8552e'/%3E%3C!-- wedge: tiny triangular --%3E%3Cpolygon points='38,45 40,42 42,46' fill='%23c8552e'/%3E%3Cpolygon points='82,48 85,45 86,49' fill='%23c8552e'/%3E%3Cpolygon points='15,72 18,69 19,73' fill='%23c8552e'/%3E%3Cpolygon points='55,65 58,62 60,65 57,68' fill='%23c8552e'/%3E%3Cpolygon points='98,70 101,67 103,71 100,73' fill='%23c8552e'/%3E%3C!-- more shards scattered --%3E%3Cpolygon points='32,82 35,79 38,82 36,85 33,84' fill='%23c8552e'/%3E%3Cpolygon points='75,88 78,85 80,88 77,90' fill='%23c8552e'/%3E%3Cpolygon points='48,98 51,95 53,98 50,101' fill='%23c8552e'/%3E%3Cpolygon points='110,95 113,92 115,96 112,97' fill='%23c8552e'/%3E%3Cpolygon points='5,105 8,102 10,105 7,108' fill='%23c8552e'/%3E%3Cpolygon points='88,110 91,107 94,110 92,113 89,112' fill='%23c8552e'/%3E%3Cpolygon points='65,115 67,112 70,114 68,117' fill='%23c8552e'/%3E%3C/svg%3E");
+	background-repeat: repeat;
+	background-size: 150px 150px;
+}
+
+.hero-section .section-pad,
+.textured-section .container {
+	position: relative;
+	z-index: 1;
+}
+
+.hero-ledge {
+	position: relative;
+	width: 100%;
+	height: 70px;
+	margin-top: -20px;
+
+	@media (max-width: 767.98px) {
+		height: 40px;
+		margin-top: -10px;
+	}
+
+	&__svg {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	// Googly eyes easter egg on the left cairn.
+	@keyframes eyes-blink {
+		0%,
+		15%,
+		25%,
+		40%,
+		100% {
+			transform: scaleY(1);
+		}
+		18%,
+		20% {
+			transform: scaleY(0.05);
+		}
+		33%,
+		35% {
+			transform: scaleY(0.05);
+		}
+	}
+
+	.cairn-eyes {
+		opacity: 0;
+		transform-origin: center 11px;
+		transition: opacity 0.15s ease-out;
+
+		&--visible {
+			opacity: 1;
+			animation: eyes-blink 2.5s ease-in-out forwards;
+		}
+	}
+
+	// Cairn silhouettes sitting on the ridge.
+	&__cairn {
+		position: absolute;
+		bottom: 25px;
+
+		@media (max-width: 767.98px) {
+			bottom: 2px;
+			transform: scale(0.6);
+		}
+
+		&--1 {
+			left: 15%;
+			width: 65px;
+			height: 80px;
+		}
+
+		&--2 {
+			left: 55%;
+			width: 46px;
+			height: 58px;
+			bottom: 30px;
+
+			@media (max-width: 767.98px) {
+				bottom: 2px;
+			}
+		}
+
+		&--3 {
+			left: 82%;
+			width: 56px;
+			height: 70px;
+		}
+	}
+}
+
+// Soil layer gradient transition.
+.hero-soil {
+	height: 80px;
+	background: linear-gradient(
+		180deg,
+		darken($ember, 15%) 0%,
+		darken($ember, 10%) 15%,
+		rgba(darken($ember, 5%), 0.6) 45%,
+		rgba($ochre, 0.3) 70%,
+		rgba($paper, 0) 100%
+	);
+
+	// Dark variant: fades into $stone for the footer transition.
+	&--dark {
+		margin-top: -2px;
+		background: linear-gradient(180deg, $ember 0%, darken($ember, 8%) 30%, $stone 100%);
+	}
+}
+
+// Wrapper to position ledge above footer.
+.footer-ledge-wrapper {
+	position: relative;
+	overflow: visible;
+}
+
+// Stratified rock layers.
+.hero-strata {
+	background-image:
+		// Layer 1: primary strata, slight tilt right
+		linear-gradient(
+			177deg,
+			rgba($ember, 0.07) 0%,
+			rgba($ember, 0.07) 9%,
+			rgba($ochre, 0.1) 9%,
+			rgba($ochre, 0.1) 16%,
+			rgba($moss, 0.18) 16%,
+			rgba($moss, 0.18) 24%,
+			rgba($ember, 0.05) 24%,
+			rgba($ember, 0.05) 34%,
+			rgba($ochre, 0.08) 34%,
+			rgba($ochre, 0.08) 42%,
+			rgba($moss, 0.15) 42%,
+			rgba($moss, 0.15) 50%,
+			rgba($ember, 0.06) 50%,
+			rgba($ember, 0.06) 60%,
+			rgba($ochre, 0.1) 60%,
+			rgba($ochre, 0.1) 68%,
+			rgba($moss, 0.18) 68%,
+			rgba($moss, 0.18) 76%,
+			rgba($ember, 0.05) 76%,
+			rgba($ember, 0.05) 86%,
+			rgba($ochre, 0.08) 86%,
+			rgba($ochre, 0.08) 93%,
+			rgba($moss, 0.16) 93%,
+			rgba($moss, 0.16) 100%
+		),
+		// Layer 2: cross-cutting intrusion, tilted left
+		linear-gradient(
+				184deg,
+				transparent 0%,
+				transparent 20%,
+				rgba($ochre, 0.06) 20%,
+				rgba($ochre, 0.06) 35%,
+				transparent 35%,
+				transparent 55%,
+				rgba($moss, 0.08) 55%,
+				rgba($moss, 0.08) 70%,
+				transparent 70%,
+				transparent 85%,
+				rgba($ember, 0.05) 85%,
+				rgba($ember, 0.05) 100%
+			);
+}
+
+// Hero install command — code chip with click-to-copy.
+.install-command-row {
+	display: flex;
+	justify-content: center;
+}
+
+.install-command {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.625rem 1.25rem;
+	background-color: $paper;
+	border: 1px solid $rule;
+	border-radius: $border-radius;
+	cursor: pointer;
+	font-family:
+		ui-monospace,
+		SFMono-Regular,
+		Menlo,
+		Consolas,
+		'Liberation Mono',
+		monospace;
+	color: $stone;
+	transition: border-color 150ms ease;
+
+	&:hover,
+	&:focus-visible {
+		border-color: $ember;
+		outline: none;
+	}
+
+	code {
+		background: transparent;
+		color: inherit;
+		font-size: 0.95rem;
+		padding: 0;
+	}
+}
+
+.install-command__prompt {
+	color: $ember;
+	margin-right: 0.5rem;
+	user-select: none;
+}
+
+.install-command__action {
+	font-family: $font-family-sans-serif;
+	font-size: $small-font-size;
+	font-weight: 500;
+	color: $stone;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	padding-left: 0.875rem;
+	border-left: 1px solid $rule;
+	min-width: 4rem;
+}
+
+$rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 200' preserveAspectRatio='none'%3E%3Cpath d='M3 0 L5 12 L2 28 L5 45 L3 60 L5 78 L2 95 L4 110 L2 128 L5 145 L3 160 L5 178 L2 195 L3 200' stroke='%23c8552e' stroke-width='3' fill='none'/%3E%3C/svg%3E");
+
+.ethos-card {
+	background-color: transparent;
+	position: relative;
+	overflow: visible;
+	border: none;
+	border-radius: 0;
+	height: 100%;
+	padding-left: 1.25rem;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 6px;
+		height: 100%;
+		background-image: $rocky-edge-vertical;
+		background-size: 6px 100%;
+		background-repeat: no-repeat;
+	}
+
+	.card-body {
+		padding: 0.5rem 0 0.5rem 0.75rem;
+	}
+
+	h3 {
+		margin-bottom: 0.5rem;
+	}
+
+	p {
+		margin-bottom: 0;
+		color: $stone;
+	}
+}
+
+.community-number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 2rem;
+	height: 2rem;
+	background-color: $ember;
+	color: $paper;
+	border-radius: 50%;
+	font-weight: 600;
+	font-size: 0.95rem;
+}
+
+.community-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 0.875rem;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid $rule;
+		color: $stone;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+}
+
+.sponsor-card {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2.5rem 2rem;
+	background-color: $paper;
+	border: 1px solid $rule;
+	border-radius: $border-radius;
+	transition:
+		border-color 200ms ease,
+		box-shadow 200ms ease;
+
+	&:hover,
+	&:focus {
+		border-color: $ember;
+	}
+}
+
+.sponsor-logo {
+	max-width: 100%;
+	height: auto;
+	max-height: 64px;
+}
+
+// Stone plop animation.
+@keyframes stone-plop {
+	0% {
+		opacity: 0;
+		transform: translateY(-40px) scale(0.96);
+	}
+	55% {
+		opacity: 1;
+		transform: translateY(6px) scale(1.01);
+	}
+	75% {
+		transform: translateY(-3px) scale(1);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.cairn-stack {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.15rem;
+	max-width: 960px;
+	margin-inline: auto;
+}
+
+.cairn-stone {
+	background-color: $ember;
+	color: $paper;
+	padding: 2.5rem 4rem;
+	display: flex;
+	align-items: flex-start;
+	gap: 1.25rem;
+	position: relative;
+
+	opacity: 0;
+	transform: translateY(-40px) scale(0.96);
+
+	&--landed {
+		animation: stone-plop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	}
+
+	// Skip animation if user prefers reduced motion.
+	@media (prefers-reduced-motion: reduce) {
+		opacity: 1;
+		transform: none;
+
+		&--landed {
+			animation: none;
+		}
+	}
+
+	h3 {
+		margin-bottom: 0.35rem;
+		color: $paper;
+	}
+
+	p {
+		margin-bottom: 0;
+		color: rgba($paper, 0.85);
+	}
+
+	&__number {
+		font-size: 2.75rem;
+		font-weight: 600;
+		color: rgba($paper, 0.35);
+		line-height: 1;
+		flex-shrink: 0;
+		min-width: 3rem;
+	}
+
+	&__content {
+		flex: 1;
+	}
+
+	// Each stone: unique width, offset, and clip-path silhouette.
+	//
+	// To adjust manually:
+	//   width  = how wide the slab is (% of container)
+	//   margin-left / margin-right = horizontal offset
+	//   clip-path: polygon(...) = the irregular shape. Edit the % pairs
+	//     (x y) to reshape. Go clockwise from top-left.
+
+	&--0 {
+		width: 55%;
+		margin-right: 8%;
+		clip-path: polygon(
+			2% 5%,
+			18% 0%,
+			50% 3%,
+			85% 0%,
+			98% 4%,
+			100% 30%,
+			99% 70%,
+			97% 96%,
+			78% 100%,
+			45% 96%,
+			12% 100%,
+			0% 94%,
+			1% 40%
+		);
+	}
+
+	&--1 {
+		width: 65%;
+		margin-left: 5%;
+		clip-path: polygon(
+			1% 3%,
+			25% 0%,
+			55% 4%,
+			90% 1%,
+			99% 5%,
+			100% 35%,
+			98% 72%,
+			97% 97%,
+			75% 100%,
+			40% 96%,
+			8% 100%,
+			0% 93%,
+			2% 45%
+		);
+	}
+
+	&--2 {
+		width: 78%;
+		margin-right: 2%;
+		clip-path: polygon(
+			0% 6%,
+			12% 0%,
+			45% 3%,
+			78% 0%,
+			97% 4%,
+			100% 45%,
+			99% 85%,
+			96% 97%,
+			70% 100%,
+			35% 96%,
+			6% 100%,
+			2% 94%,
+			0% 50%
+		);
+	}
+
+	&--3 {
+		width: 90%;
+		margin-left: 3%;
+		clip-path: polygon(
+			1% 4%,
+			20% 0%,
+			55% 3%,
+			85% 0%,
+			99% 5%,
+			100% 38%,
+			98% 78%,
+			97% 97%,
+			82% 100%,
+			50% 96%,
+			18% 100%,
+			0% 95%,
+			1% 48%
+		);
+	}
+
+	&--4 {
+		width: 96%;
+		margin-right: 1%;
+		clip-path: polygon(
+			0% 5%,
+			15% 0%,
+			42% 4%,
+			70% 1%,
+			92% 4%,
+			100% 6%,
+			99% 35%,
+			100% 70%,
+			98% 95%,
+			88% 100%,
+			55% 97%,
+			25% 100%,
+			6% 98%,
+			1% 92%,
+			0% 50%
+		);
+	}
+
+	// On mobile, stones go full width but keep their unique shapes.
+	@media (max-width: 767.98px) {
+		padding: 2.5rem 2.5rem;
+
+		&--0,
+		&--1,
+		&--2,
+		&--3,
+		&--4 {
+			width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+}
+
+// Maintainer bio layout.
+.maintainer {
+	display: flex;
+	gap: 2.5rem;
+	align-items: flex-start;
+
+	@media (max-width: 767.98px) {
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	&__photo {
+		flex-shrink: 0;
+	}
+
+	&__img {
+		width: 160px;
+		height: 160px;
+		object-fit: cover;
+		clip-path: polygon(
+			2% 4%,
+			15% 0%,
+			50% 2%,
+			88% 0%,
+			98% 5%,
+			100% 40%,
+			98% 80%,
+			97% 96%,
+			80% 100%,
+			45% 97%,
+			10% 100%,
+			0% 94%,
+			1% 50%
+		);
+	}
+
+	&__placeholder {
+		width: 160px;
+		height: 160px;
+		background-color: darken($paper, 6%);
+		border: 1px solid $rule;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: lighten($stone, 30%);
+		font-size: $small-font-size;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		clip-path: polygon(
+			2% 4%,
+			15% 0%,
+			50% 2%,
+			88% 0%,
+			98% 5%,
+			100% 40%,
+			98% 80%,
+			97% 96%,
+			80% 100%,
+			45% 97%,
+			10% 100%,
+			0% 94%,
+			1% 50%
+		);
+	}
+
+	&__bio {
+		flex: 1;
+
+		h3 {
+			margin-bottom: 0.75rem;
+		}
+	}
+
+	&__links {
+		display: flex;
+		gap: 0.75rem;
+	}
+}
+
+// Contributor CTA.
+.contributor-cta {
+	h3 {
+		margin-bottom: 1rem;
+	}
+}
+
+// Footer.
+.site-footer {
+	border-top: none;
+	padding-top: 3rem;
+	position: relative;
+	padding-bottom: 3rem;
+	font-size: $small-font-size;
+	background-color: $stone;
+	color: rgba($paper, 0.7);
+
+	h3 {
+		font-size: $small-font-size;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin-bottom: 1rem;
+		color: $paper;
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		li {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	a {
+		color: rgba($paper, 0.8);
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: $ember;
+			text-decoration: underline;
+		}
+	}
+
+	.footer-brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.625rem;
+	}
+
+	.footer-brand-logo {
+		width: 36px;
+		height: auto;
+	}
+
+	.footer-brand-text {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: $paper;
+	}
+
+	.footer-links {
+		a {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		svg {
+			flex-shrink: 0;
+		}
+	}
+
+	.footer-disclaimer {
+		color: rgba($paper, 0.45);
+		margin-top: 0.75rem;
+	}
+
+	.footer-copyright {
+		border-top: 1px solid rgba($paper, 0.15);
+		margin-top: 2.5rem;
+		padding-top: 1.5rem;
+		color: rgba($paper, 0.45);
+	}
+}
+
+.spotlight {
+	display: flex;
+	align-items: center;
+	gap: 3rem;
+	margin-bottom: 4rem;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	&--reverse {
+		flex-direction: row-reverse;
+	}
+
+	&__text {
+		flex: 1;
+
+		h3 {
+			margin-bottom: 0.75rem;
+		}
+
+		p {
+			color: $stone;
+			margin-bottom: 0;
+		}
+	}
+
+	&__category {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		margin-bottom: 0.875rem;
+		background-color: rgba($lichen, 0.2);
+		color: darken($lichen, 30%);
+		font-size: $small-font-size;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		border-radius: 9999px;
+	}
+
+	&__image {
+		flex: 1;
+	}
+
+	&__placeholder {
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		background-color: darken($paper, 5%);
+		border: 1px solid $rule;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: lighten($stone, 30%);
+		font-size: $small-font-size;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		border-radius: $border-radius;
+	}
+
+	&__img {
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		border: 1px solid $rule;
+		border-radius: $border-radius;
+		display: block;
+	}
+
+	@media (max-width: 767.98px) {
+		flex-direction: column !important;
+		gap: 1.5rem;
+		margin-bottom: 3rem;
+	}
+}
+
+.feature-card {
+	h3 {
+		margin-top: 1rem;
+		margin-bottom: 0.5rem;
+		font-size: 1.0625rem;
+	}
+
+	p {
+		color: $stone;
+		margin-bottom: 0;
+	}
+
+	&__icon {
+		display: block;
+		color: $ember;
+	}
+}
+
+.audience-list {
+	list-style: disc;
+	padding-left: 1.25rem;
+
+	li {
+		margin-bottom: 0.6rem;
+	}
+
+	li:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// Alternating section backgrounds.
+.bg-stone-tint {
+	background-color: darken($paper, 3%);
+}
+
+.bg-moss-tint {
+	background-color: rgba($moss, 0.25);
+}
+
+.section-pad {
+	padding-top: 4rem;
+	padding-bottom: 4rem;
+
+	@media (min-width: 768px) {
+		padding-top: 5rem;
+		padding-bottom: 5rem;
+	}
+
+	&--lg {
+		padding-bottom: 6rem;
+
+		@media (min-width: 768px) {
+			padding-bottom: 8rem;
+		}
+	}
+}
+
+.faq-accordion {
+	.faq-item {
+		border: 1px solid $rule;
+		background-color: $paper;
+		margin-bottom: 0.5rem;
+		border-radius: $border-radius;
+	}
+
+	.faq-question {
+		list-style: none;
+		padding: 1rem 1.25rem;
+		font-weight: 500;
+		font-size: 1.0625rem;
+		color: $stone;
+		cursor: pointer;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		&::after {
+			content: '';
+			flex-shrink: 0;
+			width: 0.75rem;
+			height: 0.75rem;
+			border-right: 2px solid $stone;
+			border-bottom: 2px solid $stone;
+			transform: rotate(45deg);
+			transition: transform 200ms ease;
+		}
+
+		&:hover {
+			color: $ember;
+
+			&::after {
+				border-color: $ember;
+			}
+		}
+	}
+
+	.faq-item[open] {
+		.faq-question::after {
+			transform: rotate(-135deg);
+		}
+	}
+
+	.faq-answer {
+		padding: 0 1.25rem 1rem 1.25rem;
+		color: $stone;
+
+		p {
+			margin-bottom: 0.75rem;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+} // .site-marketing

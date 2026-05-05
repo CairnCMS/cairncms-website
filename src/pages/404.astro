@@ -1,0 +1,31 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<MarketingLayout title="Page not found — CairnCMS" description="The page you requested does not exist.">
+	<Header />
+	<main>
+		<section class="hero-section">
+			<div class="section-pad">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-8 text-center">
+							<span class="text-primary display-3">404</span>
+							<h1>Off the trail.</h1>
+							<p class="lead mt-3 mb-4">
+								The page you were looking for does not exist. The cairn was likely moved or never built.
+							</p>
+							<div class="d-flex flex-wrap gap-3 justify-content-center">
+								<a class="btn btn-primary" href="/">Back to home</a>
+								<a class="btn btn-outline-dark" href="/docs">Read the docs</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<Footer />
+</MarketingLayout>

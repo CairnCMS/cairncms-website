@@ -1,0 +1,39 @@
+{
+	auto_https off
+}
+
+(serve_static) {
+	root * /usr/share/caddy
+	encode gzip zstd
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+	header /assets/* Cache-Control "public, max-age=31536000, immutable"
+
+	try_files {path} {path}/index.html {path}.html
+	file_server
+
+	handle_errors {
+		@404 expression {http.error.status_code} == 404
+		rewrite @404 /404.html
+		file_server
+	}
+}
+
+http://cairncms.dev:8080, http://localhost:8080 {
+	import serve_static
+}
+
+http://www.cairncms.dev:8080 {
+	redir https://cairncms.dev{uri} 301
+}
+
+http://*.fly.dev:8080 {
+	redir https://cairncms.dev{uri} 301
+}
+
+http://:8080 {
+	respond 410
+}

@@ -1,0 +1,53 @@
+// CairnCMS palette + Bootstrap variable overrides.
+// This file MUST be imported after `bootstrap/scss/functions` and BEFORE
+// `bootstrap/scss/variables` so the overrides take effect.
+
+// --- CairnCMS palette ---------------------------------------------------------
+$stone: #383e47; // body text, headlines, the cairn itself
+$lichen: #6fc9a8; // primary accent
+$moss: #dee5b0; // soft callout fills
+$ochre: #ddb562; // reserved secondary accent
+$ember: #c8552e; // brand terracotta
+$paper: #faf8f3; // page background
+$rule: #e4e0d6; // hairline borders
+
+// --- Bootstrap overrides ---------------------------------------------------
+$body-bg: $paper;
+$body-color: $stone;
+$primary: $ember;
+$secondary: $lichen;
+$dark: $stone;
+
+$border-color: $rule;
+$link-color: $stone;
+$link-hover-color: $lichen;
+
+$font-family-sans-serif:
+	'IBM Plex Sans',
+	system-ui,
+	-apple-system,
+	sans-serif;
+$font-size-base: 1.0625rem; // 17px
+$line-height-base: 1.6;
+
+$h1-font-size: 2.5rem; // hero
+$h2-font-size: 1.75rem; // section headings
+$h3-font-size: 1.25rem; // card headings
+$small-font-size: 0.8125rem;
+
+$headings-font-weight: 600;
+$headings-line-height: 1.25;
+$headings-letter-spacing: -0.01em;
+
+$enable-shadows: false;
+$enable-gradients: false;
+$enable-rounded: true;
+
+$border-radius: 0.125rem;
+$border-radius-sm: 0.125rem;
+$border-radius-lg: 0.125rem;
+
+$btn-border-radius: 0.125rem;
+$btn-border-radius-sm: 0.125rem;
+$btn-border-radius-lg: 0.125rem;
+$btn-font-weight: 500;

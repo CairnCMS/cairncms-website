@@ -1,0 +1,80 @@
+---
+const commitments = [
+	{
+		number: '01',
+		title: 'Keep the core small, and extend at the edges.',
+		body: "Core features should solve common platform needs. Specialized needs belong in extensions, even when they matter to many users.",
+	},
+	{
+		number: '02',
+		title: 'Govern transparently.',
+		body: 'Document major decisions in public with rationale. Roadmap changes, deprecations, breaking changes, and project policy should be explained, not just announced.',
+	},
+	{
+		number: '03',
+		title: 'Choose usefulness over novelty.',
+		body: 'CairnCMS should prioritize features that solve recurring operational problems over features that merely look advanced.',
+	},
+	{
+		number: '04',
+		title: 'Prefer depth over sprawl.',
+		body: 'When choosing between surface area and improving what exists, CairnCMS should favor consistency, polish, and maintainability.',
+	},
+	{
+		number: '05',
+		title: "Respect the operator's environment.",
+		body: 'CairnCMS should respect that users control their deployment, data, schema, and infrastructure. It should avoid unnecessary assumptions and fit into existing environments whenever practical.',
+	},
+];
+---
+
+<section id="commitments" class="section-pad section-border-top bg-moss-tint">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-8 text-center">
+				<h2>Commitments to the CairnCMS Community</h2>
+				<p class="lead mt-3 mb-5">These are the principles that CairnCMS returns to when evaluating features, roadmap decisions, and governance choices.</p>
+			</div>
+		</div>
+
+		<div class="cairn-stack">
+			{
+				commitments.map((item, i) => (
+					<div class={`cairn-stone cairn-stone--${i}`} data-idx={i}>
+						<span class="cairn-stone__number">{item.number}</span>
+						<div class="cairn-stone__content">
+							<h3>{item.title}</h3>
+							<p>{item.body}</p>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<script>
+	const stones = document.querySelectorAll<HTMLDivElement>('.cairn-stone');
+
+	const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (prefersReduced) {
+		stones.forEach((stone) => stone.classList.add('cairn-stone--landed'));
+	} else {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						const idx = Number((entry.target as HTMLDivElement).dataset.idx);
+						setTimeout(() => {
+							entry.target.classList.add('cairn-stone--landed');
+						}, idx * 150);
+						observer.unobserve(entry.target);
+					}
+				}
+			},
+			{ threshold: 0.3 }
+		);
+
+		stones.forEach((stone) => observer.observe(stone));
+	}
+</script>

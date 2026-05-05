@@ -1,0 +1,60 @@
+---
+const command = 'npx cairncms init my-cms';
+---
+
+<section class="hero-section">
+	<div class="section-pad">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-8 text-center">
+					<span class="eyebrow text-dark fw-bold">Self-Hosted • Open-Source • Headless CMS</span>
+					<hr class="hr-short"/>
+					<h1>CairnCMS is a self-hosted, open-source <span class="text-secondary">CMS and data platform</span> for any SQL database.</h1>
+					<p class="lead mt-3 mb-4">
+						Use CairnCMS to model your data, manage content, expose APIs, and automate workflows from one admin built on standard SQL tables you control.
+					</p>
+					<div class="install-command-row mb-4">
+						<button
+							type="button"
+							class="install-command"
+							aria-label="Copy npm install command"
+							data-install-button
+							data-command={command}
+						>
+							<code><span class="install-command__prompt">$</span>{command}</code>
+							<span class="install-command__action" aria-hidden="true" data-install-action>
+								Copy
+							</span>
+						</button>
+					</div>
+					<div class="d-flex flex-wrap gap-3 justify-content-center">
+						<a class="btn btn-outline-dark" href="/docs">Read the Docs</a>
+						<a class="btn btn-primary" href="https://github.com/CairnCMS/cairncms">
+							View on GitHub
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	const button = document.querySelector<HTMLButtonElement>('[data-install-button]');
+	const action = document.querySelector<HTMLSpanElement>('[data-install-action]');
+
+	if (button && action) {
+		button.addEventListener('click', async () => {
+			const command = button.dataset.command ?? '';
+			try {
+				await navigator.clipboard.writeText(command);
+				action.textContent = 'Copied';
+				setTimeout(() => {
+					action.textContent = 'Copy';
+				}, 2000);
+			} catch (err) {
+				console.error('Failed to copy install command', err);
+			}
+		});
+	}
+</script>

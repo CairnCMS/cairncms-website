@@ -1,0 +1,21 @@
+{
+  "name": "cairncms-frontend-astro",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "astro": "^6.2.1",
+    "bootstrap": "^5.3.8",
+    "sass": "^1.99.0"
+  }
+}

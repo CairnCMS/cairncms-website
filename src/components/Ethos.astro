@@ -1,0 +1,59 @@
+---
+const actions = [
+	'Join GitHub discussions to share ideas',
+	'Open issues for bugs or feature requests',
+	'Improve the docs to help others adopt',
+	'Contribute code once the approach is clear',
+];
+---
+
+<section id="community" class="section-pad section-border-top">
+	<div class="container">
+		<div class="row g-4 g-lg-5 align-items-center">
+			<div class="col-lg-6">
+				<h2>A Project Named for What it Aims to Be</h2>
+				<p class="lead mt-3 mb-4">
+					A <strong>cairn</strong> <span class="text-muted">/kɛrn/</span>
+					<button
+						class="btn-pronounce"
+						aria-label="Listen to pronunciation"
+						data-pronounce-button
+					>
+						&#9654;
+					</button>
+					marks a route with something durable that no single person owns, and that anyone can find. CairnCMS was named for that idea.
+					<audio src="/cairn.ogg" preload="none" data-pronounce-audio></audio>
+				</p>
+				<div class="d-flex flex-wrap gap-3">
+					<a class="btn btn-primary" href="https://github.com/CairnCMS/cairncms">View on GitHub</a>
+					<a class="btn btn-outline-dark" href="https://github.com/CairnCMS/cairncms/blob/main/CONTRIBUTING.md">Contribute</a>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<span class="eyebrow">Get involved</span>
+				<ul class="community-list mt-3">
+					{
+						actions.map((text, i) => (
+							<li>
+								<span class="community-number">{i + 1}</span>
+								<span>{text}</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	const button = document.querySelector<HTMLButtonElement>('[data-pronounce-button]');
+	const audio = document.querySelector<HTMLAudioElement>('[data-pronounce-audio]');
+
+	if (button && audio) {
+		button.addEventListener('click', () => {
+			audio.currentTime = 0;
+			audio.play().catch((err) => console.error('Failed to play pronunciation', err));
+		});
+	}
+</script>

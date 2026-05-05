@@ -1,0 +1,31 @@
+---
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '../styles/app.scss';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Self-Hosted Headless CMS for any SQL Database - CairnCMS',
+	description = 'CairnCMS is a self-hosted, free/libre open-source CMS & data platform built on SQL. REST and GraphQL APIs, no-code admin. Directus alternative.',
+} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<link rel="icon" href="/logo/logo-flat-solid.svg" />
+		<title>{title}</title>
+	</head>
+	<body>
+		<div class="site-marketing">
+			<slot />
+		</div>
+	</body>
+</html>

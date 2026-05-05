@@ -1,0 +1,85 @@
+---
+const faqs = [
+	{
+		q: 'Why was CairnCMS created?',
+		a: [
+			'CairnCMS is a fork of Directus v10. It was created to preserve the earlier database-first platform under a fully open-source GPLv3 license.'
+		],
+	},
+	{
+		q: 'Why should I use CairnCMS instead of Directus?',
+		a: [
+			'Use CairnCMS if you want the earlier Directus v10 platform under GPLv3 without the registration requirements, telemetry, or feature gates imposed by modern Directus.',
+			'It is especially well-suited to self-hosted teams that need full control over their infrastructure, multi-tenant architectures that depend on custom permissions, and organizations with privacy or compliance requirements that rule out mandatory analytics collection.'
+		],
+	},
+	{
+		q: 'Can I use CairnCMS for production systems?',
+		a: [
+			'Yes. CairnCMS is intended for production self-hosted deployments, including larger and more complex systems, not just prototypes or demos.',
+			'Whether it is the right fit depends on your requirements, operating model, and comfort running the stack yourself, but the project is not positioned as a temporary or limited-use tool.',
+		],
+	},
+	{
+		q: 'What databases does CairnCMS support?',
+		a: [
+			'CairnCMS actively supports SQLite, PostgreSQL, MySQL, and MariaDB. These are the databases the project is designed and tested around, including PostgreSQL 10 and MySQL 5.x coverage in the main-branch blackbox test matrix.',
+			'CockroachDB, Microsoft SQL Server, and Oracle support still exists in code inherited from Directus v10, but they are no longer part of the automated test matrix. If you depend on one of those vendors, treat that support as best-effort and plan to validate it yourself.',
+		],
+	},
+	{
+		q: 'Will CairnCMS be compatible with future Directus releases?',
+		a: [
+			'CairnCMS is broadly compatible with Directus v10 at the API level. Its REST and GraphQL endpoints, authentication flow, permissions model, and admin behavior are based on the v10 platform, so frontends and integrations built against Directus v10 should require little or no change in most cases.',
+			'Projects using the JavaScript SDK will need a small migration, because CairnCMS ships its own SDK package and client factory instead of reusing the Directus package unchanged.',
+			'Compatibility with Directus v11 and later is not a project goal. CairnCMS will selectively adopt useful fixes and improvements, but it will not track upstream feature parity. Over time, the two projects will continue to diverge by design.',
+		],
+	},
+	{
+		q: 'Will my Directus v10 data work with CairnCMS?',
+		a: [
+			'Yes. CairnCMS uses the same database structure as Directus v10, with one intentional change: the public role is migrated from `null` to a nil UUID sentinel to fix a long-standing constraint problem.',
+			'A migration handles that transition automatically, and existing collections, items, users, roles, permissions, and configuration should otherwise carry over as-is.',
+		],
+	},
+	{
+		q: 'How can I contribute to CairnCMS?',
+		a: [
+			'The best way to support CairnCMS is to use it, file issues when you find bugs, contribute fixes when you can, and share the project with people who might benefit from it.',
+			'Contributions go through the standard GitHub pull request workflow with the Developer Certificate of Origin sign-off requirement. The contributing guide has details. The AI policy explains the project’s expectations around AI-assisted contributions.',
+			'For larger changes, file an issue first to discuss the approach before investing significant time in implementation.',
+		],
+	},
+];
+---
+
+<section id="faq" class="section-pad section-border-top textured-section">
+	<div class="speckle-texture" aria-hidden="true"></div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-8 text-center">
+				<h2>Frequently Asked Questions</h2>
+				<p class="lead mt-3 mb-5">Common questions about CairnCMS.</p>
+			</div>
+		</div>
+
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="faq-accordion">
+					{
+						faqs.map((item) => (
+							<details class="faq-item">
+								<summary class="faq-question">{item.q}</summary>
+								<div class="faq-answer">
+									{item.a.map((paragraph) => (
+										<p>{paragraph}</p>
+									))}
+								</div>
+							</details>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

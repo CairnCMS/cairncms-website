@@ -1,0 +1,94 @@
+---
+const spotlights = [
+	{
+		category: 'Data modeling',
+		title: 'A no-code studio for shaping and managing your data.',
+		body: 'Bring an existing schema or build one from scratch in the CairnCMS studio. Define collections, fields, and relationships through the UI, or point CairnCMS at an existing database and let it reflect the schema that is already there. Either way, your data lives in standard SQL tables you fully control.',
+		image: '/features/data-model.png',
+		alt: 'CairnCMS data model studio',
+		link: '/docs/app/data-model',
+		linkText: 'Explore data modeling',
+	},
+	{
+		category: 'Content workspace',
+		title: 'A content workspace built for every role.',
+		body: 'Give teams an interface matched to the work they need to do. Collections, fields, and actions are scoped by permissions, so editors and other users can create and manage records, comment and @mention teammates, review revision history, and generate share links without being exposed to the underlying schema.',
+		image: '/features/content-workspace.png',
+		alt: 'CairnCMS content management interface',
+		link: '/docs/app/content-workspace',
+		linkText: 'Tour the workspace',
+	},
+	{
+		category: 'Access control',
+		title: 'Granular permissions and access control.',
+		body: 'Define unlimited custom roles with field-level permissions, conditional access rules, separate app and admin access controls, IP allowlists, and enforced two-factor authentication where needed.',
+		image: '/features/roles-permissions.png',
+		alt: 'CairnCMS role and permission configuration',
+		link: '/docs/app/permissions',
+		linkText: 'Configure permissions',
+	},
+	{
+		category: 'Automation builder',
+		title: 'Automation without external tooling.',
+		body: 'Build workflows directly inside CairnCMS. Trigger them from data events, incoming webhooks, cron schedules, or manual runs, then combine CRUD actions, conditional logic, email delivery, scripts, and external API calls. Each run is logged for inspection and debugging.',
+		image: '/features/flows-automation.png',
+		alt: 'CairnCMS flow automation builder',
+		link: '/docs/app/flows',
+		linkText: 'Build a flow',
+	},
+	{
+		category: 'Insights',
+		title: 'Real-time dashboards and insights.',
+		body: 'Build no-code dashboards inside CairnCMS with metrics, time-series charts, tables, and rich text panels. Work from live data already in the system and control access through the same roles and permissions used across the admin.',
+		image: '/features/insights.png',
+		alt: 'CairnCMS insights dashboard with charts',
+		link: '/docs/app/insights',
+		linkText: 'Build a dashboard',
+	},
+	{
+		category: 'File library',
+		title: 'A file library that fits your storage.',
+		body: 'Manage images and other assets in a built-in file library with folders, metadata, and image transformations. Keep the same workflow whether files live on local disk, S3, Google Cloud Storage, Azure Blob, or Cloudinary, and switch storage backends through configuration instead of rewriting the app.',
+		image: '/features/file-management.png',
+		alt: 'CairnCMS file library with image grid',
+		link: '/docs/app/files',
+		linkText: 'Manage files',
+	},
+];
+---
+
+<section id="features" class="section-pad section-border-top hero-strata">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-8 text-center">
+				<span class="eyebrow">Features</span>
+				<h2>What Teams Can Do with CairnCMS</h2>
+				<p class="lead mt-3 mb-5">
+					CairnCMS brings data modeling, content operations, permissions, automation, dashboards, and file management into one no-code admin without moving your data into a proprietary layer.
+				</p>
+			</div>
+		</div>
+
+		{
+			spotlights.map((item, i) => (
+				<div class:list={['spotlight', i % 2 !== 0 && 'spotlight--reverse']}>
+					<div class="spotlight__text">
+						{item.category && <span class="spotlight__category">{item.category}</span>}
+						<h3>{item.title}</h3>
+						<p>{item.body}</p>
+						<a class="btn btn-outline-dark mt-4" href={item.link}>{item.linkText}</a>
+					</div>
+					<div class="spotlight__image">
+						{item.image ? (
+							<img class="spotlight__img" src={item.image} alt={item.alt} loading="lazy" />
+						) : (
+							<div class="spotlight__placeholder" aria-label={item.alt}>
+								<span>{item.placeholder}</span>
+							</div>
+						)}
+					</div>
+				</div>
+			))
+		}
+	</div>
+</section>
