@@ -1,4 +1,4 @@
-# cairncms-frontend-astro
+# cairncms-website
 
 The website for [CairnCMS](https://github.com/CairnCMS/cairncms).
 
