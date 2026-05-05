@@ -3,6 +3,8 @@ name: Deploy
 on:
   push:
     branches: [main]
+  repository_dispatch:
+    types: [docs-changed]
   workflow_dispatch:
 
 permissions:
@@ -13,6 +15,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Resolve docs SHA
+        id: docs
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "sha=${{ github.event.client_payload.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=main" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Clone cairncms docs
+        run: |
+          git clone --filter=blob:none https://github.com/CairnCMS/cairncms.git /tmp/cairncms
+          cd /tmp/cairncms
+          git checkout "${{ steps.docs.outputs.sha }}"
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p src/content/docs/docs
+          cp -a /tmp/cairncms/docs/. src/content/docs/docs/
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -29,6 +47,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@v1
-      - run: flyctl deploy --remote-only
+      - name: Resolve docs SHA
+        id: docs
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "sha=${{ github.event.client_payload.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=main" >> "$GITHUB_OUTPUT"
+          fi
+      - run: flyctl deploy --remote-only --build-arg DOCS_SHA=${{ steps.docs.outputs.sha }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
