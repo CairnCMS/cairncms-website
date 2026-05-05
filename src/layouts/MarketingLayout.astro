@@ -7,12 +7,17 @@ import '../styles/app.scss';
 interface Props {
 	title?: string;
 	description?: string;
+	ogImage?: string;
 }
 
 const {
 	title = 'Self-Hosted Headless CMS for any SQL Database - CairnCMS',
 	description = 'CairnCMS is a self-hosted, free/libre open-source CMS & data platform built on SQL. REST and GraphQL APIs, no-code admin. Directus alternative.',
+	ogImage = '/og.png',
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageURL = new URL(ogImage, Astro.site).toString();
 ---
 
 <html lang="en">
@@ -20,7 +25,22 @@ const {
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
 		<link rel="icon" href="/logo/logo-flat-solid.svg" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImageURL} />
+		<meta property="og:site_name" content="CairnCMS" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageURL} />
+
+		<script defer src="https://cloud.umami.is/script.js" data-website-id="dcd90c8d-1b3b-4445-bfd5-1d7f0703dc88"></script>
 		<title>{title}</title>
 	</head>
 	<body>
