@@ -4,41 +4,57 @@ const features = [
 		icon: 'code-slash',
 		title: 'REST and GraphQL APIs',
 		body: 'Every collection gets REST and GraphQL endpoints automatically with field selection, nested filtering, relational traversal, sorting, pagination, and aggregation.',
+		link: '/docs/api/introduction/',
+		linkText: 'Read the API reference',
 	},
 	{
 		icon: 'database',
 		title: 'Multi-database support',
 		body: 'Choose PostgreSQL, MySQL, MariaDB, or SQLite and keep the same admin experience, generated APIs, and automation layer.',
+		link: '/docs/manage/configuration/',
+		linkText: 'Configure your database',
 	},
 	{
 		icon: 'arrow-left-right',
 		title: 'Webhooks',
 		body: 'Trigger outgoing HTTP requests on data events to integrate with downstream systems. Receive incoming webhooks through the flow trigger for the inbound side.',
+		link: '/docs/guides/automate/webhooks/',
+		linkText: 'Set up webhooks',
 	},
 	{
 		icon: 'box-seam',
 		title: 'Extensions',
-		body: 'Build custom interfaces, layouts, displays, modules, panels, hooks, endpoints, operations, themes, migrations, and Liquid email templates.',
+		body: 'Build custom interfaces, displays, layouts, modules, panels, hooks, endpoints, operations, and bundles, plus file-convention migrations and Liquid email templates.',
+		link: '/docs/develop/extensions/',
+		linkText: 'Build extensions',
 	},
 	{
 		icon: 'diagram-3',
 		title: 'Schema-as-code',
 		body: 'Snapshot collections, fields, and relations to a versioned file. Apply across environments via API or CLI with previewable diffs.',
+		link: '/docs/manage/schema-as-code/',
+		linkText: 'Snapshot your schema',
 	},
 	{
 		icon: 'file-earmark-code',
 		title: 'Config-as-code',
 		body: 'Snapshot roles and permissions to versioned files. Apply across environments via API or CLI with previewable diffs.',
+		link: '/docs/manage/config-as-code/',
+		linkText: 'Snapshot roles and permissions',
 	},
 	{
 		icon: 'shield-lock',
 		title: 'SSO and identity providers',
 		body: 'OAuth 2.0, OpenID Connect, SAML, and LDAP out of the box. Bring your own identity provider and let CairnCMS sit behind it.',
+		link: '/docs/guides/auth/',
+		linkText: 'Set up SSO',
 	},
 	{
 		icon: 'clock-history',
 		title: 'Activity log',
 		body: 'Track every create, update, and delete action in a system-wide log, with filtering by action, user, collection, and time.',
+		link: '/docs/guides/content/activity-log/',
+		linkText: 'Read about the activity log',
 	},
 ];
 
@@ -66,6 +82,7 @@ const ICONS: Record<string, string> = {
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-8 text-center">
+				<span class="eyebrow">Developer-First</span>
 				<h2>Launch Faster with CairnCMS</h2>
 				<p class="lead mt-3 mb-5">CairnCMS gives teams the APIs, webhooks, extensibility, identity integrations, and revision history that teams need alongside the core admin.</p>
 			</div>
@@ -75,7 +92,7 @@ const ICONS: Record<string, string> = {
 			{
 				features.map((item) => (
 					<div class="col-md-6 col-lg-3">
-						<div class="feature-card">
+						<a class="feature-card" href={item.link}>
 							<svg
 								class="feature-card__icon"
 								xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +105,10 @@ const ICONS: Record<string, string> = {
 							/>
 							<h3>{item.title}</h3>
 							<p>{item.body}</p>
-						</div>
+							{item.linkText && (
+								<span class="feature-card__link">{item.linkText} →</span>
+							)}
+						</a>
 					</div>
 				))
 			}

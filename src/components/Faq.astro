@@ -3,7 +3,24 @@ const faqs = [
 	{
 		q: 'Why was CairnCMS created?',
 		a: [
-			'CairnCMS is a fork of Directus v10. It was created to preserve the earlier database-first platform under a fully open-source GPLv3 license.'
+			'CairnCMS is a fork of Directus v10. It was created to preserve the earlier developer-first, database-first platform under a fully open-source GPLv3 license.'
+		],
+	},
+	{
+		q: 'Is CairnCMS really a CMS?',
+		a: [
+			'CairnCMS is not a traditional CMS in that it isn\'t built around a fixed content model.',
+			'Instead, your SQL schema defines the model. CairnCMS then turns that model into a governed workspace with APIs, permissions, and workflows for managing structured content and operational data across many digital surfaces: websites, applications, dashboards, or internal tools, for example.',
+			'The "CMS" in CairnCMS reflects the modern role of content management, giving teams a governed workspace for the data and content their systems depend on.'
+		],
+	},
+	{
+		q: 'What do you mean by "content and data infrastructure"?',
+		a: [
+			'CairnCMS is infrastructure in the application sense.',
+			'It does not replace your database, storage provider, or deployment platform. CairnCMS is an application layer on top of your SQL database and file storage backend. It adds the workspace, generated APIs, permissions, file management, dashboards, automation, and extension points needed to manage and govern the content and data your systems depend on.',
+			'Your database remains the source of truth. CairnCMS can read an existing schema or help you create a new one, but your application data stays in standard SQL tables you can inspect, query, back up, migrate, and use directly.',
+			'That is why CairnCMS is described as content and data infrastructure: it provides the operating layer around your data, while leaving you in control of the database, storage, and deployment model.'
 		],
 	},
 	{
@@ -58,6 +75,7 @@ const faqs = [
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-8 text-center">
+				<span class="eyebrow">FAQ</span>
 				<h2>Frequently Asked Questions</h2>
 				<p class="lead mt-3 mb-5">Common questions about CairnCMS.</p>
 			</div>

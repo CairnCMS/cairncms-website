@@ -10,6 +10,17 @@ export default defineConfig({
 		starlight({
 			title: 'CairnCMS',
 			disable404Route: true,
+			favicon: '/logo/logo-flat-solid.svg',
+			logo: {
+				src: './public/logo/logo-flat-solid.svg',
+				alt: 'CairnCMS logo: a stack of stones forming a cairn',
+			},
+			customCss: [
+				'@fontsource/ibm-plex-sans/400.css',
+				'@fontsource/ibm-plex-sans/500.css',
+				'@fontsource/ibm-plex-sans/600.css',
+				'./src/styles/starlight-overrides.css',
+			],
 			head: [
 				{
 					tag: 'script',

@@ -1,0 +1,4 @@
+/* Match the marketing site's typography on Starlight docs pages. */
+:root {
+	--sl-font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}

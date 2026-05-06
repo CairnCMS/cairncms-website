@@ -1000,20 +1000,67 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 }
 
 .feature-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 1.5rem;
+	background-color: $paper;
+	border: 1px solid $rule;
+	border-radius: $border-radius;
+	color: $stone;
+	text-decoration: none;
+	transition:
+		background-color 200ms ease,
+		border-color 200ms ease,
+		color 200ms ease,
+		transform 200ms ease;
+
 	h3 {
 		margin-top: 1rem;
 		margin-bottom: 0.5rem;
 		font-size: 1.0625rem;
+		color: inherit;
 	}
 
 	p {
-		color: $stone;
+		color: inherit;
+		opacity: 0.85;
 		margin-bottom: 0;
 	}
 
 	&__icon {
 		display: block;
 		color: $ember;
+		transition: color 200ms ease;
+	}
+
+	&__link {
+		display: inline-block;
+		margin-top: 1rem;
+		font-weight: 600;
+		color: $ember;
+		transition: color 200ms ease;
+	}
+
+	&:hover,
+	&:focus-visible {
+		background-color: $stone;
+		border-color: $stone;
+		color: $paper;
+		transform: translateY(-2px);
+		text-decoration: none;
+	}
+
+	&:hover &__icon,
+	&:focus-visible &__icon,
+	&:hover &__link,
+	&:focus-visible &__link {
+		color: $lichen;
+	}
+
+	&:focus-visible {
+		outline: 2px solid $lichen;
+		outline-offset: 3px;
 	}
 }
 
