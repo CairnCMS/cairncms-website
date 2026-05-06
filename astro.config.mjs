@@ -49,7 +49,11 @@ export default defineConfig({
 			],
 			sidebar: [
 				{ label: 'Getting started', autogenerate: { directory: 'docs/getting-started' } },
-				{ label: 'Reference', autogenerate: { directory: 'docs/reference' } },
+				{ label: 'Guides', autogenerate: { directory: 'docs/guides' } },
+				{ label: 'Develop', autogenerate: { directory: 'docs/develop' } },
+				{ label: 'Manage', autogenerate: { directory: 'docs/manage' } },
+				{ label: 'API reference', autogenerate: { directory: 'docs/api' } },
+				{ label: 'Contributing', autogenerate: { directory: 'docs/contributing' } },
 			],
 		}),
 	],
