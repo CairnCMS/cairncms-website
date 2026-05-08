@@ -1,0 +1,75 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<MarketingLayout
+	title="Privacy Policy — CairnCMS"
+	description="How CairnCMS collects and uses analytics data."
+>
+	<Header />
+	<main>
+		<section class="hero-section">
+			<div class="section-pad">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-8">
+							<h1>Privacy Policy</h1>
+							<p class="lead mt-3">
+								CairnCMS uses Umami for basic site analytics. Umami is a privacy-focused analytics tool that
+								collects aggregated, anonymized usage data to help us understand how the site is being used.
+							</p>
+
+							<h2 class="mt-5">What we collect</h2>
+							<ul>
+								<li>Page views</li>
+								<li>The referring source</li>
+								<li>Browser type, operating system, and device category</li>
+								<li>Screen resolution and language preference</li>
+								<li>Country, derived from your IP address (the IP itself is hashed and not stored)</li>
+							</ul>
+
+							<h2 class="mt-5">What we don't collect</h2>
+							<ul>
+								<li>Cookies (Umami operates without cookies)</li>
+								<li>Personally identifiable information</li>
+								<li>Cross-site tracking data</li>
+								<li>Any information about you that we could use to contact or identify you</li>
+							</ul>
+
+							<h2 class="mt-5">How we use this data</h2>
+							<p>
+								We use this data to understand how visitors find and use cairncms.dev, which pages are most
+								useful, what kinds of devices people use to access the site, and what geographic regions we need to better serve. The data helps us improve the
+								site and documentation.
+							</p>
+
+							<h2 class="mt-5">Data retention</h2>
+							<p>
+								Aggregated analytics data is retained for 6 months. No individual visitor
+								can be identified from this data.
+							</p>
+
+							<h2 class="mt-5">Third parties</h2>
+							<p>Your data is not shared with any third party.</p>
+
+							<h2 class="mt-5">Your rights</h2>
+							<p>
+								You can use a browser-based tracker blocker to prevent Umami from collecting any data about
+								your visit. The site will function normally with or without analytics.
+							</p>
+
+							<h2 class="mt-5">Contact</h2>
+							<p class="mb-0">
+								For privacy-related questions, email
+								<a class="text-ember" href="mailto:hello@cairncms.dev">hello@cairncms.dev</a>.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<Footer />
+</MarketingLayout>
