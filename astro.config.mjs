@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
+import starlightPageActions from 'starlight-page-actions';
 
 export default defineConfig({
 	site: 'https://cairncms.dev',
@@ -11,6 +12,10 @@ export default defineConfig({
 			title: 'CairnCMS',
 			disable404Route: true,
 			favicon: '/logo/logo-flat-solid.svg',
+			plugins: [starlightPageActions()],
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/CairnCMS/cairncms' },
+			],
 			logo: {
 				src: './public/logo/logo-flat-solid.svg',
 				alt: 'CairnCMS logo: a stack of stones forming a cairn',
@@ -49,11 +54,50 @@ export default defineConfig({
 			],
 			sidebar: [
 				{ label: 'Getting started', autogenerate: { directory: 'docs/getting-started' } },
-				{ label: 'Guides', autogenerate: { directory: 'docs/guides' } },
-				{ label: 'Develop', autogenerate: { directory: 'docs/develop' } },
-				{ label: 'Manage', autogenerate: { directory: 'docs/manage' } },
-				{ label: 'API reference', autogenerate: { directory: 'docs/api' } },
-				{ label: 'Contributing', autogenerate: { directory: 'docs/contributing' } },
+				{
+					label: 'Guides',
+					collapsed: true,
+					items: [
+						{ slug: 'docs/guides' },
+						{ slug: 'docs/guides/auth' },
+						{ slug: 'docs/guides/files' },
+						{ slug: 'docs/guides/insights' },
+						{ slug: 'docs/guides/permissions' },
+						{ slug: 'docs/guides/settings' },
+						{ slug: 'docs/guides/users' },
+						{ label: 'Content', collapsed: true, autogenerate: { directory: 'docs/guides/content' } },
+						{ label: 'Data Model', collapsed: true, autogenerate: { directory: 'docs/guides/data-model' } },
+						{ label: 'Flows', collapsed: true, autogenerate: { directory: 'docs/guides/automate' } },
+					],
+				},
+				{
+					label: 'Develop',
+					collapsed: true,
+					items: [
+						{ slug: 'docs/develop' },
+						{ slug: 'docs/develop/clients' },
+						{ slug: 'docs/develop/custom-migrations' },
+						{ slug: 'docs/develop/email-templates' },
+						{ label: 'Extensions', collapsed: true, autogenerate: { directory: 'docs/develop/extensions' } },
+					],
+				},
+				{ label: 'Manage', collapsed: true, autogenerate: { directory: 'docs/manage' } },
+				{
+					label: 'API reference',
+					collapsed: true,
+					items: [
+						{ slug: 'docs/api' },
+						{ slug: 'docs/api/introduction' },
+						{ slug: 'docs/api/authentication' },
+						{ slug: 'docs/api/items' },
+						{ slug: 'docs/api/files' },
+						{ slug: 'docs/api/filters-and-queries' },
+						{ slug: 'docs/api/graphql' },
+						{ slug: 'docs/api/sdk' },
+						{ label: 'System Collections', collapsed: true, autogenerate: { directory: 'docs/api/system-collections' } },
+					],
+				},
+				{ label: 'Contributing', collapsed: true, autogenerate: { directory: 'docs/contributing' } },
 			],
 		}),
 	],

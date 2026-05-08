@@ -18,6 +18,7 @@
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "astro": "^6.2.1",
     "bootstrap": "^5.3.8",
-    "sass": "^1.99.0"
+    "sass": "^1.99.0",
+    "starlight-page-actions": "^0.6.0"
   }
 }
