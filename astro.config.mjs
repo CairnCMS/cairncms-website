@@ -65,9 +65,9 @@ export default defineConfig({
 						{ slug: 'docs/guides/permissions' },
 						{ slug: 'docs/guides/settings' },
 						{ slug: 'docs/guides/users' },
-						{ label: 'Content', collapsed: true, autogenerate: { directory: 'docs/guides/content' } },
+						{ label: 'Content Module', collapsed: true, autogenerate: { directory: 'docs/guides/content' } },
 						{ label: 'Data Model', collapsed: true, autogenerate: { directory: 'docs/guides/data-model' } },
-						{ label: 'Flows', collapsed: true, autogenerate: { directory: 'docs/guides/automate' } },
+						{ label: 'Flows', collapsed: true, autogenerate: { directory: 'docs/guides/flows' } },
 					],
 				},
 				{
