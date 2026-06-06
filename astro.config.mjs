@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 import starlightPageActions from 'starlight-page-actions';
+import starlightThemeRapide from 'starlight-theme-rapide';
 
 export default defineConfig({
 	site: 'https://cairncms.dev',
@@ -12,7 +13,7 @@ export default defineConfig({
 			title: 'CairnCMS',
 			disable404Route: true,
 			favicon: '/logo/logo-flat-solid.svg',
-			plugins: [starlightPageActions()],
+			plugins: [starlightPageActions(),starlightThemeRapide()],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/CairnCMS/cairncms' },
 			],

@@ -16,9 +16,10 @@
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/starlight": "^0.38.4",
     "@fontsource/ibm-plex-sans": "^5.2.8",
-    "astro": "^6.2.1",
+    "astro": "^6.4.4",
     "bootstrap": "^5.3.8",
     "sass": "^1.99.0",
-    "starlight-page-actions": "^0.6.0"
+    "starlight-page-actions": "^0.6.0",
+    "starlight-theme-rapide": "^0.5.2"
   }
 }

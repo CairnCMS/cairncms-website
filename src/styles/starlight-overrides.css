@@ -2,3 +2,7 @@
 :root {
 	--sl-font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
+
+:root {
+	--sl-hue-accent: 40;
+}
