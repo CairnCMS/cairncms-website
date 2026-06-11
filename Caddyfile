@@ -26,6 +26,10 @@ http://cairncms.dev:8080, http://localhost:8080 {
 	import serve_static
 }
 
+http://demo.cairncms.dev:8080 {
+	reverse_proxy cairncms-demo.internal:8055
+}
+
 http://www.cairncms.dev:8080 {
 	redir https://cairncms.dev{uri} 301
 }
