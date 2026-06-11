@@ -30,6 +30,10 @@ http://demo.cairncms.dev:8080 {
 	reverse_proxy cairncms-demo.internal:8055
 }
 
+http://www.demo.cairncms.dev:8080 {
+	redir https://demo.cairncms.dev{uri} 301
+}
+
 http://www.cairncms.dev:8080 {
 	redir https://cairncms.dev{uri} 301
 }
