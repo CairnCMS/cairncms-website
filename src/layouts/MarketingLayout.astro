@@ -24,6 +24,18 @@ const ogImageURL = new URL(ogImage, Astro.site).toString();
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script is:inline>
+			(() => {
+				const stored = localStorage.getItem('starlight-theme');
+				const theme =
+					stored === 'light' || stored === 'dark'
+						? stored
+						: matchMedia('(prefers-color-scheme: dark)').matches
+							? 'dark'
+							: 'light';
+				document.documentElement.dataset.theme = theme;
+			})();
+		</script>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
 		<link rel="icon" href="/logo/logo-flat-solid.svg" />
@@ -40,10 +52,12 @@ const ogImageURL = new URL(ogImage, Astro.site).toString();
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImageURL} />
 
-		<script defer src="https://cloud.umami.is/script.js" data-website-id="dcd90c8d-1b3b-4445-bfd5-1d7f0703dc88"></script>
+		<link rel="alternate" type="application/rss+xml" title="CairnCMS Blog" href="/rss.xml" />
+
+		<script defer src="https://cloud.umami.is/script.js" data-website-id="dcd90c8d-1b3b-4445-bfd5-1d7f0703dc88" data-domains="cairncms.dev"></script>
 		<title>{title}</title>
 	</head>
-	<body>
+	<body class="marketing">
 		<div class="site-marketing">
 			<slot />
 		</div>

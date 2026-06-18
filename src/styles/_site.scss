@@ -9,17 +9,8 @@
 	font-weight: 500;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: $ember;
+	color: var(--c-accent);
 	margin-bottom: 0.75rem;
-}
-
-.hr-short {
-	width: 100px;
-	height: 1px;
-	margin: 1.5rem auto;
-	border: 0;
-	background-color: $stone;
-	opacity: 1;
 }
 
 .prose {
@@ -37,7 +28,7 @@
 // Inline pronunciation play button.
 .btn-pronounce {
 	background: none;
-	border: 1px solid $rule;
+	border: 1px solid var(--c-border);
 	border-radius: 50%;
 	width: 1.5em;
 	height: 1.5em;
@@ -45,25 +36,29 @@
 	line-height: 1;
 	padding: 0;
 	cursor: pointer;
-	color: $ember;
+	color: var(--c-accent);
 	vertical-align: middle;
 	margin-left: 0.25rem;
 
 	&:hover,
 	&:focus {
-		border-color: $ember;
-		background-color: rgba($ember, 0.08);
+		border-color: var(--c-accent);
+		background-color: rgba(var(--c-accent-rgb), 0.08);
 	}
 }
 
 .text-ember {
-	color: $ember;
+	color: var(--c-accent);
 
 	&:hover,
 	&:focus {
-		color: $ember;
+		color: var(--c-accent);
 		text-decoration: underline;
 	}
+}
+
+.text-muted {
+	color: var(--c-ink-soft) !important;
 }
 
 // Rocky section dividers.
@@ -79,9 +74,13 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 		display: block;
 		width: 100%;
 		height: 16px;
-		background-image: $rocky-edge;
-		background-size: 100% 16px;
-		background-repeat: no-repeat;
+		background-color: var(--c-ledge);
+		mask-image: $rocky-edge;
+		-webkit-mask-image: $rocky-edge;
+		mask-size: 100% 16px;
+		-webkit-mask-size: 100% 16px;
+		mask-repeat: no-repeat;
+		-webkit-mask-repeat: no-repeat;
 		margin-bottom: 4rem;
 
 		@media (min-width: 768px) {
@@ -94,38 +93,13 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 	padding-top: 0;
 }
 
-.section-border-bottom {
-	border-bottom: none;
-	position: relative;
-
-	&::after {
-		content: '';
-		display: block;
-		width: 100%;
-		height: 16px;
-		background-image: $rocky-edge;
-		background-size: 100% 16px;
-		background-repeat: no-repeat;
-		margin-top: 4rem;
-
-		@media (min-width: 768px) {
-			margin-top: 5rem;
-		}
-	}
-}
-
-.callout-moss {
-	background-color: $moss;
-	border-color: darken($moss, 8%);
-}
-
 // Slightly irregular edges on filled buttons.
 .btn-primary {
-	color: $paper;
+	color: var(--c-on-panel);
 
 	&:hover,
 	&:focus {
-		color: $paper;
+		color: var(--c-on-panel);
 	}
 
 	clip-path: polygon(
@@ -149,11 +123,14 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 }
 
 .btn-outline-dark {
+	--bs-btn-color: var(--c-ink);
+	--bs-btn-border-color: var(--c-ink);
+
 	&:hover,
 	&:focus {
 		background-color: transparent;
-		color: $ember;
-		border-color: $ember;
+		color: var(--c-accent);
+		border-color: var(--c-accent);
 		box-shadow: none;
 	}
 }
@@ -162,11 +139,11 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 	border-bottom: none;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
-	background-color: $stone;
+	background-color: var(--c-panel);
 
 	.navbar-brand {
 		font-weight: 500;
-		color: $paper;
+		color: var(--c-on-panel);
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -178,17 +155,17 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 	}
 
 	.nav-link {
-		color: rgba($paper, 0.8);
+		color: rgba(var(--c-on-panel-rgb), 0.8);
 		font-weight: 500;
 
 		&:hover,
 		&:focus {
-			color: $ember;
+			color: var(--c-accent);
 		}
 	}
 
 	.navbar-toggler {
-		border-color: rgba($paper, 0.3);
+		border-color: rgba(var(--c-on-panel-rgb), 0.3);
 	}
 
 	.navbar-toggler-icon {
@@ -199,19 +176,170 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 .hero-section {
 	position: relative;
 	overflow: hidden;
-	background-color: $paper;
-	color: $stone;
+	background-color: var(--c-surface);
+	color: var(--c-ink);
 
 	h1 {
-		color: $stone;
+		color: var(--c-ink);
 	}
 
 	.eyebrow {
-		color: $ember;
+		color: var(--c-ink);
 	}
 
 	.lead {
-		color: $stone;
+		color: var(--c-ink);
+	}
+}
+
+.hero-section--landing::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background:
+		linear-gradient(180deg, rgba(148, 198, 232, 0.30) 0%, rgba(176, 213, 236, 0.13) 32%, rgba(176, 213, 236, 0.04) 62%, transparent 100%),
+		radial-gradient(58% 50% at 48% -16%, rgba(190, 222, 241, 0.16), transparent 60%),
+		radial-gradient(72% 42% at 42% 104%, rgba(214, 170, 110, 0.05), transparent 66%);
+}
+
+.hero-mountains {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	pointer-events: none;
+
+	svg {
+		display: block;
+		width: 100%;
+		height: clamp(250px, 80vw, 700px);
+
+		@media (max-width: 767.98px) {
+			width: 170%;
+			height: clamp(420px, 110vw, 560px);
+		}
+	}
+}
+
+.hero-mountains__back {
+	fill: rgba(var(--c-moss-rgb), 0.08);
+}
+
+.hero-mountains__mid {
+	fill: rgba(var(--c-ochre-rgb), 0.1);
+}
+
+.hero-mountains__front {
+	fill: rgba(var(--c-accent-rgb), 0.1);
+}
+
+@keyframes dust-drift-a {
+	0% {
+		transform: translate3d(0, 0, 0);
+	}
+	50% {
+		transform: translate3d(-9px, -15px, 0);
+	}
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes dust-drift-b {
+	0% {
+		transform: translate3d(0, 0, 0);
+	}
+	50% {
+		transform: translate3d(7px, -11px, 0);
+	}
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+.hero-dust {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	--mote: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 1.5 C14 1 18.5 4.5 18.5 10 C19 14.5 14.5 19 10 18.5 C5.5 19 1 14.5 1.5 10 C1 5.5 6 1 10 1.5 Z' fill='%23f7ead0' stroke='%23e2cda3' stroke-width='1.3' stroke-opacity='0.5'/%3E%3C/svg%3E");
+	background-image: var(--mote), var(--mote), var(--mote), var(--mote), var(--mote), var(--mote), var(--mote);
+	background-position: 7% 22%, 22% 48%, 38% 16%, 52% 38%, 67% 56%, 81% 26%, 93% 46%;
+	background-size: 10px, 7px, 11px, 6px, 9px, 7px, 11px;
+	background-repeat: no-repeat;
+	opacity: 0.32;
+	animation: dust-drift-a 30s ease-in-out infinite;
+
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: var(--mote), var(--mote), var(--mote), var(--mote), var(--mote), var(--mote);
+		background-position: 14% 36%, 30% 12%, 46% 54%, 60% 22%, 76% 44%, 89% 14%;
+		background-size: 7px, 6px, 9px, 6px, 7px, 9px;
+		background-repeat: no-repeat;
+		animation: dust-drift-b 42s ease-in-out infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+
+		&::before {
+			animation: none;
+		}
+	}
+}
+
+.hero-section .section-pad {
+	padding-bottom: 0;
+}
+
+.hero-shot {
+	position: relative;
+	z-index: 1;
+	max-width: 1040px;
+	margin: 3.5rem auto 0;
+	overflow: hidden;
+	background-color: var(--c-surface);
+	border: 1px solid var(--c-border);
+	border-bottom: none;
+	border-radius: 14px 14px 0 0;
+	box-shadow: 0 24px 70px -28px rgba(0, 0, 0, 0.5);
+
+	@media (max-width: 767.98px) {
+		margin-top: 2.5rem;
+		border-radius: 10px 10px 0 0;
+	}
+}
+
+.hero-shot__img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.hero-shot__img--dark {
+	display: none;
+}
+
+.hero-shot__cta {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	padding: 1rem 2.5rem;
+	font-size: 1.35rem;
+	font-weight: 600;
+	filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
+	transition: transform 0.15s ease;
+
+	&:hover,
+	&:focus-visible {
+		transform: translate(-50%, -50%) scale(1.05);
 	}
 }
 
@@ -331,17 +459,17 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 	height: 80px;
 	background: linear-gradient(
 		180deg,
-		darken($ember, 15%) 0%,
-		darken($ember, 10%) 15%,
-		rgba(darken($ember, 5%), 0.6) 45%,
-		rgba($ochre, 0.3) 70%,
-		rgba($paper, 0) 100%
+		color-mix(in srgb, var(--c-accent), #000 15%) 0%,
+		color-mix(in srgb, var(--c-accent), #000 10%) 15%,
+		color-mix(in srgb, color-mix(in srgb, var(--c-accent), #000 5%) 60%, transparent) 45%,
+		rgba(var(--c-ochre-rgb), 0.3) 70%,
+		rgba(var(--c-surface-rgb), 0) 100%
 	);
 
-	// Dark variant: fades into $stone for the footer transition.
+	// Dark variant: fades into the footer panel.
 	&--dark {
 		margin-top: -2px;
-		background: linear-gradient(180deg, $ember 0%, darken($ember, 8%) 30%, $stone 100%);
+		background: linear-gradient(180deg, var(--c-accent) 0%, color-mix(in srgb, var(--c-accent), #000 8%) 30%, var(--c-panel) 100%);
 	}
 }
 
@@ -357,46 +485,46 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 		// Layer 1: primary strata, slight tilt right
 		linear-gradient(
 			177deg,
-			rgba($ember, 0.07) 0%,
-			rgba($ember, 0.07) 9%,
-			rgba($ochre, 0.1) 9%,
-			rgba($ochre, 0.1) 16%,
-			rgba($moss, 0.18) 16%,
-			rgba($moss, 0.18) 24%,
-			rgba($ember, 0.05) 24%,
-			rgba($ember, 0.05) 34%,
-			rgba($ochre, 0.08) 34%,
-			rgba($ochre, 0.08) 42%,
-			rgba($moss, 0.15) 42%,
-			rgba($moss, 0.15) 50%,
-			rgba($ember, 0.06) 50%,
-			rgba($ember, 0.06) 60%,
-			rgba($ochre, 0.1) 60%,
-			rgba($ochre, 0.1) 68%,
-			rgba($moss, 0.18) 68%,
-			rgba($moss, 0.18) 76%,
-			rgba($ember, 0.05) 76%,
-			rgba($ember, 0.05) 86%,
-			rgba($ochre, 0.08) 86%,
-			rgba($ochre, 0.08) 93%,
-			rgba($moss, 0.16) 93%,
-			rgba($moss, 0.16) 100%
+			rgba(var(--c-accent-rgb), 0.07) 0%,
+			rgba(var(--c-accent-rgb), 0.07) 9%,
+			rgba(var(--c-ochre-rgb), 0.1) 9%,
+			rgba(var(--c-ochre-rgb), 0.1) 16%,
+			rgba(var(--c-moss-rgb), 0.18) 16%,
+			rgba(var(--c-moss-rgb), 0.18) 24%,
+			rgba(var(--c-accent-rgb), 0.05) 24%,
+			rgba(var(--c-accent-rgb), 0.05) 34%,
+			rgba(var(--c-ochre-rgb), 0.08) 34%,
+			rgba(var(--c-ochre-rgb), 0.08) 42%,
+			rgba(var(--c-moss-rgb), 0.15) 42%,
+			rgba(var(--c-moss-rgb), 0.15) 50%,
+			rgba(var(--c-accent-rgb), 0.06) 50%,
+			rgba(var(--c-accent-rgb), 0.06) 60%,
+			rgba(var(--c-ochre-rgb), 0.1) 60%,
+			rgba(var(--c-ochre-rgb), 0.1) 68%,
+			rgba(var(--c-moss-rgb), 0.18) 68%,
+			rgba(var(--c-moss-rgb), 0.18) 76%,
+			rgba(var(--c-accent-rgb), 0.05) 76%,
+			rgba(var(--c-accent-rgb), 0.05) 86%,
+			rgba(var(--c-ochre-rgb), 0.08) 86%,
+			rgba(var(--c-ochre-rgb), 0.08) 93%,
+			rgba(var(--c-moss-rgb), 0.16) 93%,
+			rgba(var(--c-moss-rgb), 0.16) 100%
 		),
 		// Layer 2: cross-cutting intrusion, tilted left
 		linear-gradient(
 				184deg,
 				transparent 0%,
 				transparent 20%,
-				rgba($ochre, 0.06) 20%,
-				rgba($ochre, 0.06) 35%,
+				rgba(var(--c-ochre-rgb), 0.06) 20%,
+				rgba(var(--c-ochre-rgb), 0.06) 35%,
 				transparent 35%,
 				transparent 55%,
-				rgba($moss, 0.08) 55%,
-				rgba($moss, 0.08) 70%,
+				rgba(var(--c-moss-rgb), 0.08) 55%,
+				rgba(var(--c-moss-rgb), 0.08) 70%,
 				transparent 70%,
 				transparent 85%,
-				rgba($ember, 0.05) 85%,
-				rgba($ember, 0.05) 100%
+				rgba(var(--c-accent-rgb), 0.05) 85%,
+				rgba(var(--c-accent-rgb), 0.05) 100%
 			);
 }
 
@@ -411,8 +539,8 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 	align-items: center;
 	gap: 0.75rem;
 	padding: 0.625rem 1.25rem;
-	background-color: $paper;
-	border: 1px solid $rule;
+	background-color: var(--c-surface);
+	border: 1px solid var(--c-border);
 	border-radius: $border-radius;
 	cursor: pointer;
 	font-family:
@@ -422,12 +550,12 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 		Consolas,
 		'Liberation Mono',
 		monospace;
-	color: $stone;
+	color: var(--c-ink);
 	transition: border-color 150ms ease;
 
 	&:hover,
 	&:focus-visible {
-		border-color: $ember;
+		border-color: var(--c-accent);
 		outline: none;
 	}
 
@@ -440,7 +568,7 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 }
 
 .install-command__prompt {
-	color: $ember;
+	color: var(--c-accent);
 	margin-right: 0.5rem;
 	user-select: none;
 }
@@ -449,49 +577,12 @@ $rocky-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' v
 	font-family: $font-family-sans-serif;
 	font-size: $small-font-size;
 	font-weight: 500;
-	color: $stone;
+	color: var(--c-ink);
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	padding-left: 0.875rem;
-	border-left: 1px solid $rule;
+	border-left: 1px solid var(--c-border);
 	min-width: 4rem;
-}
-
-$rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 200' preserveAspectRatio='none'%3E%3Cpath d='M3 0 L5 12 L2 28 L5 45 L3 60 L5 78 L2 95 L4 110 L2 128 L5 145 L3 160 L5 178 L2 195 L3 200' stroke='%23c8552e' stroke-width='3' fill='none'/%3E%3C/svg%3E");
-
-.ethos-card {
-	background-color: transparent;
-	position: relative;
-	overflow: visible;
-	border: none;
-	border-radius: 0;
-	height: 100%;
-	padding-left: 1.25rem;
-
-	&::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 6px;
-		height: 100%;
-		background-image: $rocky-edge-vertical;
-		background-size: 6px 100%;
-		background-repeat: no-repeat;
-	}
-
-	.card-body {
-		padding: 0.5rem 0 0.5rem 0.75rem;
-	}
-
-	h3 {
-		margin-bottom: 0.5rem;
-	}
-
-	p {
-		margin-bottom: 0;
-		color: $stone;
-	}
 }
 
 .community-number {
@@ -501,8 +592,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	flex-shrink: 0;
 	width: 2rem;
 	height: 2rem;
-	background-color: $ember;
-	color: $paper;
+	background-color: var(--c-accent);
+	color: var(--c-on-panel);
 	border-radius: 50%;
 	font-weight: 600;
 	font-size: 0.95rem;
@@ -518,8 +609,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		align-items: center;
 		gap: 0.875rem;
 		padding: 0.75rem 0;
-		border-bottom: 1px solid $rule;
-		color: $stone;
+		border-bottom: 1px solid var(--c-border);
+		color: var(--c-ink);
 
 		&:last-child {
 			border-bottom: none;
@@ -532,8 +623,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	align-items: center;
 	justify-content: center;
 	padding: 2.5rem 2rem;
-	background-color: $paper;
-	border: 1px solid $rule;
+	background-color: var(--c-surface);
+	border: 1px solid var(--c-border);
 	border-radius: $border-radius;
 	transition:
 		border-color 200ms ease,
@@ -541,7 +632,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 	&:hover,
 	&:focus {
-		border-color: $ember;
+		border-color: var(--c-accent);
 	}
 }
 
@@ -580,8 +671,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 }
 
 .cairn-stone {
-	background-color: $ember;
-	color: $paper;
+	background-color: var(--c-accent);
+	color: var(--c-on-panel);
 	padding: 2.5rem 4rem;
 	display: flex;
 	align-items: flex-start;
@@ -607,18 +698,18 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 	h3 {
 		margin-bottom: 0.35rem;
-		color: $paper;
+		color: var(--c-on-panel);
 	}
 
 	p {
 		margin-bottom: 0;
-		color: rgba($paper, 0.85);
+		color: rgba(var(--c-on-panel-rgb), 0.85);
 	}
 
 	&__number {
 		font-size: 2.75rem;
 		font-weight: 600;
-		color: rgba($paper, 0.35);
+		color: rgba(var(--c-on-panel-rgb), 0.35);
 		line-height: 1;
 		flex-shrink: 0;
 		min-width: 3rem;
@@ -754,93 +845,6 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	}
 }
 
-// Maintainer bio layout.
-.maintainer {
-	display: flex;
-	gap: 2.5rem;
-	align-items: flex-start;
-
-	@media (max-width: 767.98px) {
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
-	&__photo {
-		flex-shrink: 0;
-	}
-
-	&__img {
-		width: 160px;
-		height: 160px;
-		object-fit: cover;
-		clip-path: polygon(
-			2% 4%,
-			15% 0%,
-			50% 2%,
-			88% 0%,
-			98% 5%,
-			100% 40%,
-			98% 80%,
-			97% 96%,
-			80% 100%,
-			45% 97%,
-			10% 100%,
-			0% 94%,
-			1% 50%
-		);
-	}
-
-	&__placeholder {
-		width: 160px;
-		height: 160px;
-		background-color: darken($paper, 6%);
-		border: 1px solid $rule;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: lighten($stone, 30%);
-		font-size: $small-font-size;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		clip-path: polygon(
-			2% 4%,
-			15% 0%,
-			50% 2%,
-			88% 0%,
-			98% 5%,
-			100% 40%,
-			98% 80%,
-			97% 96%,
-			80% 100%,
-			45% 97%,
-			10% 100%,
-			0% 94%,
-			1% 50%
-		);
-	}
-
-	&__bio {
-		flex: 1;
-
-		h3 {
-			margin-bottom: 0.75rem;
-		}
-	}
-
-	&__links {
-		display: flex;
-		gap: 0.75rem;
-	}
-}
-
-// Contributor CTA.
-.contributor-cta {
-	h3 {
-		margin-bottom: 1rem;
-	}
-}
-
 // Footer.
 .site-footer {
 	border-top: none;
@@ -848,8 +852,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	position: relative;
 	padding-bottom: 3rem;
 	font-size: $small-font-size;
-	background-color: $stone;
-	color: rgba($paper, 0.7);
+	background-color: var(--c-panel);
+	color: rgba(var(--c-on-panel-rgb), 0.7);
 
 	h3 {
 		font-size: $small-font-size;
@@ -857,7 +861,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		margin-bottom: 1rem;
-		color: $paper;
+		color: var(--c-on-panel);
 	}
 
 	ul {
@@ -871,12 +875,12 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	}
 
 	a {
-		color: rgba($paper, 0.8);
+		color: rgba(var(--c-on-panel-rgb), 0.8);
 		text-decoration: none;
 
 		&:hover,
 		&:focus {
-			color: $ember;
+			color: var(--c-accent);
 			text-decoration: underline;
 		}
 	}
@@ -895,7 +899,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	.footer-brand-text {
 		font-size: 1.125rem;
 		font-weight: 600;
-		color: $paper;
+		color: var(--c-on-panel);
 	}
 
 	.footer-links {
@@ -910,16 +914,11 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		}
 	}
 
-	.footer-disclaimer {
-		color: rgba($paper, 0.45);
-		margin-top: 0.75rem;
-	}
-
 	.footer-copyright {
-		border-top: 1px solid rgba($paper, 0.15);
+		border-top: 1px solid rgba(var(--c-on-panel-rgb), 0.15);
 		margin-top: 2.5rem;
 		padding-top: 1.5rem;
-		color: rgba($paper, 0.45);
+		color: rgba(var(--c-on-panel-rgb), 0.45);
 	}
 }
 
@@ -945,7 +944,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		}
 
 		p {
-			color: $stone;
+			color: var(--c-ink);
 			margin-bottom: 0;
 		}
 	}
@@ -954,8 +953,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		display: inline-block;
 		padding: 0.25rem 0.75rem;
 		margin-bottom: 0.875rem;
-		background-color: rgba($lichen, 0.2);
-		color: darken($lichen, 30%);
+		background-color: rgba(var(--c-accent-2-rgb), 0.2);
+		color: var(--c-accent-2-ink);
 		font-size: $small-font-size;
 		font-weight: 500;
 		letter-spacing: 0.08em;
@@ -965,17 +964,21 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 	&__image {
 		flex: 1;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border: 1px solid var(--c-border);
+		border-radius: $border-radius;
 	}
 
 	&__placeholder {
 		width: 100%;
 		aspect-ratio: 16 / 10;
-		background-color: darken($paper, 5%);
-		border: 1px solid $rule;
+		background-color: var(--c-surface-sunk);
+		border: 1px solid var(--c-border);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: lighten($stone, 30%);
+		color: var(--c-ink-soft);
 		font-size: $small-font-size;
 		font-weight: 500;
 		text-transform: uppercase;
@@ -985,11 +988,24 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 	&__img {
 		width: 100%;
-		aspect-ratio: 16 / 10;
+		height: 100%;
 		object-fit: cover;
-		border: 1px solid $rule;
-		border-radius: $border-radius;
+		object-position: var(--pan-x, 0%) center;
 		display: block;
+		transform: translateY(var(--pan-y, 0px)) scale(var(--zoom, 1));
+		transition:
+			object-position 500ms ease-out,
+			transform 500ms ease-out;
+	}
+
+	&__img--dark {
+		display: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&__img {
+			transition: none;
+		}
 	}
 
 	@media (max-width: 767.98px) {
@@ -1004,10 +1020,10 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	flex-direction: column;
 	height: 100%;
 	padding: 1.5rem;
-	background-color: $paper;
-	border: 1px solid $rule;
+	background-color: var(--c-surface);
+	border: 1px solid var(--c-border);
 	border-radius: $border-radius;
-	color: $stone;
+	color: var(--c-ink);
 	text-decoration: none;
 	transition:
 		background-color 200ms ease,
@@ -1030,7 +1046,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 	&__icon {
 		display: block;
-		color: $ember;
+		color: var(--c-accent);
 		transition: color 200ms ease;
 	}
 
@@ -1038,15 +1054,15 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		display: inline-block;
 		margin-top: 1rem;
 		font-weight: 600;
-		color: $ember;
+		color: var(--c-accent);
 		transition: color 200ms ease;
 	}
 
 	&:hover,
 	&:focus-visible {
-		background-color: $stone;
-		border-color: $stone;
-		color: $paper;
+		background-color: var(--c-panel);
+		border-color: var(--c-panel);
+		color: var(--c-on-panel);
 		transform: translateY(-2px);
 		text-decoration: none;
 	}
@@ -1055,35 +1071,22 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 	&:focus-visible &__icon,
 	&:hover &__link,
 	&:focus-visible &__link {
-		color: $lichen;
+		color: var(--c-accent-2);
 	}
 
 	&:focus-visible {
-		outline: 2px solid $lichen;
+		outline: 2px solid var(--c-accent-2);
 		outline-offset: 3px;
-	}
-}
-
-.audience-list {
-	list-style: disc;
-	padding-left: 1.25rem;
-
-	li {
-		margin-bottom: 0.6rem;
-	}
-
-	li:last-child {
-		margin-bottom: 0;
 	}
 }
 
 // Alternating section backgrounds.
 .bg-stone-tint {
-	background-color: darken($paper, 3%);
+	background-color: var(--c-surface-sunk);
 }
 
 .bg-moss-tint {
-	background-color: rgba($moss, 0.25);
+	background-color: rgba(var(--c-moss-rgb), 0.25);
 }
 
 .section-pad {
@@ -1106,8 +1109,8 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 .faq-accordion {
 	.faq-item {
-		border: 1px solid $rule;
-		background-color: $paper;
+		border: 1px solid var(--c-border);
+		background-color: var(--c-surface);
 		margin-bottom: 0.5rem;
 		border-radius: $border-radius;
 	}
@@ -1117,7 +1120,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		padding: 1rem 1.25rem;
 		font-weight: 500;
 		font-size: 1.0625rem;
-		color: $stone;
+		color: var(--c-ink);
 		cursor: pointer;
 		display: flex;
 		justify-content: space-between;
@@ -1133,17 +1136,17 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 			flex-shrink: 0;
 			width: 0.75rem;
 			height: 0.75rem;
-			border-right: 2px solid $stone;
-			border-bottom: 2px solid $stone;
+			border-right: 2px solid var(--c-ink);
+			border-bottom: 2px solid var(--c-ink);
 			transform: rotate(45deg);
 			transition: transform 200ms ease;
 		}
 
 		&:hover {
-			color: $ember;
+			color: var(--c-accent);
 
 			&::after {
-				border-color: $ember;
+				border-color: var(--c-accent);
 			}
 		}
 	}
@@ -1156,7 +1159,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 
 	.faq-answer {
 		padding: 0 1.25rem 1rem 1.25rem;
-		color: $stone;
+		color: var(--c-ink);
 
 		p {
 			margin-bottom: 0.75rem;
@@ -1167,5 +1170,7 @@ $rocky-edge-vertical: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 		}
 	}
 }
+
+@import 'blog';
 
 } // .site-marketing

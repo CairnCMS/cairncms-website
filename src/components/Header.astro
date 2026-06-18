@@ -6,29 +6,46 @@
 				<span>CairnCMS</span>
 			</a>
 
-			<button
-				class="navbar-toggler"
-				type="button"
-				aria-controls="cairn-nav"
-				aria-expanded="false"
-				aria-label="Toggle navigation"
-				data-nav-toggle
-			>
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			<div class="d-flex align-items-center order-md-last ms-md-3">
+				<div class="nav-actions">
+					<a class="nav-icon-link" href="https://github.com/CairnCMS/cairncms" target="_blank" rel="noopener noreferrer" aria-label="CairnCMS on GitHub">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+							<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+						</svg>
+					</a>
+					<span class="nav-divider" aria-hidden="true"></span>
+					<button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark theme">
+						<svg class="theme-toggle__icon theme-toggle__moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+							<path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/>
+						</svg>
+						<svg class="theme-toggle__icon theme-toggle__sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+							<path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.708l1.414 1.415a.5.5 0 0 1 0 .707z"/>
+						</svg>
+					</button>
+				</div>
+
+				<button
+					class="navbar-toggler ms-3"
+					type="button"
+					aria-controls="cairn-nav"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+					data-nav-toggle
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
 
 			<div class="collapse navbar-collapse" id="cairn-nav">
-				<ul class="navbar-nav ms-auto align-items-md-center">
+				<ul class="navbar-nav ms-md-auto align-items-md-center">
+					<li class="nav-item">
+						<a class="nav-link" href="/blog">Blog</a>
+					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="/docs">Docs</a>
 					</li>
-					<li class="nav-item ms-md-2">
-						<a class="btn btn-outline-light btn-sm d-inline-flex align-items-center gap-2" href="https://github.com/CairnCMS/cairncms" target="_blank" rel="noopener noreferrer">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-								<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
-							</svg>
-							<span>GitHub</span>
-						</a>
+					<li class="nav-item">
+						<a class="nav-link" href="https://tree.taiga.io/project/cairncms-cairncms-roadmap/kanban" target="_blank" rel="noopener noreferrer">Roadmap</a>
 					</li>
 				</ul>
 			</div>
@@ -44,6 +61,35 @@
 		toggle.addEventListener('click', () => {
 			const open = target.classList.toggle('show');
 			toggle.setAttribute('aria-expanded', String(open));
+		});
+	}
+
+	const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+
+	if (themeToggle) {
+		const syncLabel = (theme: string) => {
+			themeToggle.setAttribute(
+				'aria-label',
+				theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+			);
+		};
+
+		syncLabel(document.documentElement.dataset.theme ?? 'light');
+
+		themeToggle.addEventListener('click', () => {
+			const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+			document.documentElement.dataset.theme = next;
+			localStorage.setItem('starlight-theme', next);
+			syncLabel(next);
+		});
+
+		const media = window.matchMedia('(prefers-color-scheme: dark)');
+		media.addEventListener('change', (event) => {
+			const stored = localStorage.getItem('starlight-theme');
+			if (stored === 'light' || stored === 'dark') return;
+			const theme = event.matches ? 'dark' : 'light';
+			document.documentElement.dataset.theme = theme;
+			syncLabel(theme);
 		});
 	}
 </script>

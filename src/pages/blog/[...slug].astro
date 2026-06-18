@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from 'astro:content';
+import MarketingLayout from '../../layouts/MarketingLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BlogCover from '../../components/BlogCover.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => (import.meta.env.PROD ? !data.draft : true));
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateFormat = new Intl.DateTimeFormat('en-US', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+---
+
+<MarketingLayout title={`${post.data.title} - CairnCMS`} description={post.data.description}>
+	<Header />
+	<main>
+		<article class="section-pad">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<a class="blog-back" href="/blog/">← Back to blog</a>
+						<header class="blog-post__header">
+							<span class="blog-card__category">{post.data.category}</span>
+							<h1>{post.data.title}</h1>
+							<p class="blog-post__meta">
+								<time datetime={post.data.pubDate.toISOString()}>
+									{dateFormat.format(post.data.pubDate)}
+								</time>
+								<span aria-hidden="true">·</span>
+								{post.data.author}
+								{
+									post.data.updatedDate && (
+										<>
+											<span aria-hidden="true">·</span>
+											Updated {dateFormat.format(post.data.updatedDate)}
+										</>
+									)
+								}
+							</p>
+						</header>
+						{post.data.cover && <BlogCover src={post.data.cover} alt={post.data.coverAlt ?? ''} />}
+						<div class="blog-prose">
+							<Content />
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</main>
+	<Footer />
+</MarketingLayout>

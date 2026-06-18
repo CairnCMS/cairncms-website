@@ -34,6 +34,7 @@ export default defineConfig({
 						defer: true,
 						src: 'https://cloud.umami.is/script.js',
 						'data-website-id': 'dcd90c8d-1b3b-4445-bfd5-1d7f0703dc88',
+						'data-domains': 'cairncms.dev',
 					},
 				},
 				{
@@ -79,7 +80,25 @@ export default defineConfig({
 						{ slug: 'docs/develop/clients' },
 						{ slug: 'docs/develop/custom-migrations' },
 						{ slug: 'docs/develop/email-templates' },
-						{ label: 'Extensions', collapsed: true, autogenerate: { directory: 'docs/develop/extensions' } },
+						{
+							label: 'Extensions',
+							collapsed: true,
+							items: [
+								{ slug: 'docs/develop/extensions' },
+								{ slug: 'docs/develop/extensions/creating-extensions' },
+								{
+									label: 'App extensions',
+									collapsed: true,
+									autogenerate: { directory: 'docs/develop/extensions/app-extensions' },
+								},
+								{
+									label: 'Server extensions',
+									collapsed: true,
+									autogenerate: { directory: 'docs/develop/extensions/server-extensions' },
+								},
+								{ slug: 'docs/develop/extensions/bundles' },
+							],
+						},
 					],
 				},
 				{ label: 'Manage', collapsed: true, autogenerate: { directory: 'docs/manage' } },

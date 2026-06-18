@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+	src: ImageMetadata;
+	alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<figure class="blog-cover">
+	<Image
+		src={src}
+		alt={alt}
+		widths={[480, 760, 1140, 1520]}
+		sizes="(min-width: 992px) 760px, 100vw"
+		loading="eager"
+	/>
+</figure>

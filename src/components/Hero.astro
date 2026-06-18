@@ -2,13 +2,28 @@
 const command = 'npx cairncms init my-cairn';
 ---
 
-<section class="hero-section">
+<section class="hero-section hero-section--landing">
+	<div class="hero-dust" aria-hidden="true"></div>
+	<div class="hero-mountains" aria-hidden="true">
+		<svg viewBox="0 0 1200 240" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+			<path
+				class="hero-mountains__back"
+				d="M0 110 L180 70 L360 165 L570 55 L780 150 L990 75 L1200 140 L1200 240 L0 240 Z"
+			></path>
+			<path
+				class="hero-mountains__mid"
+				d="M0 168 L160 145 L320 200 L540 120 L760 195 L980 135 L1200 175 L1200 240 L0 240 Z"
+			></path>
+			<path
+				class="hero-mountains__front"
+				d="M0 188 L260 170 L520 220 L820 160 L1120 210 L1200 190 L1200 240 L0 240 Z"
+			></path>
+		</svg>
+	</div>
 	<div class="section-pad">
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-lg-7 text-center">
-					<span class="eyebrow text-dark fw-bold">GPLv3 • REST & GraphQL • SQL-Backed</span>
-					<hr class="hr-short"/>
 					<h1 class="text-primary">Open content and data infrastructure for self-hosted teams.</h1>
 					<p class="lead mt-3 mb-4">
 						Use CairnCMS to model data, manage content, expose APIs, & automate workflows from one workspace built on SQL tables you control.
@@ -33,6 +48,29 @@ const command = 'npx cairncms init my-cairn';
 							View on GitHub
 						</a>
 					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-12">
+					<figure class="hero-shot">
+						<img
+							class="hero-shot__img hero-shot__img--light"
+							src="/screenshots/cairncms-admin-light.png"
+							alt="The CairnCMS admin showing the Articles content list with Status, Title, and Slug columns"
+							width="1920"
+							height="844"
+							loading="lazy"
+						/>
+						<img
+							class="hero-shot__img hero-shot__img--dark"
+							src="/screenshots/cairncms-admin-dark.png"
+							alt="The CairnCMS admin showing the Articles content list with Status, Title, and Slug columns"
+							width="1916"
+							height="846"
+							loading="lazy"
+						/>
+						<a class="btn btn-primary hero-shot__cta" href="https://demo.cairncms.dev" target="_blank" rel="noopener noreferrer">Live demo</a>
+					</figure>
 				</div>
 			</div>
 		</div>
