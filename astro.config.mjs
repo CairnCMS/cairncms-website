@@ -114,6 +114,7 @@ export default defineConfig({
 						{ slug: 'docs/api/filters-and-queries' },
 						{ slug: 'docs/api/graphql' },
 						{ slug: 'docs/api/sdk' },
+						{ label: 'Realtime', collapsed: true, autogenerate: { directory: 'docs/api/realtime' } },
 						{ label: 'System Collections', collapsed: true, autogenerate: { directory: 'docs/api/system-collections' } },
 					],
 				},
