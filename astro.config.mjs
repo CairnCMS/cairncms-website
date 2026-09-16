@@ -86,6 +86,7 @@ export default defineConfig({
 							items: [
 								{ slug: 'docs/develop/extensions' },
 								{ slug: 'docs/develop/extensions/creating-extensions' },
+								{ slug: 'docs/develop/extensions/settings' },
 								{
 									label: 'App extensions',
 									collapsed: true,
