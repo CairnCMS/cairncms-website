@@ -62,6 +62,7 @@ export default defineConfig({
 					items: [
 						{ slug: 'docs/guides' },
 						{ slug: 'docs/guides/auth' },
+						{ slug: 'docs/guides/extensions' },
 						{ slug: 'docs/guides/files' },
 						{ slug: 'docs/guides/insights' },
 						{ slug: 'docs/guides/permissions' },
