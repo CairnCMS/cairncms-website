@@ -1,0 +1,47 @@
+// Extensions landing page. Builds on .spotlight, .install-command, and
+// .feature-card from _site.scss.
+
+.ext-package {
+	padding: 0.375rem 0.875rem;
+
+	code {
+		font-size: 0.8125rem;
+	}
+
+	.install-command__action {
+		min-width: 3.5rem;
+		padding-left: 0.625rem;
+		font-size: 0.6875rem;
+	}
+}
+
+.ext-pill {
+	border: 1px solid var(--c-border);
+	color: var(--c-ink-soft);
+
+	&--sandbox {
+		border-color: var(--c-accent-2);
+		background-color: rgba(var(--c-accent-2-rgb), 0.12);
+		color: var(--c-accent-2-ink);
+	}
+
+	&--new {
+		vertical-align: 0.2em;
+		border-color: var(--c-accent);
+		color: var(--c-accent);
+		font-size: 0.6875rem;
+		letter-spacing: 0.06em;
+	}
+}
+
+.ext-links {
+	a {
+		color: var(--c-accent);
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+}

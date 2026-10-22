@@ -1,0 +1,85 @@
+---
+// The Live Preview pane beside an article. An editor adds to the title, and
+// the preview keeps the saved title until they save; then the pane reloads
+// and the page shows the new one. The preview URL interpolates the slug.
+import Icon from './Icon.astro';
+
+const title = 'Black Elk Peak';
+const added = ' at sunrise';
+const summary = 'Up before dawn for the summit, then the long way down past Sylvan Lake.';
+---
+
+<div
+	class="sv sv-lp position-relative overflow-hidden rounded"
+	data-sv
+	role="img"
+	aria-label="An article in CairnCMS with the Live Preview pane open beside the editor, showing the article on the Waystone site. The editor adds to the title and saves, and the preview reloads with the new title."
+>
+	<div class="sv-page sv-lp__page position-absolute d-flex flex-column overflow-hidden sv-rise">
+		<div class="sv-head sv-lp__head d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="arrow_back" /></span>
+			<span class="sv-titles d-flex flex-column">
+				<span class="sv-crumb text-nowrap">Journal</span>
+				<span class="sv-title fw-semibold text-nowrap">Editing Item</span>
+			</span>
+			<span class="flex-fill"></span>
+			<span class="sv-round sv-lp__toggle d-inline-grid flex-shrink-0 rounded-circle"><Icon name="visibility" /></span>
+			<span class="sv-round sv-lp__save d-inline-grid flex-shrink-0 rounded-circle sv-round--primary"><Icon name="check" /></span>
+		</div>
+
+		<div class="sv-lp__split d-flex flex-fill">
+			<div class="sv-lp__form flex-shrink-0">
+				<div class="sv-form d-grid">
+					<div class="sv-form__field d-flex flex-column is-full sv-rise" style="--d: 150">
+						<span class="sv-form__label fw-semibold">Title</span>
+						<span class="sv-input sv-lp__title d-flex align-items-center text-nowrap overflow-hidden">
+							<span>{title}<span class="sv-type">{[...added].map((c, i) => <span style={`--c: ${i}`}>{c === ' ' ? ' ' : c}</span>)}</span><span class="sv-caret d-inline-block" /></span>
+						</span>
+					</div>
+					<div class="sv-form__field d-flex flex-column is-full sv-rise" style="--d: 200">
+						<span class="sv-form__label fw-semibold">Slug</span>
+						<span class="sv-input d-flex align-items-center text-nowrap overflow-hidden">black-elk-peak</span>
+					</div>
+					<div class="sv-form__field d-flex flex-column is-full sv-rise" style="--d: 250">
+						<span class="sv-form__label fw-semibold">Summary</span>
+						<span class="sv-input sv-lp__summary d-block">{summary}</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="sv-lp__pane d-flex flex-column flex-fill">
+				<div class="sv-lp__bar d-flex align-items-center flex-shrink-0 text-nowrap">
+					<span class="sv-lp__btn d-inline-grid flex-shrink-0 rounded-circle"><Icon name="open_in_new" /></span>
+					<span class="sv-lp__btn sv-lp__refresh d-inline-grid flex-shrink-0 rounded-circle"><Icon name="refresh" /></span>
+					<span class="sv-lp__url text-truncate">https://waystone.dev/journal/black-elk-peak</span>
+					<span class="flex-fill"></span>
+					<span class="sv-lp__zoom d-flex align-items-center">100%<Icon name="arrow_drop_down" /></span>
+					<Icon name="devices" />
+				</div>
+
+				<div class="sv-lp__site flex-fill overflow-hidden">
+					<div class="sv-lp__nav d-flex align-items-center">
+						<span class="fw-semibold">Waystone</span>
+						<span class="flex-fill"></span>
+						<span>Journal</span>
+						<span>Gear</span>
+					</div>
+					<div class="sv-lp__article">
+						<span class="sv-lp__eyebrow d-block fw-semibold text-uppercase">Trip report</span>
+						<span class="sv-lp__h1 d-grid fw-semibold">
+							<span class="sv-lp__old">{title}</span>
+							<span class="sv-lp__new"><span class="sv-lp__mark">{title + added}</span></span>
+						</span>
+						<p class="sv-lp__lede m-0">{summary}</p>
+						<svg class="sv-lp__hero d-block w-100" viewBox="0 0 200 64" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+							<rect width="200" height="64" class="sv-lp__sky" />
+							<circle cx="148" cy="22" r="7" class="sv-lp__sun" />
+							<path d="M0 64 L38 30 L56 42 L84 16 L112 40 L128 30 L162 52 L200 36 L200 64 Z" class="sv-lp__far" />
+							<path d="M0 64 L26 48 L58 58 L96 40 L134 56 L170 46 L200 56 L200 64 Z" class="sv-lp__near" />
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

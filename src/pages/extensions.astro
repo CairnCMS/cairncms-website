@@ -1,0 +1,208 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormatterVisual from '../components/spotlights/FormatterVisual.astro';
+import PreviewVisual from '../components/spotlights/PreviewVisual.astro';
+import AddressVisual from '../components/spotlights/AddressVisual.astro';
+import VisualRuntime from '../components/spotlights/VisualRuntime.astro';
+
+const REPO = 'https://github.com/CairnCMS/extensions';
+
+type Extension = {
+	name: string;
+	slug: string;
+	kind: string;
+	body: string;
+	requires: string;
+	sandboxed?: boolean;
+	isNew?: boolean;
+	// A lightly animated recreation of the extension at work, as on the homepage.
+	visual: AstroComponentFactory;
+};
+
+const extensions: Extension[] = [
+	{
+		name: 'Formatter',
+		slug: 'formatter',
+		kind: 'Flow operation',
+		body: 'Clean up and format field values in Flows without writing a script. Normalize phone numbers, tidy text, generate slugs, and format dates and numbers for any locale, then save the result or reject values that can’t be formatted.',
+		requires: '1.6.1',
+		isNew: true,
+		visual: FormatterVisual,
+	},
+	{
+		name: 'Live Preview',
+		slug: 'live-preview',
+		kind: 'Item view',
+		body: 'See your site’s page for the item you’re editing, right beside the editor. Set a preview URL for each collection, and the preview reloads every time you save.',
+		requires: '1.3.0',
+		visual: PreviewVisual,
+	},
+	{
+		name: 'Address Completion',
+		slug: 'address-completion',
+		kind: 'Field interface',
+		body: 'Let editors pick real addresses from Google Places suggestions and save the formatted address, place ID, and coordinates in one field. Searches run through a sandboxed server endpoint, so your API key stays on the server.',
+		requires: '1.3.0',
+		sandboxed: true,
+		visual: AddressVisual,
+	},
+];
+
+const guides = [
+	{
+		title: 'Create an extension',
+		body: 'Scaffold, build, and install your first extension.',
+		link: '/docs/develop/extensions/creating-extensions/',
+	},
+	{
+		title: 'Add settings',
+		body: 'Let admins configure your extension from the admin app.',
+		link: '/docs/develop/extensions/settings/',
+	},
+	{
+		title: 'Run it in the sandbox',
+		body: 'Declare the access your server code needs, and nothing more.',
+		link: '/docs/develop/extensions/server-extensions/sandbox/',
+	},
+];
+---
+
+<MarketingLayout
+	title="Extensions - CairnCMS"
+	description="First-party CairnCMS extensions, and how to build and run your own with full access or in a sandbox."
+>
+	<Header />
+	<main>
+		<section class="section-pad">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8 text-center">
+						<span class="eyebrow">CairnCMS</span>
+						<h1>Extensions</h1>
+						<p class="lead mt-3 mb-4">
+							Extend CairnCMS with your own code, or start with extensions built and maintained by the project.
+						</p>
+						<div class="d-flex flex-wrap gap-3 justify-content-center">
+							<a class="btn btn-primary" href={REPO} target="_blank" rel="noopener noreferrer">View the extensions repo</a>
+							<a class="btn btn-outline-dark" href="/docs/develop/extensions/">Build an extension</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section-pad section-border-top">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8 text-center">
+						<span class="eyebrow">First-party</span>
+						<h2>Built and maintained by the project</h2>
+						<p class="lead mt-3 mb-5">
+							Each extension is open source under GPLv3, published to npm under the @cairncms scope, and documented in its README.
+						</p>
+					</div>
+				</div>
+
+				{
+					extensions.map((ext, i) => {
+						const pkg = `@cairncms/extension-${ext.slug}`;
+						const Visual = ext.visual;
+						return (
+							<div class:list={['spotlight', i % 2 !== 0 && 'spotlight--reverse']} id={ext.slug}>
+								<div class="spotlight__text">
+									<div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+										<span class="spotlight__category mb-0">{ext.kind}</span>
+										{ext.sandboxed && <span class="ext-pill ext-pill--sandbox small d-inline-block rounded-pill py-1 px-2 fw-medium text-nowrap">Runs sandboxed</span>}
+									</div>
+									<h3>
+										{ext.name}
+										{ext.isNew && <span class="ext-pill ext-pill--new ms-2 text-uppercase d-inline-block rounded-pill py-1 px-2 fw-medium text-nowrap">New</span>}
+									</h3>
+									<p>{ext.body}</p>
+
+									<div class="d-flex flex-wrap align-items-center gap-2 mt-4">
+										<button
+											type="button"
+											class="install-command ext-package"
+											aria-label={`Copy package name ${pkg}`}
+											data-copy={pkg}
+										>
+											<code>{pkg}</code>
+											<span class="install-command__action" aria-hidden="true" data-copy-label>
+												Copy
+											</span>
+										</button>
+										<span class="ext-pill small d-inline-block rounded-pill py-1 px-2 fw-medium text-nowrap">Requires CairnCMS {ext.requires}+</span>
+									</div>
+
+									<div class="ext-links d-flex flex-wrap gap-4 mt-3">
+										<a class="fw-medium" href={`${REPO}/tree/main/packages/${ext.slug}`} target="_blank" rel="noopener noreferrer">
+											Installation and setup →
+										</a>
+										<a class="fw-medium" href={`https://www.npmjs.com/package/${pkg}`} target="_blank" rel="noopener noreferrer">
+											npm →
+										</a>
+									</div>
+								</div>
+								<div class="spotlight__visual">
+									<Visual />
+								</div>
+							</div>
+						);
+					})
+				}
+			</div>
+		</section>
+
+		<section class="section-pad section-pad--lg section-border-top">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8 text-center">
+						<span class="eyebrow">Build your own</span>
+						<h2>Make CairnCMS fit your project</h2>
+						<p class="lead mt-3 mb-5">
+							Add new fields, views, and pages to the admin app, or new API endpoints, automation steps, and event hooks.
+						</p>
+					</div>
+				</div>
+
+				<div class="row g-4 justify-content-center">
+					{
+						guides.map((guide) => (
+							<div class="col-md-4">
+								<a class="feature-card" href={guide.link}>
+									<h3>{guide.title}</h3>
+									<p>{guide.body}</p>
+									<span class="feature-card__link">Read the guide →</span>
+								</a>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+	</main>
+	<VisualRuntime />
+	<Footer />
+</MarketingLayout>
+
+<script>
+	for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+		const label = button.querySelector<HTMLElement>('[data-copy-label]');
+
+		button.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(button.dataset.copy ?? '');
+				if (label) {
+					label.textContent = 'Copied';
+					setTimeout(() => (label.textContent = 'Copy'), 2000);
+				}
+			} catch (err) {
+				console.error('Failed to copy package name', err);
+			}
+		});
+	}
+</script>

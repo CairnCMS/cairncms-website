@@ -1,0 +1,91 @@
+---
+// The Formatter extension at work. Its operation drawer lists three rules; an
+// editor beside it creates a location with untidy values and saves. The
+// blocking flow runs the rules top to bottom, and each field settles into its
+// formatted value as its rule lights.
+import Icon from './Icon.astro';
+
+const rules = [
+	{ path: 'slug', transform: 'text.slugify' },
+	{ path: 'email', transform: 'text.lowercase' },
+	{ path: 'phone', transform: 'phone.format' },
+];
+
+// Fields with a rule show their typed value until that rule runs.
+const fields: { label: string; value: string; typed?: string; rule?: number }[] = [
+	{ label: 'Name', value: 'Black Elk Trailhead' },
+	{ label: 'Slug', typed: 'Black Elk Trailhead!', value: 'black-elk-trailhead', rule: 0 },
+	{ label: 'Email', typed: 'Guides@Waystone.DEV', value: 'guides@waystone.dev', rule: 1 },
+	{ label: 'Phone', typed: '(201) 555-0123', value: '+12015550123', rule: 2 },
+];
+---
+
+<div
+	class="sv sv-fm position-relative overflow-hidden rounded"
+	data-sv
+	role="img"
+	aria-label="A Formatter operation in a CairnCMS flow, with rules that slugify a slug, lowercase an email, and format a phone number. An editor saves a new location with untidy values, and each field is formatted in turn as its rule runs."
+>
+	<div class="sv-page sv-fm__op position-absolute d-flex flex-column sv-rise">
+		<div class="sv-head d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="offline_bolt" /></span>
+			<span class="sv-titles d-flex flex-column">
+				<span class="sv-crumb text-nowrap">Clean up locations</span>
+				<span class="sv-title fw-semibold text-nowrap">Edit Operation</span>
+			</span>
+		</div>
+
+		<div class="sv-fm__type d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--primary"><Icon name="transform" /></span>
+			<span class="d-flex flex-column text-nowrap">
+				<span class="sv-fm__type-name fw-semibold">Formatter</span>
+				<span class="sv-fm__type-note">Normalize and format field values</span>
+			</span>
+		</div>
+
+		<div class="sv-fm__group d-flex flex-column">
+			<span class="sv-form__label fw-semibold">Formatting rules</span>
+			<ol class="sv-fm__rules d-flex flex-column m-0 list-unstyled">
+				{
+					rules.map((r, i) => (
+						<li class="sv-fm__rule d-flex align-items-center text-nowrap" style={`--i: ${i}`}>
+							<Icon name="drag_handle" />
+							<span class="flex-fill fw-medium">{`${r.path}: ${r.transform}`}</span>
+							<Icon name="close" />
+						</li>
+					))
+				}
+			</ol>
+			<span class="sv-fm__add align-self-start fw-semibold text-nowrap">Create New</span>
+		</div>
+	</div>
+
+	<div class="sv-page sv-fm__item position-absolute sv-rise" style="--d: 120">
+		<div class="sv-head d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="arrow_back" /></span>
+			<span class="sv-titles d-flex flex-column">
+				<span class="sv-crumb text-nowrap">Locations</span>
+				<span class="sv-title fw-semibold text-nowrap">Creating Item</span>
+			</span>
+			<span class="flex-fill"></span>
+			<span class="sv-round sv-fm__save d-inline-grid flex-shrink-0 rounded-circle sv-round--primary"><Icon name="check" /></span>
+		</div>
+
+		<div class="sv-form d-grid">
+			{
+				fields.map((f, i) => (
+					<div class="sv-form__field d-flex flex-column is-full sv-rise" style={`--d: ${250 + i * 50}`}>
+						<span class="sv-form__label fw-semibold">{f.label}</span>
+						<span
+							class:list={['sv-input sv-fm__input d-grid align-items-center text-nowrap overflow-hidden', f.typed && 'is-formatted']}
+							style={f.rule !== undefined ? `--i: ${f.rule}` : undefined}
+						>
+							{f.typed && <span class="sv-fm__typed">{f.typed}</span>}
+							<span class="sv-fm__value">{f.value}</span>
+						</span>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>

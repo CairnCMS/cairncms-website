@@ -1,0 +1,102 @@
+---
+// The Address Completion interface on a location. An editor types into the
+// address field, Google Places suggestions drop down, and picking one fills
+// in the formatted address with its coordinates. A note then spells out the
+// one record the field saves. The record is the README's example.
+import Icon from './Icon.astro';
+
+const typed = '30 W Pershing';
+const suggestions = [
+	'30 W Pershing Rd, Kansas City, MO, USA',
+	'30 W Pershing Rd, Chicago, IL, USA',
+	'Pershing Square, Los Angeles, CA, USA',
+];
+const record = {
+	formattedAddress: '30 W Pershing Rd, Kansas City, MO 64108, USA',
+	placeId: 'ChIJxbu2nD_wwIcR3cdZjUGmRhc',
+	location: '39.0846332, -94.5850238',
+};
+---
+
+<div
+	class="sv sv-ad position-relative overflow-hidden rounded"
+	data-sv
+	role="img"
+	aria-label="A location in CairnCMS with an Address Completion field. An editor types part of an address, picks a Google Places suggestion, and the field fills in the formatted address and its coordinates. A note shows the saved record: the formatted address, the place ID, and the location."
+>
+	<div class="sv-page sv-ad__page position-absolute sv-rise">
+		<div class="sv-head d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="arrow_back" /></span>
+			<span class="sv-titles d-flex flex-column">
+				<span class="sv-crumb text-nowrap">Locations</span>
+				<span class="sv-title fw-semibold text-nowrap">Kansas City</span>
+			</span>
+			<span class="flex-fill"></span>
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--primary"><Icon name="check" /></span>
+		</div>
+
+		<div class="sv-form d-grid">
+			<div class="sv-form__field d-flex flex-column sv-rise" style="--d: 150">
+				<span class="sv-form__label fw-semibold">Name</span>
+				<span class="sv-input d-flex align-items-center text-nowrap overflow-hidden">Kansas City</span>
+			</div>
+			<div class="sv-form__field d-flex flex-column sv-rise" style="--d: 200">
+				<span class="sv-form__label fw-semibold">Phone</span>
+				<span class="sv-input d-flex align-items-center text-nowrap overflow-hidden">+18165550142</span>
+			</div>
+			<div class="sv-form__field d-flex flex-column is-full sv-rise" style="--d: 250">
+				<span class="sv-form__label fw-semibold">Address</span>
+				<div class="position-relative">
+					<span class="sv-input sv-ad__input d-flex align-items-center text-nowrap overflow-hidden">
+						<Icon name="location_on" class="sv-ad__pin" />
+						<span class="sv-ad__text d-grid flex-fill">
+							<span class="sv-ad__placeholder text-truncate">Search for an address or place</span>
+							<span class="sv-ad__typed">
+								<span class="sv-type">
+									{[...typed].map((c, i) => <span style={`--c: ${i}`}>{c === ' ' ? ' ' : c}</span>)}
+								</span>
+								<span class="sv-caret d-inline-block" />
+							</span>
+							<span class="sv-ad__value text-truncate">{record.formattedAddress}</span>
+						</span>
+						<Icon name="close" class="sv-ad__clear" />
+					</span>
+
+					<div class="sv-layer sv-ad__menu position-absolute start-0 end-0 z-1">
+						<ul class="m-0 list-unstyled">
+							{
+								suggestions.map((s, i) => (
+									<li class:list={['sv-ad__option text-truncate', i === 0 && 'is-picked']}>{s}</li>
+								))
+							}
+						</ul>
+						<span class="sv-ad__attribution d-block text-end fw-medium">Google Maps</span>
+					</div>
+				</div>
+				<div class="sv-ad__summary d-flex align-items-center text-nowrap">
+					<span>{record.location}</span>
+					<span>8/9/2026, 9:22:24 AM</span>
+					<span class="sv-ad__attribution fw-medium">Google Maps</span>
+					<span class="d-flex ms-auto">
+						<Icon name="autorenew" />
+						<Icon name="open_in_new" />
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="sv-note sv-ad__note position-absolute z-1 d-flex flex-column">
+		<span class="sv-note__eyebrow fw-semibold text-uppercase text-nowrap">Saved in one field</span>
+		<dl class="sv-ad__record d-grid m-0">
+			{
+				Object.entries(record).map(([key, value]) => (
+					<>
+						<dt class="font-monospace fw-normal">{key}</dt>
+						<dd class="m-0">{value}</dd>
+					</>
+				))
+			}
+		</dl>
+	</div>
+</div>
