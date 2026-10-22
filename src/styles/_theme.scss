@@ -66,14 +66,6 @@
 	display: block;
 }
 
-:root[data-theme='dark'] .spotlight__img--light {
-	display: none;
-}
-
-:root[data-theme='dark'] .spotlight__img--dark {
-	display: block;
-}
-
 :root[data-theme='dark'] .hero-dust {
 	display: none;
 }

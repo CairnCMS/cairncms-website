@@ -1,0 +1,13 @@
+---
+import { icons } from './icons';
+---
+
+<svg class="position-absolute overflow-hidden" width="0" height="0" aria-hidden="true" focusable="false">
+	<defs>
+		{Object.entries(icons).map(([name, d]) => (
+			<symbol id={`sv-i-${name}`} viewBox="0 -960 960 960">
+				<path d={d} />
+			</symbol>
+		))}
+	</defs>
+</svg>

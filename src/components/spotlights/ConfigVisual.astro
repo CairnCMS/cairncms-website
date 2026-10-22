@@ -1,0 +1,223 @@
+---
+// Config as code in the spotlight style: a small map of where config moves,
+// over a terminal with the three ways to run it. Each tab lights its route.
+// Commands, flags, and output follow the config-as-code docs and the CLI's
+// plan renderer, without its log prefixes or the blank lines between plan
+// sections, which the terminal has no room for.
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+type Line = {
+	k: 'cmd' | 'cont' | 'out' | 'note';
+	text: string;
+	cls?: 'head' | 'create' | 'mod' | 'plan';
+};
+
+type Mode = {
+	id: 'local' | 'remote' | 'ci';
+	label: string;
+	title: string;
+	prompt: string;
+	lines: Line[];
+};
+
+const modes: Mode[] = [
+	{
+		id: 'local',
+		label: 'Local CLI',
+		title: 'you@waystone: ~/waystone',
+		prompt: '~/waystone $',
+		lines: [
+			{ k: 'cmd', text: 'cairncms config snapshot ./config' },
+			{ k: 'out', text: '? Directory "/home/you/waystone/config" is not empty. Overwrite? Yes' },
+			{ k: 'cmd', text: 'git status --short config' },
+			{ k: 'out', text: ' M config/permissions/editor.yaml', cls: 'mod' },
+			{ k: 'out', text: ' M config/schema/articles.yaml', cls: 'mod' },
+			{ k: 'cmd', text: 'git commit -am "Article summaries"' },
+			{ k: 'out', text: '[main 4c1d2e7] Article summaries' },
+		],
+	},
+	{
+		id: 'remote',
+		label: 'Remote CLI',
+		title: 'you@waystone: ~/waystone',
+		prompt: '~/waystone $',
+		lines: [
+			{ k: 'cmd', text: 'cairncms config apply --url https://staging.waystone.dev --yes ./config' },
+			{ k: 'out', text: 'The following changes will be applied:' },
+			{ k: 'out', text: 'Permissions:', cls: 'head' },
+			{ k: 'out', text: '  - Create editor / articles / update', cls: 'create' },
+			{ k: 'out', text: 'Fields:', cls: 'head' },
+			{ k: 'out', text: '  - Create articles / summary', cls: 'create' },
+			{ k: 'out', text: 'Plan: 2 to create, 0 to update, 0 to delete.', cls: 'plan' },
+		],
+	},
+	{
+		id: 'ci',
+		label: 'CI pipeline',
+		title: 'deploy-config · main · #142',
+		prompt: '$',
+		lines: [
+			{ k: 'note', text: '# CAIRNCMS_TOKEN comes from the repository secrets' },
+			{ k: 'cmd', text: 'cairncms config apply --dry-run --format json \\' },
+			{ k: 'cont', text: '    --url "$PROD_URL" ./config > plan.json || [ $? -eq 1 ]' },
+			{ k: 'cmd', text: `jq -e '.changes | all(.operation != "delete")' plan.json` },
+			{ k: 'out', text: 'true' },
+			{ k: 'cmd', text: 'cairncms config apply --url "$PROD_URL" --yes ./config' },
+			{ k: 'out', text: 'Plan: 2 to create, 0 to update, 0 to delete.', cls: 'plan' },
+		],
+	},
+];
+
+type Node = { id: string; icon: IconName; label: string; sub: string; x: number; y: number; mono?: boolean };
+
+// Positions in em on the 40 x 25 stage.
+const nodes: Node[] = [
+	{ id: 'local', icon: 'computer', label: 'local', sub: 'localhost:8055', x: 1.75, y: 4 },
+	{ id: 'config', icon: 'folder', label: './config', sub: 'YAML in git', x: 15, y: 4, mono: true },
+	{ id: 'staging', icon: 'dns', label: 'staging', sub: 'staging.waystone.dev', x: 28.5, y: 1.75 },
+	{ id: 'production', icon: 'dns', label: 'production', sub: 'cms.waystone.com', x: 28.5, y: 6.25 },
+];
+
+// Routes in stage units (10 per em). The two applies share a trunk out of
+// ./config, drawn once so neither branch paints over the other.
+const edges = [
+	{ id: 'snapshot', d: 'M114 57 L146 57', head: 'M142 53 L146 57 L142 61' },
+	{ id: 'trunk', d: 'M246 57 L265 57' },
+	{ id: 'staging', d: 'M265 57 Q267 57 267 55 L267 36.5 Q267 34.5 269 34.5 L280 34.5', head: 'M276 30.5 L280 34.5 L276 38.5' },
+	{ id: 'production', d: 'M265 57 Q267 57 267 59 L267 77.5 Q267 79.5 269 79.5 L280 79.5', head: 'M276 75.5 L280 79.5 L276 83.5' },
+];
+---
+
+<div class="sv sv-cfg is-mode-local position-relative overflow-hidden rounded" data-sv data-sv-config role="group" aria-label="Config as code: snapshot locally, apply remotely, or apply from CI">
+	<div class="sv-cfg__map position-absolute top-0 start-0 w-100 h-100" aria-hidden="true">
+		<svg class="sv-cfg__edges position-absolute top-0 start-0 w-100 h-100 overflow-visible" viewBox="0 0 400 250">
+			{
+				edges.map((e) => (
+					<g class={`sv-cfg__edge is-${e.id}`}>
+						<path d={e.d} />
+						{e.head && <path d={e.head} />}
+					</g>
+				))
+			}
+			<text class="sv-cfg__tag font-monospace" x="130" y="51">snapshot</text>
+			<text class="sv-cfg__tag font-monospace" x="255.5" y="51">apply</text>
+		</svg>
+
+		{
+			nodes.map((n, i) => (
+				<div class={`sv-cfg__node is-${n.id} position-absolute d-flex align-items-center sv-rise`} style={`--x: ${n.x}; --y: ${n.y}; --d: ${i * 90}`}>
+					<Icon name={n.icon} />
+					<span class="sv-cfg__text d-flex flex-column">
+						<span class:list={['sv-cfg__label fw-semibold', n.mono && 'font-monospace']}>{n.label}</span>
+						<span class="sv-cfg__sub text-truncate">{n.sub}</span>
+					</span>
+					{(n.id === 'staging' || n.id === 'production') && <Icon name="check_circle" class="sv-cfg__check position-absolute rounded-circle" />}
+				</div>
+			))
+		}
+	</div>
+
+	<div class="sv-cfg__term position-absolute d-flex flex-column overflow-hidden">
+		<div class="sv-cfg__bar d-flex flex-shrink-0 align-items-center">
+			<span class="sv-cfg__dots d-flex" aria-hidden="true"><i class="rounded-circle"></i><i class="rounded-circle"></i><i class="rounded-circle"></i></span>
+			<div class="sv-cfg__tabs d-flex" role="tablist" aria-label="Ways to run config as code">
+				{
+					modes.map((mode, i) => (
+						<button
+							type="button"
+							class="sv-cfg__tab border-0 rounded-pill fw-medium text-nowrap"
+							role="tab"
+							id={`sv-cfg-tab-${mode.id}`}
+							aria-selected={i === 0 ? 'true' : 'false'}
+							aria-controls={`sv-cfg-${mode.id}`}
+							tabindex={i === 0 ? 0 : -1}
+							data-mode={mode.id}
+						>
+							{mode.label}
+						</button>
+					))
+				}
+			</div>
+			<span class="flex-fill"></span>
+			{modes.map((mode, i) => <span class:list={['sv-cfg__title font-monospace text-nowrap', i === 0 && 'is-active']} data-title={mode.id}>{mode.title}</span>)}
+		</div>
+
+		<div class="sv-cfg__panes d-grid">
+			{
+				modes.map((mode, i) => (
+					<div
+						class:list={['sv-cfg__pane font-monospace', i === 0 && 'is-active']}
+						role="tabpanel"
+						id={`sv-cfg-${mode.id}`}
+						aria-labelledby={`sv-cfg-tab-${mode.id}`}
+					>
+						{mode.lines.map((line, n) => (
+							<div class:list={['sv-cfg__line overflow-hidden', `is-${line.k}`, line.cls && `is-${line.cls}`, (line.cls === 'head' || line.cls === 'plan') && 'fw-semibold']} style={`--i: ${n}`}>{/* One line: whitespace is visible under white-space: pre. */}{line.k === 'cmd' && <span class="sv-cfg__prompt">{mode.prompt} </span>}{line.text}</div>
+						))}
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<script>
+	// Tabs pick the mode; the root's is-mode-* class lights its route. Once the
+	// visual plays, the modes step forward on their own and stop at CI, unless
+	// someone picks one first.
+	for (const root of document.querySelectorAll<HTMLElement>('[data-sv-config]')) {
+		const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+		const panes = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+		const titles = [...root.querySelectorAll<HTMLElement>('[data-title]')];
+		let current = 0;
+		let timer: number | undefined;
+		let visible = false;
+
+		const select = (index: number) => {
+			current = index;
+			root.classList.add('has-switched');
+			const mode = tabs[index].dataset.mode;
+			tabs.forEach((tab, i) => {
+				tab.setAttribute('aria-selected', String(i === index));
+				tab.tabIndex = i === index ? 0 : -1;
+			});
+			panes.forEach((pane, i) => pane.classList.toggle('is-active', i === index));
+			titles.forEach((title) => title.classList.toggle('is-active', title.dataset.title === mode));
+			root.classList.remove('is-mode-local', 'is-mode-remote', 'is-mode-ci');
+			root.classList.add(`is-mode-${mode}`);
+		};
+
+		const stop = () => {
+			window.clearInterval(timer);
+			timer = undefined;
+		};
+
+		tabs.forEach((tab, i) => {
+			tab.addEventListener('click', () => {
+				stop();
+				select(i);
+			});
+			tab.addEventListener('keydown', (event) => {
+				const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+				if (!step) return;
+				stop();
+				const next = (i + step + tabs.length) % tabs.length;
+				tabs[next].focus();
+				select(next);
+			});
+		});
+
+		root.addEventListener('sv:play', () => {
+			new IntersectionObserver((entries) => {
+				visible = entries.some((e) => e.isIntersecting);
+			}).observe(root);
+			visible = true;
+			timer = window.setInterval(() => {
+				if (!visible || root.matches(':hover, :focus-within')) return;
+				select(current + 1);
+				if (current === tabs.length - 1) stop();
+			}, 5200);
+		});
+	}
+</script>

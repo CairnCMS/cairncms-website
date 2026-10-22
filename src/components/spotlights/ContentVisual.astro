@@ -1,0 +1,113 @@
+---
+// An item in the content workspace with its sidebar open on Comments. The
+// form settles in, then a teammate's comment arrives with an @mention.
+import Icon from './Icon.astro';
+---
+
+<div
+	class="sv sv-ct position-relative overflow-hidden rounded"
+	data-sv
+	role="img"
+	aria-label="An article open in the CairnCMS content workspace, with a new comment that mentions a teammate appearing in the sidebar."
+>
+	<div class="sv-page position-absolute sv-ct__page d-flex overflow-hidden">
+		<div class="sv-ct__form flex-fill">
+			<div class="sv-head d-flex align-items-center">
+				<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="arrow_back" /></span>
+				<span class="sv-titles d-flex flex-column">
+					<span class="sv-crumb">Articles</span>
+					<span class="sv-title fw-semibold text-nowrap">Spring launch notes</span>
+				</span>
+				<span class="flex-fill"></span>
+				<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--primary"><Icon name="check" /></span>
+			</div>
+
+			<div class="sv-form d-grid">
+				<div class="sv-form__field d-flex flex-column is-full sv-rise" style="--d: 150">
+					<span class="sv-form__label fw-semibold">Title</span>
+					<span class="sv-input d-flex align-items-center text-nowrap overflow-hidden">Spring launch notes</span>
+				</div>
+				<div class="sv-form__field d-flex flex-column sv-rise" style="--d: 250">
+					<span class="sv-form__label fw-semibold">Status</span>
+					<span class="sv-input d-flex align-items-center text-nowrap overflow-hidden">
+						<span class="sv-ct__dot flex-shrink-0 rounded-circle"></span>
+						In review
+						<span class="flex-fill"></span>
+						<Icon name="arrow_drop_down" class="sv-ct__caret" />
+					</span>
+				</div>
+				<div class="sv-form__field d-flex flex-column sv-rise" style="--d: 300">
+					<span class="sv-form__label fw-semibold">Author</span>
+					<span class="sv-input d-flex align-items-center text-nowrap overflow-hidden">
+						<span class="sv-avatar d-inline-grid flex-shrink-0 fw-semibold sv-avatar--ochre">SO</span>
+						Sam Okafor
+					</span>
+				</div>
+				<div class="sv-form__field d-flex flex-column is-full sv-rise" style="--d: 400">
+					<span class="sv-form__label fw-semibold">Body</span>
+					<span class="sv-input sv-ct__editor d-flex flex-column align-items-stretch text-nowrap overflow-hidden">
+						<span class="sv-ct__toolbar d-flex">
+							<Icon name="text_fields" />
+							<Icon name="format_quote" />
+							<Icon name="link" />
+							<Icon name="image" />
+							<Icon name="list" />
+						</span>
+						<span class="sv-ct__text d-block" style="--w: 92%"></span>
+						<span class="sv-ct__text d-block" style="--w: 84%"></span>
+						<span class="sv-ct__text d-block" style="--w: 61%"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="sv-ct__sidebar">
+			<div class="sv-ct__detail d-flex align-items-center fw-semibold text-nowrap">
+				<Icon name="change_history" />
+				<span>Revisions</span>
+				<span class="flex-fill"></span>
+				<span class="sv-badge d-inline-grid fw-semibold rounded-pill">4</span>
+			</div>
+
+			<div class="sv-ct__detail is-open d-flex align-items-center fw-semibold text-nowrap">
+				<Icon name="chat_bubble" />
+				<span>Comments</span>
+				<span class="flex-fill"></span>
+				<span class="sv-badge sv-ct__count d-inline-grid fw-semibold rounded-pill"><span>1</span><span>2</span></span>
+			</div>
+
+			<div class="sv-ct__comments d-flex flex-column">
+				<span class="sv-ct__divider d-flex align-items-center">Today</span>
+
+				<div class="sv-comment">
+					<div class="sv-comment__head d-flex align-items-center text-nowrap">
+						<span class="sv-avatar d-inline-grid flex-shrink-0 fw-semibold sv-avatar--ochre">SO</span>
+						<b class="fw-semibold">Sam Okafor</b>
+						<span class="flex-fill"></span>
+						<span class="sv-comment__time">2h ago</span>
+					</div>
+					<p class="m-0">Added the pricing table.</p>
+				</div>
+
+				<div class="sv-comment sv-ct__new">
+					<div class="sv-comment__head d-flex align-items-center text-nowrap">
+						<span class="sv-avatar d-inline-grid flex-shrink-0 fw-semibold sv-avatar--lichen">MC</span>
+						<b class="fw-semibold">Maya Chen</b>
+						<span class="flex-fill"></span>
+						<span class="sv-comment__time">now</span>
+					</div>
+					<p class="m-0"><mark class="sv-mention d-inline-block">@Sam Okafor</mark> can you tighten the intro?</p>
+				</div>
+
+				<div class="sv-ct__input">Leave a comment...</div>
+			</div>
+
+			<div class="sv-ct__detail d-flex align-items-center fw-semibold text-nowrap">
+				<Icon name="share" />
+				<span>Shares</span>
+				<span class="flex-fill"></span>
+				<span class="sv-badge d-inline-grid fw-semibold rounded-pill">1</span>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+---
+// Page-level support for the spotlight visuals: the icon sprite they draw
+// from and the script that plays each one as it scrolls into view. Render
+// once on any page that uses a visual.
+import IconSprite from './IconSprite.astro';
+---
+
+<IconSprite />
+<script>
+	// Visuals hold their finished state until the script arms them, so they read
+	// correctly without JavaScript or with reduced motion. Armed visuals sit at
+	// their first frame and play once when they scroll into view.
+	const visuals = document.querySelectorAll<HTMLElement>('[data-sv]');
+	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	if (!reduce && 'IntersectionObserver' in window) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					entry.target.classList.add('is-playing');
+					entry.target.dispatchEvent(new CustomEvent('sv:play'));
+					observer.unobserve(entry.target);
+				}
+			},
+			{ threshold: 0.45 }
+		);
+
+		for (const visual of visuals) {
+			visual.classList.add('is-armed');
+			observer.observe(visual);
+		}
+	}
+</script>

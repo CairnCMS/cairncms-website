@@ -1,0 +1,133 @@
+---
+// The data model field list for an articles collection. Fields pop in, then
+// a grab cursor drags cover up by its handle and the rows below it make room.
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+type Field = {
+	name: string;
+	ui: string;
+	half?: boolean;
+	required?: boolean;
+	icons?: IconName[];
+	// Position before the drag, for the pop-in order.
+	was: number;
+	role?: 'drag' | 'shift';
+	at?: number;
+};
+
+// Listed in their final order. Cover starts last and is dragged up to third;
+// the rows it passes shift down one row each as it goes by.
+const fields: Field[] = [
+	{ name: 'id', ui: 'Input', icons: ['vpn_key'], was: 0 },
+	{ name: 'title', ui: 'Input', required: true, was: 1 },
+	{ name: 'cover', ui: 'Image', was: 7, role: 'drag' },
+	{ name: 'status', ui: 'Dropdown', half: true, was: 2, role: 'shift', at: 2510 },
+	{ name: 'author', ui: 'Many to One', half: true, icons: ['open_in_new'], was: 3, role: 'shift', at: 2510 },
+	{ name: 'published_on', ui: 'Datetime', half: true, was: 4, role: 'shift', at: 2250 },
+	{ name: 'slug', ui: 'Input', half: true, was: 5, role: 'shift', at: 2250 },
+	{ name: 'body', ui: 'WYSIWYG', was: 6, role: 'shift', at: 1990 },
+];
+
+// The grab cursor: an open hand over the handle, closed while it drags. Each
+// hand is fingers, thumb, and palm as [x, y, width, height, rotation] in a
+// 20-unit box. It's drawn twice, an outline under a fill, so the outline
+// traces the whole hand and the gaps between fingers read as lines.
+type Part = [number, number, number, number, number];
+const hands: { state: 'open' | 'closed'; parts: Part[] }[] = [
+	{
+		state: 'open',
+		parts: [
+			[5.4, 3.6, 2, 10.4, 0],
+			[8.1, 2.3, 2, 11.7, 0],
+			[10.8, 2.9, 2, 11.1, 0],
+			[13.5, 4.9, 1.9, 9.1, 0],
+			[3.5, 9, 2.2, 6.4, -42],
+			[5.4, 9, 10, 8.6, 0],
+		],
+	},
+	{
+		state: 'closed',
+		parts: [
+			[5.4, 5.4, 2, 6.6, 0],
+			[8.1, 4.8, 2, 7.2, 0],
+			[10.8, 5.1, 2, 6.9, 0],
+			[13.5, 6, 1.9, 6, 0],
+			[3.9, 9.6, 2.2, 4.8, -24],
+			[5.4, 7.6, 10, 9, 0],
+		],
+	},
+];
+
+const part = ([x, y, w, h, r]: Part) => ({
+	x,
+	y,
+	width: w,
+	height: h,
+	rx: w < 4 ? w / 2 : 3.2,
+	transform: r ? `rotate(${r} ${x + w / 2} ${y + h / 2})` : undefined,
+});
+---
+
+<div
+	class="sv sv-dm position-relative overflow-hidden rounded"
+	data-sv
+	role="img"
+	aria-label="The CairnCMS data model editor showing the fields of an articles collection, with the cover field being dragged into a new position."
+>
+	<div class="sv-page position-absolute">
+		<div class="sv-head d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="arrow_back" /></span>
+			<span class="sv-title fw-semibold text-nowrap">Articles</span>
+			<span class="flex-fill"></span>
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="delete" /></span>
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--primary"><Icon name="check" /></span>
+		</div>
+
+		<div class="sv-dm__label d-flex align-items-baseline">
+			<span class="sv-label fw-semibold text-nowrap">Fields &amp; Layout</span>
+			<span class="sv-dm__autosave">Saves automatically</span>
+		</div>
+
+		<div class="sv-dm__grid d-grid">
+			{
+				fields.map((field) => (
+					<div
+						class:list={['sv-dm__slot position-relative', !field.half && 'is-full', field.role && `is-${field.role}`, field.role === 'drag' && 'z-2']}
+						style={`--pop: ${150 + field.was * 110}; --at: ${field.at ?? 0}`}
+					>
+						<div class="sv-field d-flex align-items-center text-nowrap overflow-hidden">
+							<Icon name="drag_indicator" class="sv-field__handle" />
+							<span class="sv-field__name font-monospace">
+								{field.name}
+								{field.required && <Icon name="star_fill" class="sv-field__required" />}
+							</span>
+							<span class="sv-field__ui text-truncate font-monospace">{field.ui}</span>
+							<span class="flex-fill" />
+							{field.icons?.map((icon) => <Icon name={icon} class="sv-field__icon" />)}
+							<Icon name="more_vert" class="sv-field__icon" />
+						</div>
+						{field.role === 'drag' && (
+							<svg class="sv-cursor position-absolute pe-none" viewBox="0 0 20 20" aria-hidden="true">
+								{hands.map((hand) => (
+									<g class={`sv-cursor__${hand.state}`}>
+										<g class="sv-cursor__edge">
+											{hand.parts.map((p) => (
+												<rect {...part(p)} />
+											))}
+										</g>
+										<g class="sv-cursor__fill">
+											{hand.parts.map((p) => (
+												<rect {...part(p)} />
+											))}
+										</g>
+									</g>
+								))}
+							</svg>
+						)}
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>

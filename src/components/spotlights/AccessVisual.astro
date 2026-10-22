@@ -1,0 +1,218 @@
+---
+// A role's permissions overview, as the admin app draws it. Tabs switch
+// between three roles. One custom cell per role is annotated: a leader runs
+// from the cell to a note outside the page that spells out its rule. The note
+// is site styled so it reads as commentary, not as part of the app.
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+type Access = 'all' | 'custom' | 'none';
+
+type Role = {
+	id: string;
+	name: string;
+	icon: IconName;
+	settings: { icon: IconName; label: string }[];
+	rows: [string, Access[]][];
+	// The annotated custom cell: row, column, its filter, and what it means.
+	rule: { row: number; col: number; field: string; op: string; value: string; note: string };
+};
+
+const actions: { icon: IconName; label: string }[] = [
+	{ icon: 'add', label: 'Create' },
+	{ icon: 'visibility', label: 'Read' },
+	{ icon: 'edit', label: 'Update' },
+	{ icon: 'delete', label: 'Delete' },
+	{ icon: 'share', label: 'Share' },
+];
+
+const STATE: Record<Access, { icon: IconName; label: string }> = {
+	all: { icon: 'check', label: 'All access' },
+	custom: { icon: 'rule', label: 'Custom access' },
+	none: { icon: 'block', label: 'No access' },
+};
+
+const roles: Role[] = [
+	{
+		id: 'editor',
+		name: 'Editor',
+		icon: 'supervisor_account',
+		settings: [
+			{ icon: 'badge', label: 'App access' },
+			{ icon: 'shield', label: '2FA enforced' },
+		],
+		rows: [
+			['Articles', ['all', 'all', 'all', 'custom', 'all']],
+			['Authors', ['none', 'all', 'all', 'none', 'none']],
+			['Categories', ['all', 'all', 'all', 'all', 'none']],
+			['Pages', ['all', 'all', 'all', 'none', 'none']],
+		],
+		rule: { row: 0, col: 3, field: 'status', op: 'Equals', value: 'draft', note: 'Editors can only delete drafts.' },
+	},
+	{
+		id: 'author',
+		name: 'Author',
+		icon: 'person',
+		settings: [
+			{ icon: 'badge', label: 'App access' },
+			{ icon: 'dns', label: 'IP allowlist' },
+		],
+		rows: [
+			['Articles', ['all', 'all', 'custom', 'none', 'all']],
+			['Authors', ['none', 'all', 'custom', 'none', 'none']],
+			['Categories', ['none', 'all', 'none', 'none', 'none']],
+			['Pages', ['none', 'all', 'none', 'none', 'none']],
+		],
+		rule: {
+			row: 0,
+			col: 2,
+			field: 'author',
+			op: 'Equals',
+			value: '$CURRENT_USER',
+			note: 'Authors can only edit their own articles.',
+		},
+	},
+	{
+		id: 'public',
+		name: 'Public',
+		icon: 'public',
+		settings: [{ icon: 'public', label: 'Unauthenticated requests' }],
+		rows: [
+			['Articles', ['none', 'custom', 'none', 'none', 'none']],
+			['Authors', ['none', 'all', 'none', 'none', 'none']],
+			['Categories', ['none', 'all', 'none', 'none', 'none']],
+			['Pages', ['none', 'all', 'none', 'none', 'none']],
+		],
+		rule: {
+			row: 0,
+			col: 1,
+			field: 'status',
+			op: 'Equals',
+			value: 'published',
+			note: 'The public only sees published articles.',
+		},
+	},
+];
+---
+
+<div class="sv sv-acc position-relative overflow-hidden rounded" data-sv data-sv-access>
+	<div class="sv-acc__tabs position-absolute z-1 d-flex" role="tablist" aria-label="Roles">
+		{
+			roles.map((role, i) => (
+				<button
+					type="button"
+					class="sv-acc__tab fw-medium rounded-pill"
+					role="tab"
+					id={`sv-acc-tab-${role.id}`}
+					aria-selected={i === 0 ? 'true' : 'false'}
+					aria-controls={`sv-acc-${role.id}`}
+					tabindex={i === 0 ? 0 : -1}
+				>
+					{role.name}
+				</button>
+			))
+		}
+	</div>
+
+	<div class="sv-page position-absolute sv-acc__page d-grid">
+		{
+			roles.map((role, i) => (
+				<div
+					class:list={['sv-acc__role', i === 0 && 'is-active']}
+					role="tabpanel"
+					id={`sv-acc-${role.id}`}
+					aria-labelledby={`sv-acc-tab-${role.id}`}
+				>
+					<div class="sv-head d-flex align-items-center">
+						<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft">
+							<Icon name={role.icon} />
+						</span>
+						<span class="sv-title fw-semibold text-nowrap">{role.name}</span>
+						<span class="flex-fill" />
+						{role.settings.map((s) => (
+							<span class="sv-chip d-inline-flex align-items-center rounded-pill text-nowrap">
+								<Icon name={s.icon} />
+								{s.label}
+							</span>
+						))}
+					</div>
+
+					<div class="sv-acc__label">
+						<span class="sv-label fw-semibold text-nowrap">Permissions</span>
+					</div>
+
+					<table class="sv-acc__table w-100">
+						<thead>
+							<tr>
+								<th scope="col" class="text-start align-middle fw-semibold">Collection</th>
+								{actions.map((a) => (
+									<th scope="col" class="text-center align-middle fw-semibold">
+										<Icon name={a.icon} class="rounded-circle" />
+										<span class="visually-hidden">{a.label}</span>
+									</th>
+								))}
+							</tr>
+						</thead>
+						<tbody>
+							{role.rows.map(([name, cells], r) => (
+								<tr>
+									<th scope="row" class="text-start align-middle fw-normal">{name}</th>
+									{cells.map((state, c) => (
+										<td
+											class:list={[
+												`is-${state}`,
+												'text-center align-middle',
+												r === role.rule.row && c === role.rule.col && 'is-called position-relative',
+											]}
+											style={`--d: ${200 + c * 90 + r * 40}; --below: ${role.rows.length - 1 - r}`}
+										>
+											<Icon name={STATE[state].icon} class="rounded-circle" />
+											<span class="visually-hidden">{STATE[state].label}</span>
+										</td>
+									))}
+								</tr>
+							))}
+						</tbody>
+					</table>
+
+					<div class="sv-note sv-acc__note position-relative z-1 d-flex flex-column">
+						<span class="sv-note__eyebrow fw-semibold text-uppercase text-nowrap">
+							{role.rows[role.rule.row][0]} · {actions[role.rule.col].label}
+						</span>
+						<span class="sv-acc__note-text fw-semibold">{role.rule.note}</span>
+						<code class="sv-acc__note-filter font-monospace text-nowrap">
+							{role.rule.field} <span class="sv-acc__op">{role.rule.op}</span>{' '}
+							<span class="sv-acc__value">{role.rule.value}</span>
+						</code>
+					</div>
+				</div>
+			))
+		}
+	</div>
+</div>
+
+<script>
+	for (const root of document.querySelectorAll<HTMLElement>('[data-sv-access]')) {
+		const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+		const panels = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+
+		const select = (index: number) => {
+			tabs.forEach((tab, i) => {
+				tab.setAttribute('aria-selected', String(i === index));
+				tab.tabIndex = i === index ? 0 : -1;
+			});
+			panels.forEach((panel, i) => panel.classList.toggle('is-active', i === index));
+		};
+
+		tabs.forEach((tab, i) => {
+			tab.addEventListener('click', () => select(i));
+			tab.addEventListener('keydown', (event) => {
+				const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+				if (!step) return;
+				const next = (i + step + tabs.length) % tabs.length;
+				tabs[next].focus();
+				select(next);
+			});
+		});
+	}
+</script>

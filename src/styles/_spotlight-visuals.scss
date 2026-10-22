@@ -1,0 +1,2462 @@
+// Feature spotlight visuals: stylized recreations of the admin app with light,
+// one-shot animation. Everything in a stage is sized in em and the stage's
+// font size follows its container width, so each visual scales as one picture.
+//
+// Animations are declared under .is-armed only, so without JavaScript or with
+// reduced motion every visual shows its finished state.
+
+$sv-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+.spotlight__visual {
+	flex: 1;
+	min-width: 0;
+	container-type: inline-size;
+
+	@media (max-width: 767.98px) {
+		width: 100%;
+	}
+}
+
+// --- Stage -------------------------------------------------------------------
+
+.sv {
+	// App surfaces mapped onto the site palette.
+	--sv-card: #fff;
+	--sv-sunk: var(--c-surface-sunk);
+	--sv-line: var(--c-border);
+	--sv-line-strong: var(--c-ledge);
+	--sv-muted: var(--c-ink-soft);
+	--sv-soft: color-mix(in srgb, var(--c-ink) 7%, transparent);
+	--sv-ok: var(--c-accent-2-ink);
+	--sv-warn: color-mix(in srgb, var(--c-ochre), #000 28%);
+	--sv-danger: var(--c-accent);
+	--sv-radius: 0.5em;
+	--sv-shadow: 0 1em 2.5em -1.5em rgba(0, 0, 0, 0.3);
+
+	aspect-ratio: 16 / 10;
+	font-size: 13px;
+	font-size: 2.5cqw;
+	line-height: 1.4;
+	color: var(--c-ink);
+	background-color: var(--c-surface);
+	border: 1px solid var(--c-border);
+
+	// Grid paper, lighter than the config-as-code panel.
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(var(--sv-line) 1px, transparent 1px),
+			linear-gradient(90deg, var(--sv-line) 1px, transparent 1px);
+		background-size: 2em 2em;
+		background-position: -1px -1px;
+		opacity: 0.5;
+		mask-image: radial-gradient(ellipse at center, #000 35%, transparent 85%);
+		-webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 85%);
+		pointer-events: none;
+	}
+
+	:root[data-theme='dark'] & {
+		--sv-card: var(--c-surface-sunk);
+		--sv-sunk: var(--c-surface);
+		--sv-warn: var(--c-ochre);
+		--sv-shadow: 0 1em 2.5em -1.25em rgba(0, 0, 0, 0.7);
+	}
+}
+
+// Armed visuals hold their first frame until they scroll into view.
+.sv.is-armed:not(.is-playing) {
+	*,
+	*::before,
+	*::after {
+		animation-play-state: paused !important;
+	}
+}
+
+@keyframes sv-rise {
+	from {
+		opacity: 0;
+		transform: translateY(0.4em);
+	}
+}
+
+@keyframes sv-fade {
+	from {
+		opacity: 0;
+	}
+}
+
+// Instant changes run as 1ms animations timed by step-start, so the change
+// lands when the delay ends and holds through the fill. Not step-end: Chrome
+// can end a short animation a hair short of full progress, and step-end then
+// never flips.
+//
+// Shown until the delay ends, then gone.
+@keyframes sv-hide {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+.sv.is-armed {
+	.sv-rise {
+		animation: sv-rise 520ms $sv-ease both;
+		animation-delay: calc(var(--d, 0) * 1ms);
+	}
+
+	.sv-fade {
+		animation: sv-fade 520ms ease both;
+		animation-delay: calc(var(--d, 0) * 1ms);
+	}
+}
+
+// --- Shared app pieces -------------------------------------------------------
+
+.sv-i {
+	width: 1.25em;
+	height: 1.25em;
+	fill: currentColor;
+}
+
+.sv-page {
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+	box-shadow: var(--sv-shadow);
+}
+
+.sv-head {
+	gap: 0.625em;
+}
+
+.sv-title {
+	font-size: 1.375em;
+	line-height: 1.2;
+}
+
+// A page title with its breadcrumb above it.
+.sv-titles {
+	min-width: 0;
+
+	.sv-title {
+		font-size: 1.2em;
+	}
+}
+
+.sv-crumb {
+	font-size: 0.75em;
+	color: var(--sv-muted);
+}
+
+.sv-round {
+	place-items: center;
+	width: 2.25em;
+	height: 2.25em;
+
+	.sv-i {
+		width: 1.25em;
+		height: 1.25em;
+	}
+
+	&--soft {
+		background-color: var(--sv-soft);
+		color: var(--c-ink);
+	}
+
+	&--primary {
+		background-color: var(--c-ink);
+		color: var(--sv-card);
+	}
+}
+
+.sv-label {
+	font-size: 0.9375em;
+}
+
+// A layer over the page, such as a drawer or a menu: a rounder frame and a
+// deeper shadow. In the dark it is a shade lighter than the panels under it.
+.sv-layer {
+	--sv-layer: var(--sv-card);
+	background-color: var(--sv-layer);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+	box-shadow:
+		0 0.15em 0.4em rgba(0, 0, 0, 0.06),
+		0 1.4em 2.8em -1em rgba(0, 0, 0, 0.4);
+
+	:root[data-theme='dark'] & {
+		--sv-layer: color-mix(in srgb, var(--sv-card), #fff 6%);
+		border-color: var(--sv-line-strong);
+		box-shadow: 0 1.4em 2.8em -1em rgba(0, 0, 0, 0.85);
+	}
+}
+
+// --- Data model --------------------------------------------------------------
+
+.sv-dm {
+	.sv-page {
+		top: 1.75em;
+		left: 2.5em;
+		right: 2.5em;
+		bottom: -1em;
+		padding: 1.25em 1.5em;
+	}
+
+	.sv-head {
+		margin-bottom: 1em;
+	}
+}
+
+.sv-dm__label {
+	gap: 0.75em;
+	margin-bottom: 0.625em;
+}
+
+.sv-dm__autosave {
+	font-size: 0.8125em;
+	color: var(--sv-warn);
+}
+
+.sv-dm__grid {
+	--pitch: 2.75em;
+
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 0.4em;
+}
+
+.sv-dm__slot {
+	min-width: 0;
+
+	&.is-full {
+		grid-column: span 2;
+	}
+}
+
+.sv-field {
+	gap: 0.5em;
+	height: 2.35em;
+	padding: 0 0.625em 0 0.5em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+
+	&__handle,
+	&__icon {
+		color: var(--sv-muted);
+	}
+
+	&__icon {
+		width: 1.0625em;
+		height: 1.0625em;
+	}
+
+	&__name {
+		font-size: 0.875em;
+	}
+
+	&__required {
+		width: 0.75em;
+		height: 0.75em;
+		margin: -0.6em 0 0 0.1em;
+		color: var(--c-accent);
+	}
+
+	&__ui {
+		font-size: 0.8125em;
+		color: var(--sv-muted);
+		opacity: 0.8;
+	}
+}
+
+// Centered on the drag handle. Dark with a white outline, as Linux desktops
+// draw it, and like a real cursor it keeps its colors in either theme.
+.sv-cursor {
+	top: 0.5em;
+	left: 0.3em;
+	width: 1.45em;
+	height: 1.45em;
+	opacity: 0;
+
+	&__edge {
+		fill: #fff;
+		stroke: #fff;
+		stroke-width: 2;
+		stroke-linejoin: round;
+	}
+
+	&__fill {
+		fill: #1d1d1f;
+	}
+
+	&__closed {
+		opacity: 0;
+	}
+}
+
+@keyframes sv-pop {
+	from {
+		opacity: 0;
+		transform: translateY(0.35em) scale(0.985);
+	}
+}
+
+@keyframes sv-dm-shift {
+	from {
+		transform: translateY(calc(-1 * var(--pitch)));
+	}
+}
+
+@keyframes sv-dm-drag {
+	0%,
+	16% {
+		transform: translateY(calc(3 * var(--pitch)));
+	}
+
+	84% {
+		transform: none;
+	}
+}
+
+@keyframes sv-dm-lift {
+	0%,
+	100% {
+		border-color: var(--sv-line);
+		box-shadow: none;
+	}
+
+	14%,
+	86% {
+		border-color: var(--sv-line-strong);
+		box-shadow: 0 0.75em 1.5em -0.75em rgba(0, 0, 0, 0.35);
+	}
+}
+
+@keyframes sv-dm-cursor {
+	0%,
+	100% {
+		opacity: 0;
+	}
+
+	12%,
+	88% {
+		opacity: 1;
+	}
+}
+
+// The hand closes as cover lifts and opens as it drops, on the cursor's
+// timeline.
+@keyframes sv-dm-grip {
+	0%,
+	15% {
+		opacity: 0;
+	}
+
+	16%,
+	78% {
+		opacity: 1;
+	}
+
+	79%,
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes sv-dm-release {
+	0%,
+	15% {
+		opacity: 1;
+	}
+
+	16%,
+	78% {
+		opacity: 0;
+	}
+
+	79%,
+	100% {
+		opacity: 1;
+	}
+}
+
+.sv-dm.is-armed {
+	.sv-field {
+		animation: sv-pop 480ms $sv-ease both;
+		animation-delay: calc(var(--pop) * 1ms);
+	}
+
+	.sv-dm__slot.is-shift {
+		animation: sv-dm-shift 340ms $sv-ease both;
+		animation-delay: calc(var(--at) * 1ms);
+	}
+
+	.sv-dm__slot.is-drag {
+		animation: sv-dm-drag 1300ms cubic-bezier(0.45, 0, 0.25, 1) 1700ms both;
+
+		.sv-field {
+			animation:
+				sv-pop 480ms $sv-ease both,
+				sv-dm-lift 1300ms ease 1700ms both;
+			animation-delay: calc(var(--pop) * 1ms), 1700ms;
+		}
+
+		.sv-field__handle {
+			animation: sv-dm-handle 1300ms ease 1700ms both;
+		}
+
+		.sv-cursor {
+			animation: sv-dm-cursor 1500ms ease 1650ms both;
+		}
+
+		.sv-cursor__open {
+			animation: sv-dm-release 1500ms linear 1650ms both;
+		}
+
+		.sv-cursor__closed {
+			animation: sv-dm-grip 1500ms linear 1650ms both;
+		}
+	}
+}
+
+@keyframes sv-dm-handle {
+	14%,
+	86% {
+		color: var(--c-ink);
+	}
+}
+
+// --- Shared form and sidebar pieces --------------------------------------------
+
+.sv-input {
+	gap: 0.5em;
+	height: 2.25em;
+	padding: 0 0.75em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+	font-size: 0.875em;
+}
+
+.sv-avatar {
+	place-items: center;
+	width: 1.75em;
+	height: 1.75em;
+	border-radius: 0.2em;
+	font-size: 0.75em;
+	letter-spacing: 0.02em;
+	color: var(--c-ink);
+
+	&--ochre {
+		background-color: rgba(var(--c-ochre-rgb), 0.35);
+	}
+
+	&--lichen {
+		background-color: rgba(var(--c-accent-2-rgb), 0.35);
+	}
+}
+
+.sv-badge {
+	place-items: center;
+	min-width: 1.5em;
+	height: 1.5em;
+	padding: 0 0.4em;
+	background-color: var(--c-ink);
+	color: var(--sv-card);
+	font-size: 0.75em;
+}
+
+.sv-comment {
+	padding: 0.5em 0.625em 0.6em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+
+	&__head {
+		gap: 0.5em;
+		margin-bottom: 0.375em;
+
+		b {
+			font-size: 0.8125em;
+		}
+	}
+
+	&__time {
+		font-size: 0.6875em;
+		color: var(--sv-muted);
+	}
+
+	p {
+		font-size: 0.8125em;
+		line-height: 1.45;
+		color: var(--c-ink);
+	}
+}
+
+.sv-mention {
+	padding: 0.125em 0.3em;
+	border-radius: 0.35em;
+	background-color: rgba(var(--c-accent-rgb), 0.12);
+	color: var(--c-accent);
+	line-height: 1.1;
+}
+
+// An item form: fields in two columns, with full-width fields spanning both.
+.sv-form {
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 0.875em 1em;
+	margin-top: 1.125em;
+}
+
+.sv-form__field {
+	gap: 0.3em;
+	min-width: 0;
+
+	&.is-full {
+		grid-column: span 2;
+	}
+}
+
+.sv-form__label {
+	font-size: 0.8125em;
+}
+
+// Commentary on the app, site styled so it does not read as part of the UI.
+.sv-note {
+	background-color: var(--c-surface);
+	border: 1px solid rgba(var(--c-accent-rgb), 0.45);
+	border-top: 3px solid var(--c-accent);
+	border-radius: 0.35em;
+	box-shadow: 0 1.2em 2.4em -1.2em rgba(0, 0, 0, 0.45);
+}
+
+.sv-note__eyebrow {
+	font-size: 0.625em;
+	letter-spacing: 0.08em;
+	color: var(--c-accent);
+}
+
+// Typing. Each character of a .sv-type arrives in turn from --type-at, and a
+// .sv-caret blinks --caret-blinks times from --caret-at. Unarmed, the text is
+// whole and the caret hidden.
+.sv-caret {
+	width: 1px;
+	height: 1.15em;
+	margin-left: 1px;
+	background-color: currentColor;
+	vertical-align: -0.2em;
+	opacity: 0;
+}
+
+@keyframes sv-key {
+	from {
+		font-size: 0;
+	}
+}
+
+@keyframes sv-blink {
+	0%,
+	49% {
+		opacity: 1;
+	}
+
+	50%,
+	100% {
+		opacity: 0;
+	}
+}
+
+// A focused input, held for the length of the animation and no longer.
+@keyframes sv-focus {
+	from,
+	to {
+		border-color: var(--c-accent);
+		box-shadow: 0 0 0 1px var(--c-accent);
+	}
+}
+
+@keyframes sv-press {
+	40% {
+		transform: scale(0.86);
+		box-shadow: 0 0 0 0.4em rgba(var(--c-accent-rgb), 0.25);
+	}
+}
+
+.sv.is-armed {
+	.sv-type > span {
+		animation: sv-key 1ms step-start both;
+		animation-delay: calc(var(--type-at) + var(--c) * 70ms);
+	}
+
+	.sv-caret {
+		animation: sv-blink 800ms step-end var(--caret-at) var(--caret-blinks) forwards;
+	}
+}
+
+// --- Content workspace -------------------------------------------------------
+
+.sv-ct__page {
+	top: 1.75em;
+	left: 2em;
+	right: -0.5em;
+	bottom: -0.5em;
+}
+
+.sv-ct__form {
+	min-width: 0;
+	padding: 1.25em 1.5em;
+}
+
+.sv-ct__dot {
+	width: 0.6em;
+	height: 0.6em;
+	background-color: var(--c-ochre);
+}
+
+.sv-ct__caret {
+	color: var(--sv-muted);
+}
+
+.sv-ct__editor {
+	gap: 0.6em;
+	height: auto;
+	padding: 0 0 1em;
+}
+
+.sv-ct__toolbar {
+	gap: 0.75em;
+	padding: 0.4em 0.75em;
+	border-bottom: 1px solid var(--sv-line);
+	color: var(--sv-muted);
+
+	.sv-i {
+		width: 1.1em;
+		height: 1.1em;
+	}
+}
+
+.sv-ct__text {
+	width: var(--w);
+	height: 0.45em;
+	margin: 0 0.85em;
+	border-radius: 0.25em;
+	background-color: var(--sv-soft);
+}
+
+.sv-ct__sidebar {
+	flex: 0 0 15.5em;
+	padding: 0.5em 0.75em;
+	background-color: var(--sv-sunk);
+	border-left: 1px solid var(--sv-line);
+}
+
+.sv-ct__detail {
+	gap: 0.6em;
+	height: 2.6em;
+	padding: 0 0.25em;
+	font-size: 0.875em;
+
+	.sv-i {
+		color: var(--sv-muted);
+	}
+
+	& + & {
+		border-top: 1px solid var(--sv-line);
+	}
+}
+
+.sv-ct__count {
+	span {
+		grid-area: 1 / 1;
+	}
+
+	span:first-child {
+		visibility: hidden;
+	}
+}
+
+.sv-ct__comments {
+	gap: 0.5em;
+	padding: 0.1em 0 0.875em;
+	border-bottom: 1px solid var(--sv-line);
+}
+
+.sv-ct__divider {
+	gap: 0.6em;
+	font-size: 0.6875em;
+	color: var(--sv-muted);
+
+	&::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background-color: var(--sv-line);
+	}
+}
+
+.sv-ct__input {
+	padding: 0.6em 0.75em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+	font-size: 0.75em;
+	color: var(--sv-muted);
+}
+
+@keyframes sv-ct-mention {
+	from {
+		background-color: rgba(var(--c-accent-rgb), 0.3);
+	}
+}
+
+@keyframes sv-ct-count-out {
+	from {
+		visibility: visible;
+	}
+
+	to {
+		visibility: hidden;
+	}
+}
+
+@keyframes sv-ct-count-in {
+	from {
+		visibility: hidden;
+	}
+
+	to {
+		visibility: visible;
+	}
+}
+
+.sv-ct.is-armed {
+	.sv-ct__new {
+		animation: sv-rise 600ms $sv-ease 1100ms both;
+	}
+
+	.sv-mention {
+		animation: sv-ct-mention 1600ms ease-out 1500ms both;
+	}
+
+	// The count steps from 1 to 2 as the comment lands.
+	.sv-ct__count span:first-child {
+		animation: sv-ct-count-out 1ms step-start 1250ms both;
+	}
+
+	.sv-ct__count span:last-child {
+		animation: sv-ct-count-in 1ms step-start 1250ms both;
+	}
+}
+
+.sv-chip {
+	gap: 0.35em;
+	padding: 0.25em 0.65em;
+	border: 1px solid var(--sv-line);
+	font-size: 0.75em;
+	color: var(--sv-muted);
+
+	.sv-i {
+		width: 1.15em;
+		height: 1.15em;
+	}
+}
+
+// --- Access control ----------------------------------------------------------
+
+$sv-acc-row: 2.1em;
+
+.sv-acc__tabs {
+	top: 0.95em;
+	left: 2.5em;
+	gap: 0.375em;
+}
+
+.sv-acc__tab {
+	padding: 0.3em 0.9em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	font: inherit;
+	font-size: 0.8125em;
+	line-height: 1.4;
+	color: var(--sv-muted);
+	cursor: pointer;
+	transition:
+		background-color 200ms ease,
+		color 200ms ease,
+		border-color 200ms ease;
+
+	&:hover {
+		color: var(--c-ink);
+		border-color: var(--sv-line-strong);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--c-accent);
+		outline-offset: 2px;
+	}
+
+	&[aria-selected='true'] {
+		background-color: var(--c-ink);
+		border-color: var(--c-ink);
+		color: var(--sv-card);
+	}
+}
+
+.sv-acc__page {
+	top: 3.35em;
+	left: 2.5em;
+	right: 2.5em;
+	bottom: -1em;
+}
+
+.sv-acc__role {
+	grid-area: 1 / 1;
+	padding: 0.95em 1.4em;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 250ms ease,
+		visibility 0s linear 250ms;
+
+	&.is-active {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 250ms ease;
+	}
+
+	.sv-head {
+		margin-bottom: 0.55em;
+	}
+
+	.sv-title {
+		font-size: 1.25em;
+	}
+}
+
+.sv-acc__label {
+	margin-bottom: 0.5em;
+}
+
+.sv-acc__table {
+	border-collapse: separate;
+	border-spacing: 0;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+	font-size: 0.875em;
+
+	th,
+	td {
+		height: $sv-acc-row;
+		padding: 0;
+	}
+
+	th[scope='col'],
+	th[scope='row'] {
+		padding: 0 1em;
+	}
+
+	thead th {
+		border-bottom: 1px solid var(--sv-line);
+	}
+
+	thead th + th,
+	td {
+		width: 2.4em;
+		padding: 0;
+		color: var(--sv-muted);
+	}
+
+	thead th:last-child,
+	td:last-child {
+		width: 3em;
+		padding-right: 0.6em;
+	}
+
+	tbody tr + tr > * {
+		border-top: 1px solid var(--sv-line);
+	}
+
+	.sv-i {
+		width: 1.3em;
+		height: 1.3em;
+		padding: 0.1em;
+	}
+
+	td.is-all {
+		color: var(--sv-ok);
+	}
+
+	td.is-custom {
+		color: var(--sv-warn);
+	}
+
+	td.is-none {
+		color: var(--sv-danger);
+	}
+
+	// The annotated cell: an ember ring, and a leader that steps right to the
+	// column boundary and drops between the icons to the note. Its length runs
+	// past the rows below and into the note, which covers the end.
+	td.is-called {
+		.sv-i {
+			box-shadow: 0 0 0 0.12em var(--c-accent);
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: calc(50% + 0.85em);
+			width: calc(50% - 0.85em);
+			height: calc((var(--below) + 0.5) * #{$sv-acc-row} + var(--below) * 1px + 1.4em);
+			border-top: 1.5px dashed var(--c-accent);
+			border-right: 1.5px dashed var(--c-accent);
+			border-top-right-radius: 0.35em;
+			pointer-events: none;
+		}
+	}
+}
+
+// The note sits in the page's flow under the table but hangs past its right
+// edge, in site styling, so it reads as commentary laid over the app.
+.sv-acc__note {
+	gap: 0.3em;
+	width: 17.25em;
+	margin: 0.7em -2.6em 0 auto;
+	padding: 0.65em 0.9em 0.7em;
+}
+
+.sv-acc__note-text {
+	font-size: 0.8125em;
+	line-height: 1.3;
+	color: var(--c-ink);
+}
+
+.sv-acc__note-filter {
+	font-size: 0.75em;
+	color: var(--c-ink);
+}
+
+.sv-acc__op {
+	color: var(--sv-muted);
+}
+
+.sv-acc__value {
+	color: var(--c-accent);
+}
+
+@keyframes sv-acc-halo {
+	from {
+		box-shadow: 0 0 0 0.9em rgba(var(--c-accent-rgb), 0);
+	}
+}
+
+@keyframes sv-acc-leader {
+	from {
+		clip-path: inset(0 0 100% 0);
+	}
+
+	to {
+		clip-path: inset(0);
+	}
+}
+
+.sv-acc.is-armed {
+	td .sv-i {
+		animation: sv-pop 420ms $sv-ease both;
+		animation-delay: calc(var(--d) * 1ms);
+	}
+
+	td.is-called .sv-i {
+		animation:
+			sv-pop 420ms $sv-ease both,
+			sv-acc-halo 900ms ease-out both;
+		animation-delay: calc(var(--d) * 1ms), 1150ms;
+	}
+
+	td.is-called::after {
+		animation: sv-acc-leader 450ms ease-in-out 1350ms both;
+	}
+
+	.sv-acc__note {
+		animation: sv-rise 520ms $sv-ease 1650ms both;
+	}
+}
+
+// --- Automation builder ------------------------------------------------------
+
+.sv-fl {
+	// The flow canvas draws a dot grid instead of grid paper.
+	&::before {
+		background-image: radial-gradient(circle, var(--sv-line-strong) 0.075em, transparent 0.09em);
+		background-size: 1.25em 1.25em;
+		background-position: -0.3em -0.3em;
+		opacity: 0.55;
+	}
+}
+
+.sv-fl__line,
+.sv-fl__head,
+.sv-fl__pulse {
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.sv-fl__link {
+	color: var(--sv-muted);
+
+	&.is-reject {
+		color: var(--sv-danger);
+	}
+}
+
+.sv-fl__line,
+.sv-fl__head {
+	stroke: currentColor;
+	stroke-width: 1.5;
+	opacity: 0.75;
+}
+
+.sv-fl__pulse {
+	stroke: var(--c-accent);
+	stroke-width: 3;
+	stroke-dasharray: 7 120;
+	stroke-dashoffset: 7;
+	opacity: 0;
+}
+
+.sv-op {
+	left: calc(var(--x) * 1em);
+	top: calc(var(--y) * 1em);
+	width: calc(var(--w) * 1em);
+	height: calc(var(--h) * 1em);
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	box-shadow: 0 0 0 1px var(--sv-line);
+	border-radius: 0.25em;
+
+	&__head {
+		gap: 0.35em;
+		height: 2.4em;
+		padding: 0 0.75em;
+		font-size: 0.875em;
+
+		.sv-i {
+			width: 1.2em;
+			height: 1.2em;
+		}
+	}
+
+	&__body {
+		gap: 0.45em;
+		padding: 0 0.75em;
+
+		dt {
+			font-size: 0.6875em;
+			color: var(--sv-muted);
+		}
+
+		dd {
+			font-size: 0.75em;
+		}
+	}
+
+	&__foot {
+		gap: 0.45em;
+		padding: 0.55em 0.75em;
+		border-top: 2px solid var(--sv-line);
+		font-size: 0.75em;
+	}
+
+	&__dot {
+		width: 0.6em;
+		height: 0.6em;
+		background-color: var(--c-accent);
+	}
+
+	&__port {
+		top: calc(var(--py) * 1em);
+		place-items: center;
+		width: 1.25em;
+		height: 1.25em;
+		margin: -0.625em 0 0 -0.625em;
+		background-color: var(--sv-card);
+		color: var(--sv-muted);
+
+		.sv-i {
+			width: 1.25em;
+			height: 1.25em;
+		}
+
+		&.is-resolve {
+			color: var(--sv-ok);
+		}
+
+		&.is-reject {
+			color: var(--sv-danger);
+		}
+	}
+
+	&.is-trigger {
+		border-color: var(--c-accent);
+		box-shadow:
+			0 0 0 1px var(--c-accent),
+			0 0 0 0.35em rgba(var(--c-accent-rgb), 0.1);
+
+		.sv-op__head {
+			color: var(--c-accent);
+		}
+	}
+
+	&.is-reject .sv-op__head,
+	&.is-reject .sv-op__port.is-in {
+		color: var(--sv-danger);
+	}
+}
+
+// The run's log, in a drawer that slides out over the canvas. It has no ports,
+// a raised layer's frame, and the log's timeline of steps, and it sits off the
+// canvas grid, over the condition's corner, so it reads as a layer above the
+// flow rather than a panel on it.
+.sv-fl__drawer {
+	left: 7.5em;
+	bottom: 1em;
+	width: 12.5em;
+}
+
+.sv-fl__drawer-head {
+	gap: 0.5em;
+	padding: 0.4em 0.65em 0.4em 0.5em;
+	border-bottom: 1px solid var(--sv-line);
+
+	.sv-round {
+		width: 1.85em;
+		height: 1.85em;
+
+		.sv-i {
+			width: 1.1em;
+			height: 1.1em;
+		}
+	}
+
+	> .sv-i {
+		width: 1.1em;
+		height: 1.1em;
+		color: var(--sv-muted);
+	}
+}
+
+.sv-fl__drawer-title {
+	font-size: 0.875em;
+	font-variant-numeric: tabular-nums;
+}
+
+// Each step hangs a dot on one line, as in the app's run log.
+.sv-fl__steps {
+	padding: 0.4em 0.65em 0.5em;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 1.15em;
+		bottom: 1.25em;
+		left: calc(1.2em - 1px);
+		width: 2px;
+		background-color: var(--sv-line);
+	}
+
+	li {
+		gap: 0.45em;
+		padding-left: 1.5em;
+		line-height: 1.5em;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0.45em;
+			left: 0.25em;
+			width: 0.6em;
+			height: 0.6em;
+			border-radius: 50%;
+			background-color: var(--sv-ok);
+			box-shadow: 0 0 0 0.15em var(--sv-layer);
+		}
+	}
+}
+
+.sv-fl__step-name {
+	font-size: 0.75em;
+}
+
+.sv-fl__step-type {
+	font-size: 0.6875em;
+	color: var(--sv-muted);
+}
+
+@keyframes sv-fl-draw {
+	from {
+		stroke-dashoffset: 100;
+	}
+}
+
+@keyframes sv-fl-pulse {
+	0% {
+		stroke-dashoffset: 7;
+		opacity: 1;
+	}
+
+	92% {
+		opacity: 1;
+	}
+
+	100% {
+		stroke-dashoffset: -100;
+		opacity: 0;
+	}
+}
+
+@keyframes sv-fl-glow {
+	50% {
+		box-shadow:
+			0 0 0 1px var(--c-accent),
+			0 0 0 0.2em rgba(var(--c-accent-rgb), 0.1);
+	}
+}
+
+@keyframes sv-fl-hit {
+	30% {
+		border-color: var(--c-accent);
+		box-shadow: 0 0 0 1px var(--c-accent);
+	}
+}
+
+@keyframes sv-fl-drawer {
+	from {
+		opacity: 0;
+		transform: translateY(1.25em);
+	}
+}
+
+@keyframes sv-fl-trace {
+	from {
+		transform: scaleY(0);
+	}
+}
+
+.sv-fl.is-armed {
+	.sv-fl__line {
+		stroke-dasharray: 100;
+		animation: sv-fl-draw 450ms ease-out both;
+		animation-delay: calc(var(--d) * 1ms);
+	}
+
+	.sv-fl__head {
+		animation: sv-fade 200ms ease both;
+		animation-delay: calc((var(--d) + 400) * 1ms);
+	}
+
+	.sv-fl__pulse--1 {
+		animation: sv-fl-pulse 420ms linear 1600ms both;
+	}
+
+	.sv-fl__pulse--2 {
+		animation: sv-fl-pulse 820ms linear 2000ms both;
+	}
+
+	.sv-op.is-trigger {
+		animation:
+			sv-rise 520ms $sv-ease both,
+			sv-fl-glow 3s ease-in-out 600ms infinite;
+	}
+
+	.sv-op--reorder {
+		animation:
+			sv-rise 520ms $sv-ease both,
+			sv-fl-hit 900ms ease 2750ms both;
+		animation-delay: calc(var(--d) * 1ms), 2750ms;
+	}
+
+	// After the run lands, its log slides out and the steps trace down.
+	.sv-fl__drawer {
+		animation: sv-fl-drawer 560ms $sv-ease 3050ms both;
+	}
+
+	.sv-fl__steps::before {
+		transform-origin: top;
+		animation: sv-fl-trace 420ms ease-out 3350ms both;
+	}
+
+	.sv-fl__steps li {
+		animation: sv-fade 300ms ease both;
+		animation-delay: calc(3350ms + var(--i) * 160ms);
+	}
+}
+
+// --- Insights ----------------------------------------------------------------
+
+.sv-tile {
+	.sv-op__head .sv-i {
+		color: var(--sv-muted);
+	}
+
+	&__note {
+		font-size: 0.8125em;
+		color: var(--sv-muted);
+	}
+
+	&__metric {
+		flex: 1;
+		place-items: center;
+		padding-bottom: 0.5em;
+		font-size: 2.5em;
+		letter-spacing: -0.02em;
+
+		&.is-small {
+			padding-bottom: 0.3em;
+			font-size: 1.625em;
+		}
+	}
+}
+
+.sv-in__chart {
+	flex: 1;
+	margin: 0.25em 0.9em 0;
+	color: var(--c-accent);
+}
+
+.sv-in__grid {
+	stroke: var(--sv-line);
+	stroke-width: 1;
+	vector-effect: non-scaling-stroke;
+}
+
+.sv-in__line {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+}
+
+.sv-in__live {
+	width: 0.55em;
+	height: 0.55em;
+	margin: -0.275em 0 0 -0.275em;
+	background-color: currentColor;
+	box-shadow: 0 0 0 0.2em var(--sv-card);
+}
+
+.sv-in__axis {
+	padding: 0.45em 0.9em 0.55em;
+	font-size: 0.625em;
+	color: var(--sv-muted);
+}
+
+.sv-in__list {
+	padding: 0 0.75em;
+	font-variant-numeric: tabular-nums;
+
+	li {
+		gap: 1em;
+		padding: 0.4em 0;
+		font-size: 0.8125em;
+
+		& + li {
+			border-top: 1px solid var(--sv-line);
+		}
+
+		span:last-child {
+			color: var(--sv-muted);
+		}
+	}
+}
+
+.sv-in__bars {
+	flex: 1;
+	gap: 0.75em;
+	padding: 0.25em 0.9em 0.5em;
+}
+
+.sv-in__bar {
+	flex: 1;
+	gap: 0.3em;
+
+	span {
+		height: var(--v);
+		background-color: rgba(var(--c-accent-2-rgb), 0.45);
+		border-radius: 0.15em 0.15em 0 0;
+		transform-origin: bottom;
+	}
+
+	small {
+		font-size: 0.5625em;
+		color: var(--sv-muted);
+	}
+}
+
+@keyframes sv-in-draw {
+	from {
+		stroke-dashoffset: 100;
+	}
+}
+
+@keyframes sv-in-grow {
+	from {
+		transform: scaleY(0);
+	}
+}
+
+@keyframes sv-in-ping {
+	0% {
+		box-shadow:
+			0 0 0 0.2em var(--sv-card),
+			0 0 0 0.2em rgba(var(--c-accent-rgb), 0.35);
+	}
+
+	70%,
+	100% {
+		box-shadow:
+			0 0 0 0.2em var(--sv-card),
+			0 0 0 0.9em rgba(var(--c-accent-rgb), 0);
+	}
+}
+
+.sv-in.is-armed {
+	.sv-in__line {
+		stroke-dasharray: 100;
+		animation: sv-in-draw 1400ms cubic-bezier(0.4, 0, 0.2, 1) 500ms both;
+	}
+
+	.sv-in__area {
+		animation: sv-fade 700ms ease 1500ms both;
+	}
+
+	.sv-in__live {
+		animation:
+			sv-fade 300ms ease 1850ms both,
+			sv-in-ping 2.8s ease-out 2200ms infinite;
+	}
+
+	.sv-in__bar span {
+		animation: sv-in-grow 600ms $sv-ease both;
+		animation-delay: calc(var(--d) * 1ms);
+	}
+}
+
+// --- File library ------------------------------------------------------------
+
+.sv-fi__library {
+	top: 1.75em;
+	left: 1.75em;
+	width: 19.5em;
+	bottom: -1em;
+	padding: 1.1em 1.25em;
+
+	.sv-head {
+		margin-bottom: 1em;
+	}
+
+	.sv-title {
+		font-size: 1.2em;
+	}
+}
+
+.sv-fi__grid {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.9em 0.75em;
+	padding-right: 0.4em;
+}
+
+.sv-fi__card {
+	min-width: 0;
+}
+
+.sv-fi__thumb {
+	place-items: center;
+	aspect-ratio: 1;
+	margin-bottom: 0.35em;
+	border-radius: var(--sv-radius);
+	background-color: var(--sv-sunk);
+
+	&.is-peaks {
+		background: linear-gradient(180deg, rgba(var(--c-ochre-rgb), 0.45), rgba(var(--c-ochre-rgb), 0.12));
+
+		.sun {
+			fill: rgba(var(--c-accent-rgb), 0.75);
+		}
+
+		.far {
+			fill: color-mix(in srgb, var(--c-ink) 45%, var(--c-surface));
+		}
+
+		.near {
+			fill: var(--c-ink);
+		}
+	}
+
+	&.is-cairn {
+		background-color: rgba(var(--c-accent-2-rgb), 0.22);
+
+		.s1 {
+			fill: #6b2a14;
+		}
+
+		.s2 {
+			fill: #7d3219;
+		}
+
+		.s3 {
+			fill: #954020;
+		}
+
+		.s4 {
+			fill: #b5492a;
+		}
+	}
+
+	&.is-map {
+		background-color: rgba(var(--c-moss-rgb), 0.6);
+
+		.contour {
+			fill: none;
+			stroke: rgba(var(--c-accent-2-rgb), 0.9);
+			stroke-width: 1.1;
+		}
+
+		.trail {
+			fill: none;
+			stroke: var(--c-accent);
+			stroke-width: 1.4;
+			stroke-dasharray: 2.5 2;
+		}
+
+		.pin {
+			fill: var(--c-accent);
+		}
+	}
+
+	&.is-hills {
+		background: linear-gradient(180deg, rgba(var(--c-accent-2-rgb), 0.35), rgba(var(--c-accent-2-rgb), 0.1));
+
+		.back {
+			fill: rgba(var(--c-accent-2-rgb), 0.7);
+		}
+
+		.front {
+			fill: var(--c-accent-2-ink);
+		}
+	}
+
+	&.is-video {
+		background-color: var(--c-panel);
+		color: var(--c-on-panel);
+	}
+}
+
+.sv-fi__type {
+	gap: 0.2em;
+	font-size: 0.75em;
+	color: var(--sv-muted);
+
+	.sv-i {
+		width: 2.2em;
+		height: 2.2em;
+	}
+
+	.is-video & {
+		color: rgba(var(--c-on-panel-rgb), 0.75);
+	}
+}
+
+.sv-fi__name {
+	font-size: 0.75em;
+}
+
+.sv-fi__meta {
+	font-size: 0.6875em;
+	color: var(--sv-muted);
+}
+
+.sv-fi__env {
+	top: 4.75em;
+	right: 1.25em;
+	width: 17.25em;
+	background-color: var(--c-panel);
+	border: 1px solid rgba(var(--c-on-panel-rgb), 0.12);
+	border-radius: var(--sv-radius);
+	box-shadow: 0 1.5em 3em -1.5em rgba(0, 0, 0, 0.55);
+	color: rgba(var(--c-on-panel-rgb), 0.82);
+}
+
+.sv-fi__tabs {
+	gap: 0.2em;
+	padding: 0.75em 0.6em 0.6em;
+}
+
+.sv-fi__tab {
+	padding: 0.3em 0.75em;
+	background: none;
+	font: inherit;
+	font-size: 0.65em;
+	line-height: 1.4;
+	color: rgba(var(--c-on-panel-rgb), 0.6);
+	cursor: pointer;
+	transition:
+		background-color 200ms ease,
+		color 200ms ease;
+
+	&:hover {
+		color: var(--c-on-panel);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--c-accent);
+		outline-offset: 1px;
+	}
+
+	&[aria-selected='true'] {
+		background-color: var(--c-accent);
+		color: #fff;
+	}
+}
+
+.sv-fi__file {
+	margin: 0 0.75em;
+	padding: 0 0.15em 0.45em;
+	border-bottom: 1px solid rgba(var(--c-on-panel-rgb), 0.12);
+	font-size: 0.6875em;
+	color: rgba(var(--c-on-panel-rgb), 0.45);
+}
+
+.sv-fi__panes {
+	min-height: 11.25em;
+}
+
+.sv-fi__code {
+	grid-area: 1 / 1;
+	padding: 0.7em 0.9em 1em;
+	font-size: 0.65em;
+	line-height: 1.75;
+	color: rgba(var(--c-on-panel-rgb), 0.5);
+	white-space: pre;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 300ms ease,
+		visibility 0s linear 300ms;
+
+	&.is-active {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 300ms ease;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--c-accent);
+		outline-offset: -2px;
+	}
+
+	.k {
+		color: rgba(var(--c-on-panel-rgb), 0.92);
+	}
+
+	.v {
+		color: var(--c-accent-2);
+	}
+}
+
+.sv-fi.is-armed .sv-fi__env {
+	animation: sv-rise 600ms $sv-ease 700ms both;
+}
+
+// --- Config as code ----------------------------------------------------------
+// A route map of where config moves, over a terminal with the three ways to
+// run it. The root's is-mode-* class lights the route for the selected tab.
+
+.sv-cfg__edge path {
+	fill: none;
+	stroke: var(--sv-line-strong);
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	transition: stroke 300ms ease;
+}
+
+.sv-cfg__tag {
+	font-size: 6.5px;
+	fill: var(--sv-muted);
+	text-anchor: middle;
+}
+
+.sv-cfg__node {
+	left: calc(var(--x) * 1em);
+	top: calc(var(--y) * 1em);
+	gap: 0.6em;
+	width: 9.25em;
+	height: 3.4em;
+	padding: 0 0.8em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	box-shadow: 0 0 0 1px var(--sv-line);
+	border-radius: 0.25em;
+	transition:
+		border-color 300ms ease,
+		box-shadow 300ms ease;
+
+	> .sv-i {
+		width: 1.35em;
+		height: 1.35em;
+		color: var(--sv-muted);
+		transition: color 300ms ease;
+	}
+}
+
+// The servers run wider to fit their hostnames.
+.sv-cfg__node.is-staging,
+.sv-cfg__node.is-production {
+	width: 10.6em;
+}
+
+.sv-cfg__text {
+	min-width: 0;
+	line-height: 1.3;
+}
+
+.sv-cfg__label {
+	font-size: 0.875em;
+}
+
+.sv-cfg__sub {
+	font-size: 0.6875em;
+	color: var(--sv-muted);
+}
+
+.sv-cfg__check {
+	top: -0.6em;
+	right: -0.6em;
+	width: 1.25em;
+	height: 1.25em;
+	background-color: var(--sv-card);
+	color: var(--sv-ok);
+	opacity: 0;
+	transition: opacity 300ms ease;
+}
+
+// Lit routes per mode.
+@mixin sv-cfg-lit($nodes, $edges, $done: null) {
+	@each $node in $nodes {
+		.sv-cfg__node.is-#{$node} {
+			border-color: var(--c-accent);
+			box-shadow: 0 0 0 1px var(--c-accent);
+
+			> .sv-i {
+				color: var(--c-accent);
+			}
+		}
+	}
+
+	@each $edge in $edges {
+		.sv-cfg__edge.is-#{$edge} path {
+			stroke: var(--c-accent);
+		}
+	}
+
+	@if $done {
+		.sv-cfg__node.is-#{$done} .sv-cfg__check {
+			opacity: 1;
+		}
+	}
+}
+
+.sv-cfg.is-mode-local {
+	@include sv-cfg-lit((local, config), (snapshot));
+}
+
+.sv-cfg.is-mode-remote {
+	@include sv-cfg-lit((config, staging), (trunk, staging), staging);
+}
+
+.sv-cfg.is-mode-ci {
+	@include sv-cfg-lit((config, production), (trunk, production), production);
+}
+
+.sv-cfg__term {
+	top: 11.25em;
+	left: 1.75em;
+	right: 1.75em;
+	bottom: 1.5em;
+	background-color: var(--c-panel);
+	border: 1px solid rgba(var(--c-on-panel-rgb), 0.12);
+	border-radius: var(--sv-radius);
+	box-shadow: 0 1.5em 3em -1.5em rgba(0, 0, 0, 0.55);
+	color: rgba(var(--c-on-panel-rgb), 0.82);
+}
+
+.sv-cfg__bar {
+	gap: 0.9em;
+	padding: 0.6em 0.9em;
+	border-bottom: 1px solid rgba(var(--c-on-panel-rgb), 0.1);
+}
+
+.sv-cfg__dots {
+	gap: 0.35em;
+
+	i {
+		width: 0.55em;
+		height: 0.55em;
+		background-color: rgba(var(--c-on-panel-rgb), 0.22);
+	}
+}
+
+.sv-cfg__tabs {
+	gap: 0.2em;
+}
+
+.sv-cfg__tab {
+	padding: 0.3em 0.8em;
+	background: none;
+	font: inherit;
+	font-size: 0.6875em;
+	line-height: 1.4;
+	color: rgba(var(--c-on-panel-rgb), 0.6);
+	cursor: pointer;
+	transition:
+		background-color 200ms ease,
+		color 200ms ease;
+
+	&:hover {
+		color: var(--c-on-panel);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--c-accent);
+		outline-offset: 1px;
+	}
+
+	&[aria-selected='true'] {
+		background-color: var(--c-accent);
+		color: #fff;
+	}
+}
+
+.sv-cfg__title {
+	display: none;
+	font-size: 0.625em;
+	color: rgba(var(--c-on-panel-rgb), 0.45);
+
+	&.is-active {
+		display: inline;
+	}
+}
+
+.sv-cfg__panes {
+	flex: 1;
+	min-height: 0;
+}
+
+.sv-cfg__pane {
+	grid-area: 1 / 1;
+	padding: 0.75em 1.25em;
+	font-size: 0.6875em;
+	line-height: 1.7;
+	visibility: hidden;
+
+	&.is-active {
+		visibility: visible;
+	}
+}
+
+.sv-cfg__line {
+	white-space: pre;
+	text-overflow: ellipsis;
+
+	&.is-cmd,
+	&.is-cont {
+		color: rgba(var(--c-on-panel-rgb), 0.96);
+	}
+
+	&.is-note {
+		color: rgba(var(--c-on-panel-rgb), 0.42);
+	}
+
+	&.is-head,
+	&.is-plan {
+		color: rgba(var(--c-on-panel-rgb), 0.96);
+	}
+
+	&.is-create {
+		color: var(--c-accent-2);
+	}
+
+	&.is-mod {
+		color: var(--c-ochre);
+	}
+}
+
+.sv-cfg__prompt {
+	color: var(--c-accent-2);
+}
+
+@keyframes sv-cfg-line {
+	from {
+		opacity: 0;
+		transform: translateY(0.25em);
+	}
+}
+
+.sv-cfg.is-armed {
+	.sv-cfg__edges {
+		animation: sv-fade 500ms ease 350ms both;
+	}
+
+	.sv-cfg__term {
+		animation: sv-rise 600ms $sv-ease 300ms both;
+	}
+
+	// Lines settle in each time a pane becomes active; the first pane waits for
+	// the terminal to arrive.
+	.sv-cfg__pane.is-active .sv-cfg__line {
+		animation: sv-cfg-line 320ms ease both;
+		animation-delay: calc(var(--i) * 140ms + var(--base, 120ms));
+	}
+
+	&:not(.has-switched) {
+		--base: 700ms;
+	}
+}
+
+// --- Formatter (extensions page) ---------------------------------------------
+
+.sv-fm__op,
+.sv-fm__item {
+	top: 1.75em;
+	bottom: -1em;
+	padding: 1.25em;
+}
+
+.sv-fm__op {
+	left: 1.5em;
+	width: 18em;
+	gap: 1em;
+}
+
+.sv-fm__item {
+	left: 20.75em;
+	right: -0.75em;
+}
+
+.sv-fm__group {
+	gap: 0.4em;
+}
+
+// The selected operation type.
+.sv-fm__type {
+	gap: 0.65em;
+	padding: 0.55em 0.65em;
+	background-color: var(--sv-soft);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+
+	.sv-round {
+		width: 2em;
+		height: 2em;
+
+		.sv-i {
+			width: 1.15em;
+			height: 1.15em;
+		}
+	}
+}
+
+.sv-fm__type-name {
+	font-size: 0.875em;
+}
+
+.sv-fm__type-note {
+	font-size: 0.6875em;
+	color: var(--sv-muted);
+}
+
+.sv-fm__rules {
+	gap: 0.4em;
+}
+
+.sv-fm__rule {
+	gap: 0.5em;
+	height: 2.25em;
+	padding: 0 0.6em;
+	background-color: var(--sv-card);
+	border: 1px solid var(--sv-line);
+	border-radius: var(--sv-radius);
+
+	span {
+		font-size: 0.8125em;
+	}
+
+	.sv-i {
+		width: 1.1em;
+		height: 1.1em;
+		color: var(--sv-muted);
+	}
+}
+
+.sv-fm__add {
+	margin-top: 0.4em;
+	padding: 0.55em 1em;
+	background-color: var(--sv-soft);
+	border-radius: var(--sv-radius);
+	font-size: 0.75em;
+	color: var(--sv-muted);
+}
+
+// The typed and formatted values share one cell; the formatted one shows
+// unless the visual is playing.
+.sv-fm__input > span {
+	grid-area: 1 / 1;
+	min-width: 0;
+}
+
+.sv-fm__typed {
+	opacity: 0;
+}
+
+@keyframes sv-fm-hit {
+	25%,
+	60% {
+		border-color: var(--c-accent);
+		box-shadow:
+			0 0 0 1px var(--c-accent),
+			0 0 0 0.3em rgba(var(--c-accent-rgb), 0.12);
+	}
+}
+
+@keyframes sv-fm-out {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+		transform: translateY(-0.6em);
+	}
+}
+
+@keyframes sv-fm-in {
+	from {
+		opacity: 0;
+		transform: translateY(0.6em);
+	}
+}
+
+// Save is pressed, then each rule lights with its field, top to bottom, and
+// the field swaps its typed value for the formatted one.
+.sv-fm.is-armed {
+	.sv-fm__save {
+		animation: sv-press 450ms ease 1200ms both;
+	}
+
+	.sv-fm__rule,
+	.sv-fm__input.is-formatted {
+		animation: sv-fm-hit 900ms ease both;
+		animation-delay: calc(1600ms + var(--i) * 650ms);
+	}
+
+	.sv-fm__typed {
+		animation: sv-fm-out 240ms ease-in both;
+		animation-delay: calc(1750ms + var(--i) * 650ms);
+	}
+
+	.is-formatted .sv-fm__value {
+		animation: sv-fm-in 320ms $sv-ease both;
+		animation-delay: calc(1930ms + var(--i) * 650ms);
+	}
+}
+
+// --- Address Completion (extensions page) ------------------------------------
+
+.sv-ad {
+	--type-at: 900ms;
+	--caret-at: 700ms;
+	--caret-blinks: 2;
+}
+
+.sv-ad__page {
+	top: 1.75em;
+	left: 1.5em;
+	right: -0.75em;
+	bottom: -1em;
+	padding: 1.25em 1.5em;
+}
+
+.sv-ad__input .sv-i {
+	color: var(--sv-muted);
+}
+
+// The placeholder, the typed search, and the picked address share one cell.
+// Unarmed, only the picked address shows.
+.sv-ad__text {
+	min-width: 0;
+
+	> span {
+		grid-area: 1 / 1;
+		min-width: 0;
+	}
+}
+
+.sv-ad__placeholder {
+	color: var(--sv-muted);
+	opacity: 0;
+}
+
+.sv-ad__typed {
+	opacity: 0;
+}
+
+.sv-ad__menu {
+	top: calc(100% + 0.3em);
+	padding: 0.3em;
+	opacity: 0;
+}
+
+.sv-ad__option {
+	padding: 0.5em 0.75em;
+	border-radius: 0.35em;
+	font-size: 0.8125em;
+}
+
+// Google's attribution, as the interface shows it under suggestions and saved
+// addresses.
+.sv-ad__attribution {
+	color: var(--sv-muted);
+
+	.sv-ad__menu & {
+		padding: 0.3em 0.8em 0.2em;
+		font-size: 0.6875em;
+	}
+}
+
+.sv-ad__summary {
+	gap: 0.9em;
+	margin-top: 0.2em;
+	font-size: 0.75em;
+	font-variant-numeric: tabular-nums;
+	color: var(--sv-muted);
+
+	.sv-i {
+		width: 1.35em;
+		height: 1.35em;
+		margin-left: 0.4em;
+	}
+}
+
+.sv-ad__note {
+	top: 16.5em;
+	left: 3em;
+	gap: 0.4em;
+	padding: 0.65em 0.9em 0.75em;
+}
+
+.sv-ad__record {
+	grid-template-columns: auto auto;
+	gap: 0.25em 1em;
+	font-size: 0.75em;
+
+	dt {
+		color: var(--c-accent);
+	}
+
+	dd {
+		color: var(--c-ink);
+	}
+}
+
+@keyframes sv-ad-menu {
+	0% {
+		opacity: 0;
+		transform: translateY(-0.4em);
+	}
+
+	12%,
+	88% {
+		opacity: 1;
+		transform: none;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes sv-ad-pick {
+	from,
+	55% {
+		background-color: var(--sv-soft);
+	}
+
+	to {
+		background-color: color-mix(in srgb, var(--c-ink) 14%, transparent);
+	}
+}
+
+// The field takes focus and the search is typed; suggestions drop down, the
+// first is picked, and the field fills in with the address and its details.
+.sv-ad.is-armed {
+	.sv-ad__input {
+		animation: sv-focus 1950ms linear 700ms;
+	}
+
+	.sv-ad__placeholder {
+		animation: sv-hide 1ms step-start 900ms both;
+	}
+
+	.sv-ad__typed {
+		animation: sv-hide 1ms step-start 2550ms both;
+	}
+
+	.sv-ad__value {
+		animation: sv-fade 200ms ease 2550ms both;
+	}
+
+	.sv-ad__clear {
+		animation: sv-fade 150ms ease 900ms both;
+	}
+
+	.sv-ad__menu {
+		animation: sv-ad-menu 1000ms ease 1650ms both;
+	}
+
+	.sv-ad__option.is-picked {
+		animation: sv-ad-pick 400ms ease 2150ms forwards;
+	}
+
+	.sv-ad__summary {
+		animation: sv-fade 300ms ease 2700ms both;
+	}
+
+	.sv-ad__note {
+		animation: sv-rise 520ms $sv-ease 3000ms both;
+	}
+}
+
+// --- Live Preview (extensions page) ------------------------------------------
+
+.sv-lp {
+	--type-at: 900ms;
+	--caret-at: 700ms;
+	--caret-blinks: 2;
+}
+
+.sv-lp__page {
+	top: 1.75em;
+	left: 1.5em;
+	right: -0.75em;
+	bottom: -1em;
+}
+
+.sv-lp__head {
+	padding: 1.25em 1.5em 0.9em;
+	border-bottom: 1px solid var(--sv-line);
+}
+
+// The item-view toggle, on while the pane is open.
+.sv-lp__toggle {
+	background-color: rgba(var(--c-accent-rgb), 0.14);
+	color: var(--c-accent);
+}
+
+.sv-lp__split {
+	min-height: 0;
+}
+
+.sv-lp__form {
+	width: 15.5em;
+	padding: 0 1.25em 0 1.5em;
+
+	.sv-form {
+		margin-top: 0.9em;
+	}
+}
+
+.sv-lp__summary {
+	height: auto;
+	padding: 0.5em 0.75em;
+	line-height: 1.45;
+	white-space: normal;
+}
+
+// The pane: the app's dark bar over the site's own page, which keeps its light
+// colors in either theme.
+.sv-lp__pane {
+	min-width: 0;
+	border-left: 1px solid var(--sv-line);
+}
+
+.sv-lp__bar {
+	gap: 0.45em;
+	height: 2.4em;
+	padding: 0 0.6em;
+	background-color: var(--c-ink);
+	color: var(--sv-card);
+
+	> .sv-i {
+		width: 1.15em;
+		height: 1.15em;
+	}
+}
+
+.sv-lp__btn {
+	place-items: center;
+	width: 1.6em;
+	height: 1.6em;
+	background-color: color-mix(in srgb, var(--sv-card) 16%, transparent);
+
+	.sv-i {
+		width: 1em;
+		height: 1em;
+	}
+}
+
+.sv-lp__url,
+.sv-lp__zoom {
+	font-size: 0.6875em;
+	color: color-mix(in srgb, var(--sv-card) 62%, transparent);
+}
+
+.sv-lp__zoom .sv-i {
+	width: 1.5em;
+	height: 1.5em;
+}
+
+.sv-lp__site {
+	background-color: #fbfaf7;
+	color: #24272c;
+}
+
+.sv-lp__nav {
+	gap: 1.1em;
+	padding: 0.6em 1.1em;
+	border-bottom: 1px solid #e6e2da;
+	font-size: 0.6875em;
+
+	span:not(:first-child) {
+		color: #6b6f76;
+	}
+
+	.fw-semibold {
+		font-size: 1.15em;
+	}
+}
+
+.sv-lp__article {
+	padding: 0.9em 1.1em;
+}
+
+.sv-lp__eyebrow {
+	font-size: 0.5625em;
+	letter-spacing: 0.1em;
+	color: #a2561f;
+}
+
+.sv-lp__h1 {
+	margin: 0.25em 0 0.35em;
+	font-size: 1.3em;
+	line-height: 1.2;
+
+	> span {
+		grid-area: 1 / 1;
+	}
+}
+
+// Unarmed, the page shows the saved, longer title.
+.sv-lp__old {
+	opacity: 0;
+}
+
+.sv-lp__mark {
+	border-radius: 0.15em;
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+}
+
+.sv-lp__lede {
+	font-size: 0.6875em;
+	line-height: 1.5;
+	color: #555a61;
+}
+
+.sv-lp__hero {
+	height: 5.25em;
+	margin-top: 0.8em;
+	border-radius: 0.3em;
+}
+
+.sv-lp__sky {
+	fill: #e9e4d6;
+}
+
+.sv-lp__sun {
+	fill: #e8b25c;
+}
+
+.sv-lp__far {
+	fill: #9fae9a;
+}
+
+.sv-lp__near {
+	fill: #5f7660;
+}
+
+@keyframes sv-lp-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes sv-lp-reload {
+	40% {
+		opacity: 0.15;
+	}
+}
+
+@keyframes sv-lp-mark {
+	from {
+		background-color: rgba(var(--c-accent-rgb), 0.28);
+	}
+}
+
+// The title is edited while the page holds its saved title. Saving reloads the
+// pane, and the page comes back with the new one.
+.sv-lp.is-armed {
+	.sv-lp__title {
+		animation: sv-focus 1400ms linear 700ms;
+	}
+
+	.sv-lp__save {
+		animation: sv-press 450ms ease 2000ms both;
+	}
+
+	.sv-lp__refresh .sv-i {
+		animation: sv-lp-spin 650ms ease-in-out 2200ms both;
+	}
+
+	.sv-lp__site {
+		animation: sv-lp-reload 600ms ease 2250ms both;
+	}
+
+	.sv-lp__old {
+		animation: sv-hide 1ms step-start 2490ms both;
+	}
+
+	.sv-lp__new {
+		animation: sv-fade 1ms step-start 2490ms both;
+	}
+
+	.sv-lp__mark {
+		animation: sv-lp-mark 1600ms ease-out 2550ms both;
+	}
+}

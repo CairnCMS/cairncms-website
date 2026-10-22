@@ -1,0 +1,119 @@
+---
+// A store's dashboard of panels: two metrics, a time series, a list, and a bar
+// chart. Panels settle in, the series draws across, and the bars grow.
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+// Daily orders over the 30 days to Oct 15, which climb with a weekend peak
+// each week. Sep 16 was a Wednesday.
+const series = [18, 19, 21, 26, 27, 20, 19, 21, 22, 23, 29, 30, 23, 23, 24, 25, 27, 33, 34, 26, 26, 28, 29, 31, 37, 39, 31, 29, 33, 36];
+const W = 228;
+const H = 86;
+const MAX = 44;
+const points = series.map((v, i): [number, number] => [(i / (series.length - 1)) * W, H - (v / MAX) * H]);
+
+// Catmull-Rom through the points, as cubic Beziers.
+function smooth(pts: [number, number][]) {
+	let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+	for (let i = 0; i < pts.length - 1; i++) {
+		const p0 = pts[i - 1] ?? pts[i];
+		const p1 = pts[i];
+		const p2 = pts[i + 1];
+		const p3 = pts[i + 2] ?? p2;
+		const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+		const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+		d += ` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+	}
+	return d;
+}
+
+const line = smooth(points);
+const area = `${line} L${W} ${H} L0 ${H} Z`;
+const last = points[points.length - 1];
+
+const bars: [string, number][] = [
+	['Packs', 72],
+	['Footwear', 88],
+	['Apparel', 94],
+	['Camp', 61],
+	['Climbing', 43],
+];
+
+const list = [
+	['#10482 · Dana Reyes', '$184.00'],
+	['#10481 · Sam Okafor', '$62.50'],
+	['#10480 · Lee Hartman', '$311.20'],
+];
+
+type Tile = { x: number; y: number; w: number; h: number; icon: IconName; name: string; d: number };
+const tile = (t: Tile) => `--x: ${t.x}; --y: ${t.y}; --w: ${t.w}; --h: ${t.h}; --d: ${t.d}`;
+
+const tiles = {
+	revenue: { x: 2, y: 2, w: 11, h: 7, icon: 'payments', name: 'Revenue this month', d: 0 },
+	stock: { x: 2, y: 9.75, w: 11, h: 4.75, icon: 'inventory_2', name: 'Low-stock products', d: 120 },
+	series: { x: 13.75, y: 2, w: 24.25, h: 12.5, icon: 'show_chart', name: 'Orders', d: 60 },
+	orders: { x: 2, y: 15.25, w: 18, h: 7.75, icon: 'receipt_long', name: 'Recent orders', d: 200 },
+	categories: { x: 20.75, y: 15.25, w: 17.25, h: 7.75, icon: 'bar_chart', name: 'Revenue by category', d: 260 },
+} satisfies Record<string, Tile>;
+---
+
+<div
+	class="sv sv-in position-relative overflow-hidden rounded"
+	data-sv
+	role="img"
+	aria-label="A CairnCMS insights dashboard for an online store, with metric panels for revenue this month and low-stock products, a time series of daily orders, a list of recent orders, and a bar chart of revenue by category."
+>
+	<div class="sv-op position-absolute d-flex flex-column sv-tile sv-rise" style={tile(tiles.revenue)}>
+		<div class="sv-op__head d-flex align-items-center fw-semibold text-nowrap"><Icon name={tiles.revenue.icon} /><span>{tiles.revenue.name}</span></div>
+		<div class="sv-tile__metric d-grid fw-bold lh-1">$48.2K</div>
+	</div>
+
+	<div class="sv-op position-absolute d-flex flex-column sv-tile sv-rise" style={tile(tiles.stock)}>
+		<div class="sv-op__head d-flex align-items-center fw-semibold text-nowrap"><Icon name={tiles.stock.icon} /><span>{tiles.stock.name}</span></div>
+		<div class="sv-tile__metric is-small d-grid fw-bold lh-1">7</div>
+	</div>
+
+	<div class="sv-op position-absolute d-flex flex-column sv-tile sv-rise" style={tile(tiles.series)}>
+		<div class="sv-op__head d-flex align-items-center fw-semibold text-nowrap">
+			<Icon name={tiles.series.icon} /><span>{tiles.series.name}</span>
+			<span class="flex-fill"></span>
+			<span class="sv-tile__note fw-normal">Last 30 days</span>
+		</div>
+		<div class="sv-in__chart position-relative">
+			<svg class="position-absolute top-0 start-0 w-100 h-100 overflow-visible" viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+				<defs>
+					<linearGradient id="sv-in-fill" x1="0" y1="0" x2="0" y2="1">
+						<stop offset="0" stop-color="currentColor" stop-opacity="0.25"></stop>
+						<stop offset="1" stop-color="currentColor" stop-opacity="0"></stop>
+					</linearGradient>
+				</defs>
+				{[0.25, 0.5, 0.75].map((f) => <line class="sv-in__grid" x1="0" x2={W} y1={H * f} y2={H * f} />)}
+				<path class="sv-in__area" d={area} fill="url(#sv-in-fill)" />
+				<path class="sv-in__line" d={line} pathLength="100" />
+			</svg>
+			<span class="sv-in__live position-absolute rounded-circle" style={`left: ${(last[0] / W) * 100}%; top: ${(last[1] / H) * 100}%`}></span>
+		</div>
+		<div class="sv-in__axis d-flex justify-content-between fw-semibold"><span>Sep 16</span><span>Oct 1</span><span>Oct 15</span></div>
+	</div>
+
+	<div class="sv-op position-absolute d-flex flex-column sv-tile sv-rise" style={tile(tiles.orders)}>
+		<div class="sv-op__head d-flex align-items-center fw-semibold text-nowrap"><Icon name={tiles.orders.icon} /><span>{tiles.orders.name}</span></div>
+		<ul class="sv-in__list m-0 list-unstyled">
+			{list.map(([order, total]) => <li class="d-flex justify-content-between text-nowrap"><span>{order}</span><span>{total}</span></li>)}
+		</ul>
+	</div>
+
+	<div class="sv-op position-absolute d-flex flex-column sv-tile sv-rise" style={tile(tiles.categories)}>
+		<div class="sv-op__head d-flex align-items-center fw-semibold text-nowrap"><Icon name={tiles.categories.icon} /><span>{tiles.categories.name}</span></div>
+		<div class="sv-in__bars d-flex">
+			{
+				bars.map(([label, value], i) => (
+					<div class="sv-in__bar d-flex flex-column justify-content-end align-items-stretch">
+						<span style={`--v: ${value}%; --d: ${700 + i * 80}`} />
+						<small class="fw-semibold text-center">{label}</small>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>

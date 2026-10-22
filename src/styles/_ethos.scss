@@ -1,0 +1,95 @@
+// Ethos: the intro film, with a link to build your cairn over the finished
+// cairn. Without JavaScript, or with reduced motion, the film rests on the
+// finished cairn with the link showing.
+
+$cairn-film-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+.cairn-film {
+	container-type: inline-size;
+	background-color: var(--c-surface-sunk);
+	border: 1px solid var(--c-border);
+	box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.35);
+}
+
+// A primary button, centered over the cairn and clear of its cap (y 235 in the
+// 1600 x 900 frame). It scales with the film. It centers with translate rather
+// than .translate-middle, whose transform would override its entrance.
+.cairn-film__message {
+	top: calc(150 / 900 * 100%);
+	translate: -50% -50%;
+	padding: 0.45em 1em;
+	font-size: clamp(0.8125rem, 2.4cqw, 1.125rem);
+}
+
+.cairn-film__control {
+	display: none;
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0.4rem;
+	background-color: rgba(28, 28, 28, 0.5);
+	backdrop-filter: blur(4px);
+	opacity: 0.8;
+	cursor: pointer;
+	transition: opacity 200ms ease;
+
+	&:hover,
+	&:focus-visible {
+		opacity: 1;
+	}
+
+	svg {
+		display: none;
+		fill: currentColor;
+	}
+}
+
+// With JavaScript: the control follows the film's state, and the link
+// waits for the finished cairn. It settles in after the film ends, and is
+// already there in the still.
+.cairn-film.is-armed {
+	.cairn-film__control {
+		display: block;
+	}
+
+	&[data-state='idle'],
+	&[data-state='paused'],
+	&[data-state='still'] {
+		.cairn-film__control .is-play {
+			display: block;
+		}
+	}
+
+	&[data-state='playing'] .cairn-film__control .is-pause,
+	&[data-state='ended'] .cairn-film__control .is-replay {
+		display: block;
+	}
+
+	&:not([data-state='ended'], [data-state='still']) {
+		.cairn-film__message {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	&[data-state='ended'] {
+		.cairn-film__message {
+			animation: cairn-message-in 700ms $cairn-film-ease 300ms both;
+
+			@media (prefers-reduced-motion: reduce) {
+				animation: none;
+			}
+		}
+	}
+}
+
+@keyframes cairn-message-in {
+	from {
+		opacity: 0;
+		transform: translateY(0.5em);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}

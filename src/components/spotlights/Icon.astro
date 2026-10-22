@@ -1,0 +1,13 @@
+---
+// One admin-app icon, drawn from the sprite that IconSprite renders once per page.
+import type { IconName } from './icons';
+
+interface Props {
+	name: IconName;
+	class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<svg class:list={['sv-i d-inline-block flex-shrink-0 align-middle', className]} viewBox="0 0 960 960" aria-hidden="true" focusable="false"><use href={`#sv-i-${name}`} /></svg>

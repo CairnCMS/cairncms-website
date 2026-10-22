@@ -1,0 +1,229 @@
+---
+// The file library beside the .env that points it at storage. Tabs switch the
+// storage driver; the library stays the same. Variable names follow the
+// storage section of the configuration docs.
+import Icon from './Icon.astro';
+
+const drivers = [
+	{
+		id: 'local',
+		label: 'Local',
+		env: [
+			['STORAGE_LOCATIONS', 'local'],
+			['STORAGE_LOCAL_DRIVER', 'local'],
+			['STORAGE_LOCAL_ROOT', './uploads'],
+		],
+	},
+	{
+		id: 's3',
+		label: 'S3',
+		env: [
+			['STORAGE_LOCATIONS', 's3'],
+			['STORAGE_S3_DRIVER', 's3'],
+			['STORAGE_S3_KEY', '...'],
+			['STORAGE_S3_SECRET', '...'],
+			['STORAGE_S3_BUCKET', 'waystone-assets'],
+			['STORAGE_S3_REGION', 'us-east-1'],
+		],
+	},
+	{
+		id: 'gcs',
+		label: 'GCS',
+		env: [
+			['STORAGE_LOCATIONS', 'gcs'],
+			['STORAGE_GCS_DRIVER', 'gcs'],
+			['STORAGE_GCS_KEY_FILENAME', './gcs-key.json'],
+			['STORAGE_GCS_BUCKET', 'waystone-assets'],
+		],
+	},
+	{
+		id: 'azure',
+		label: 'Azure',
+		env: [
+			['STORAGE_LOCATIONS', 'azure'],
+			['STORAGE_AZURE_DRIVER', 'azure'],
+			['STORAGE_AZURE_CONTAINER_NAME', 'assets'],
+			['STORAGE_AZURE_ACCOUNT_NAME', 'waystone'],
+			['STORAGE_AZURE_ACCOUNT_KEY', '...'],
+		],
+	},
+	{
+		id: 'cloudinary',
+		label: 'Cloudinary',
+		env: [
+			['STORAGE_LOCATIONS', 'cloudinary'],
+			['STORAGE_CLOUDINARY_DRIVER', 'cloudinary'],
+			['STORAGE_CLOUDINARY_CLOUD_NAME', 'waystone'],
+			['STORAGE_CLOUDINARY_API_KEY', '...'],
+			['STORAGE_CLOUDINARY_API_SECRET', '...'],
+		],
+	},
+];
+
+const files = [
+	{ name: 'launch-hero.jpg', meta: 'JPG · 2.4 MB', art: 'peaks' },
+	{ name: 'cairn.png', meta: 'PNG · 840 KB', art: 'cairn' },
+	{ name: 'q3-report.pdf', meta: 'PDF · 1.1 MB', art: 'pdf' },
+	{ name: 'trail-map.png', meta: 'PNG · 3.2 MB', art: 'map' },
+	{ name: 'team-offsite.jpg', meta: 'JPG · 4.7 MB', art: 'hills' },
+	{ name: 'intro.mp4', meta: 'MP4 · 38 MB', art: 'video' },
+];
+---
+
+<div class="sv sv-fi position-relative overflow-hidden rounded" data-sv data-sv-files role="group" aria-label="File library and storage configuration">
+	<div class="sv-page position-absolute sv-fi__library" aria-hidden="true">
+		<div class="sv-head d-flex align-items-center">
+			<span class="sv-round d-inline-grid flex-shrink-0 rounded-circle sv-round--soft"><Icon name="folder_special" /></span>
+			<span class="sv-title fw-semibold text-nowrap">File Library</span>
+			<span class="flex-fill"></span>
+			<span class="sv-chip d-inline-flex align-items-center rounded-pill text-nowrap font-monospace"><Icon name="cloud" /><span data-sv-files-location>local</span></span>
+		</div>
+
+		<div class="sv-fi__grid d-grid">
+			{
+				files.map((file, i) => (
+					<div class="sv-fi__card d-flex flex-column sv-rise" style={`--d: ${150 + i * 90}`}>
+						<div class={`sv-fi__thumb is-${file.art} position-relative d-grid overflow-hidden`}>
+							{file.art === 'peaks' && (
+								<svg class="position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 60 60" preserveAspectRatio="xMidYMax slice">
+									<circle class="sun" cx="42" cy="18" r="7" />
+									<path class="far" d="M0 44 L14 28 L24 36 L36 22 L52 38 L60 32 L60 60 L0 60 Z" />
+									<path class="near" d="M0 52 L12 42 L22 48 L34 38 L48 50 L60 44 L60 60 L0 60 Z" />
+								</svg>
+							)}
+							{file.art === 'cairn' && (
+								<svg class="position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 60 60">
+									<ellipse class="s1" cx="30" cy="46" rx="17" ry="6.5" />
+									<ellipse class="s2" cx="30" cy="35" rx="13" ry="5.5" />
+									<ellipse class="s3" cx="30" cy="25.5" rx="9.5" ry="4.75" />
+									<ellipse class="s4" cx="30" cy="17.5" rx="6.5" ry="4" />
+								</svg>
+							)}
+							{file.art === 'map' && (
+								<svg class="position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 60 60" preserveAspectRatio="xMidYMid slice">
+									<path class="contour" d="M-4 14 C10 6 22 18 34 12 S56 4 64 10" />
+									<path class="contour" d="M-4 26 C12 18 24 30 36 24 S54 16 64 22" />
+									<path class="contour" d="M-4 38 C10 32 26 42 38 36 S56 28 64 34" />
+									<path class="contour" d="M-4 50 C14 44 24 54 40 48 S56 42 64 46" />
+									<path class="trail" d="M8 56 C14 44 22 40 26 32 S38 20 48 8" />
+									<circle class="pin" cx="48" cy="8" r="2.6" />
+								</svg>
+							)}
+							{file.art === 'hills' && (
+								<svg class="position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 60 60" preserveAspectRatio="xMidYMax slice">
+									<path class="back" d="M0 40 C14 30 26 34 38 30 S54 28 60 32 L60 60 L0 60 Z" />
+									<path class="front" d="M0 48 C16 40 30 50 44 42 S56 40 60 42 L60 60 L0 60 Z" />
+								</svg>
+							)}
+							{file.art === 'pdf' && (
+								<span class="sv-fi__type d-flex flex-column align-items-center font-monospace text-uppercase">
+									<Icon name="description" />
+									pdf
+								</span>
+							)}
+							{file.art === 'video' && (
+								<span class="sv-fi__type d-flex flex-column align-items-center font-monospace text-uppercase">
+									<Icon name="movie" />
+									mp4
+								</span>
+							)}
+						</div>
+						<span class="sv-fi__name text-truncate fw-medium">{file.name}</span>
+						<span class="sv-fi__meta text-truncate">{file.meta}</span>
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="sv-fi__env position-absolute">
+		<div class="sv-fi__tabs d-flex" role="tablist" aria-label="Storage driver">
+			{
+				drivers.map((driver, i) => (
+					<button
+						type="button"
+						class="sv-fi__tab border-0 rounded-pill fw-medium"
+						role="tab"
+						id={`sv-fi-tab-${driver.id}`}
+						aria-selected={i === 0 ? 'true' : 'false'}
+						aria-controls={`sv-fi-${driver.id}`}
+						tabindex={i === 0 ? 0 : -1}
+						data-location={driver.id}
+					>
+						{driver.label}
+					</button>
+				))
+			}
+		</div>
+		<div class="sv-fi__file font-monospace">.env</div>
+		<div class="sv-fi__panes d-grid">
+			{
+				drivers.map((driver, i) => (
+					<pre
+						class:list={['sv-fi__code m-0 font-monospace overflow-hidden', i === 0 && 'is-active']}
+						role="tabpanel"
+						id={`sv-fi-${driver.id}`}
+						aria-labelledby={`sv-fi-tab-${driver.id}`}
+						tabindex="0"
+					>{driver.env.map(([key, value]) => <span class="sv-fi__line d-block"><span class="k">{key}</span>=<span class="v">&quot;{value}&quot;</span></span>)}</pre>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<script>
+	// Tabs switch the driver. Once the visual plays, they also step through
+	// each driver once on their own, unless someone picks one first.
+	for (const root of document.querySelectorAll<HTMLElement>('[data-sv-files]')) {
+		const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+		const panes = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+		const location = root.querySelector<HTMLElement>('[data-sv-files-location]');
+		let current = 0;
+		let timer: number | undefined;
+		let visible = false;
+
+		const select = (index: number) => {
+			current = index;
+			tabs.forEach((tab, i) => {
+				tab.setAttribute('aria-selected', String(i === index));
+				tab.tabIndex = i === index ? 0 : -1;
+			});
+			panes.forEach((pane, i) => pane.classList.toggle('is-active', i === index));
+			if (location) location.textContent = tabs[index].dataset.location ?? '';
+		};
+
+		const stop = () => {
+			window.clearInterval(timer);
+			timer = undefined;
+		};
+
+		tabs.forEach((tab, i) => {
+			tab.addEventListener('click', () => {
+				stop();
+				select(i);
+			});
+			tab.addEventListener('keydown', (event) => {
+				const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+				if (!step) return;
+				stop();
+				const next = (i + step + tabs.length) % tabs.length;
+				tabs[next].focus();
+				select(next);
+			});
+		});
+
+		root.addEventListener('sv:play', () => {
+			new IntersectionObserver((entries) => {
+				visible = entries.some((e) => e.isIntersecting);
+			}).observe(root);
+			visible = true;
+			let steps = 0;
+			timer = window.setInterval(() => {
+				if (!visible || root.matches(':hover, :focus-within')) return;
+				select((current + 1) % tabs.length);
+				if (++steps === tabs.length) stop();
+			}, 3600);
+		});
+	}
+</script>

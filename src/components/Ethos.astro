@@ -1,16 +1,22 @@
 ---
+// The project's name and how to get involved, beside the intro film: three
+// hands and three stones build the cairn, then a link to get started appears
+// over the finished cairn. The film is the accepted v19 intro, cut before the
+// logo card at the last still frame.
 const actions = [
 	'Join GitHub discussions to share ideas',
 	'Open issues for bugs or feature requests',
 	'Improve the docs to help others adopt',
 	'Contribute code once the approach is clear',
 ];
+
+const contributing = 'https://github.com/CairnCMS/cairncms/blob/main/CONTRIBUTING.md';
 ---
 
 <section id="community" class="section-pad section-border-top">
 	<div class="container">
 		<div class="row g-4 g-lg-5 align-items-center">
-			<div class="col-lg-6">
+			<div class="col-lg-5">
 				<h2>A Project Named for What it Aims to Be</h2>
 				<p class="lead mt-3 mb-4">
 					A <strong>cairn</strong> <span class="text-muted">/kɛrn/</span>
@@ -24,14 +30,8 @@ const actions = [
 					marks a route with something durable that no single person owns, and that anyone can find. CairnCMS was named for that idea.
 					<audio src="/cairn.ogg" preload="none" data-pronounce-audio></audio>
 				</p>
-				<div class="d-flex flex-wrap gap-3">
-					<a class="btn btn-primary" href="https://github.com/CairnCMS/cairncms" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-					<a class="btn btn-outline-dark" href="https://github.com/CairnCMS/cairncms/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribute</a>
-				</div>
-			</div>
-			<div class="col-lg-6">
 				<span class="eyebrow">Get involved</span>
-				<ul class="community-list mt-3">
+				<ul class="community-list mt-2">
 					{
 						actions.map((text, i) => (
 							<li>
@@ -41,6 +41,37 @@ const actions = [
 						))
 					}
 				</ul>
+				<div class="d-flex flex-wrap gap-3 mt-4">
+					<a class="btn btn-primary" href="https://github.com/CairnCMS/cairncms" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+					<a class="btn btn-outline-dark" href={contributing} target="_blank" rel="noopener noreferrer">Contribute</a>
+				</div>
+			</div>
+
+			<div class="col-lg-7">
+				<figure class="cairn-film position-relative m-0 overflow-hidden rounded" data-cairn-film>
+					<div class="ratio ratio-16x9">
+						<video
+							class="object-fit-cover"
+							muted
+							playsinline
+							preload="none"
+							poster="/media/cairn-intro-poster.jpg"
+							data-start-poster="/media/cairn-intro-start.jpg"
+							aria-label="Three people, one after another, each place a stone on the last until a cairn stands in a painted landscape."
+						>
+							<source src="/media/cairn-intro.webm" type="video/webm" />
+							<source src="/media/cairn-intro.mp4" type="video/mp4" />
+						</video>
+					</div>
+
+					<a class="btn btn-primary cairn-film__message position-absolute start-50 text-nowrap" href="/docs/getting-started/">Build your cairn <span aria-hidden="true">&rarr;</span></a>
+
+					<button type="button" class="cairn-film__control position-absolute bottom-0 end-0 m-3 text-white border-0 rounded-circle" data-cairn-film-control aria-label="Play">
+						<svg class="is-play w-100 h-100" viewBox="0 -960 960 960" aria-hidden="true"><path d="M340-238.39v-487.68l383.07 243.84L340-238.39Zm45.39-243.84Zm0 161 253.99-161-253.99-161v322Z" /></svg>
+						<svg class="is-pause w-100 h-100" viewBox="0 -960 960 960" aria-hidden="true"><path d="M533.85-220v-520H740v520H533.85ZM220-220v-520h206.54v520H220Zm359.23-45.39h115.38v-429.22H579.23v429.22Zm-313.84 0h115.76v-429.22H265.39v429.22Zm0-429.22v429.22-429.22Zm313.84 0v429.22-429.22Z" /></svg>
+						<svg class="is-replay w-100 h-100" viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-100q-70.77 0-132.61-26.46-61.85-26.46-108.16-72.77-46.31-46.31-72.77-108.16Q140-369.23 140-440h45.39q0 122.69 85.96 208.65 85.96 85.96 208.65 85.96 122.69 0 208.65-85.96 85.96-85.96 85.96-208.65 0-122.69-84.03-208.65-84.04-85.96-206.73-85.96h-23.39l71.85 71.46-31.39 31.61-127.38-127.77 128.15-127.76 31.39 30.99L457-780h23q70.77 0 132.61 26.46 61.85 26.46 108.16 72.77 46.31 46.31 72.77 108.16Q820-510.77 820-440q0 70.77-26.46 132.61-26.46 61.85-72.77 108.16-46.31 46.31-108.16 72.77Q550.77-100 480-100Z" /></svg>
+					</button>
+				</figure>
 			</div>
 		</div>
 	</div>
@@ -55,5 +86,75 @@ const actions = [
 			audio.currentTime = 0;
 			audio.play().catch((err) => console.error('Failed to play pronunciation', err));
 		});
+	}
+
+	// The film plays once when it scrolls into view and rests on the finished
+	// cairn, where the message appears. With reduced motion it starts
+	// there instead, as it does when the browser won't autoplay. The control
+	// plays, pauses, or replays. State follows the video's own events.
+	type State = 'idle' | 'playing' | 'paused' | 'ended' | 'still';
+	const labels: Record<State, string> = {
+		idle: 'Play',
+		playing: 'Pause',
+		paused: 'Play',
+		ended: 'Replay',
+		still: 'Play',
+	};
+
+	for (const film of document.querySelectorAll<HTMLElement>('[data-cairn-film]')) {
+		const video = film.querySelector('video');
+		const control = film.querySelector<HTMLButtonElement>('[data-cairn-film-control]');
+		if (!video || !control) continue;
+
+		const finishedPoster = video.poster;
+		let state: State = 'idle';
+		const set = (next: State) => {
+			state = next;
+			film.dataset.state = next;
+			control.setAttribute('aria-label', labels[next]);
+		};
+
+		// The finished cairn, without playing.
+		const rest = () => {
+			video.poster = finishedPoster;
+			set('still');
+		};
+
+		const play = () => {
+			if (video.ended) video.currentTime = 0;
+			video.play().catch((err: DOMException) => {
+				// A pause while loading interrupts play; anything else means the
+				// browser won't play it.
+				if (err.name !== 'AbortError') rest();
+			});
+		};
+
+		video.addEventListener('play', () => set('playing'));
+		video.addEventListener('pause', () => {
+			if (!video.ended) set('paused');
+		});
+		video.addEventListener('ended', () => set('ended'));
+		control.addEventListener('click', () => (state === 'playing' ? video.pause() : play()));
+
+		film.classList.add('is-armed');
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			rest();
+			continue;
+		}
+
+		// Start from the empty landscape rather than the finished cairn.
+		if (video.dataset.startPoster) video.poster = video.dataset.startPoster;
+		set('idle');
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (!entries.some((e) => e.isIntersecting)) return;
+				observer.disconnect();
+				if (state === 'idle') play();
+			},
+			{ threshold: 0.6 }
+		);
+		observer.observe(film);
 	}
 </script>
