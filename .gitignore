@@ -26,3 +26,8 @@ pnpm-debug.log*
 
 # dev scratch
 .local/
+
+# AI agent settings and skills
+.claude/
+.agents/
+skills-lock.json

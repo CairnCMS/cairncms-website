@@ -10,3 +10,6 @@ dist
 .env.*
 *.log
 README.md
+.claude
+.agents
+skills-lock.json
