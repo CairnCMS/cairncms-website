@@ -13,14 +13,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/starlight": "^0.38.4",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/starlight": "^0.42.6",
     "@fontsource/ibm-plex-sans": "^5.2.8",
-    "astro": "^6.4.4",
+    "astro": "^7.3.8",
     "bootstrap": "^5.3.8",
     "sass": "^1.99.0",
-    "starlight-page-actions": "^0.6.0",
-    "starlight-theme-rapide": "^0.5.2"
+    "starlight-page-actions": "^0.7.1",
+    "starlight-theme-rapide": "^0.6.0"
   }
 }

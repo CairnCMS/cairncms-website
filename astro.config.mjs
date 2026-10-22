@@ -7,6 +7,9 @@ import starlightThemeRapide from 'starlight-theme-rapide';
 
 export default defineConfig({
 	site: 'https://cairncms.dev',
+	// Astro 7 strips whitespace between elements by JSX rules by default, which
+	// drops spaces the templates rely on. Keep the HTML-aware compression.
+	compressHTML: true,
 	integrations: [
 		sitemap(),
 		starlight({
@@ -55,7 +58,7 @@ export default defineConfig({
 				},
 			],
 			sidebar: [
-				{ label: 'Getting started', autogenerate: { directory: 'docs/getting-started' } },
+				{ label: 'Getting started', items: [{ autogenerate: { directory: 'docs/getting-started' } }] },
 				{
 					label: 'Guides',
 					collapsed: true,
@@ -68,9 +71,9 @@ export default defineConfig({
 						{ slug: 'docs/guides/permissions' },
 						{ slug: 'docs/guides/settings' },
 						{ slug: 'docs/guides/users' },
-						{ label: 'Content Module', collapsed: true, autogenerate: { directory: 'docs/guides/content' } },
-						{ label: 'Data Model', collapsed: true, autogenerate: { directory: 'docs/guides/data-model' } },
-						{ label: 'Flows', collapsed: true, autogenerate: { directory: 'docs/guides/flows' } },
+						{ label: 'Content Module', collapsed: true, items: [{ autogenerate: { directory: 'docs/guides/content', collapsed: true } }] },
+						{ label: 'Data Model', collapsed: true, items: [{ autogenerate: { directory: 'docs/guides/data-model', collapsed: true } }] },
+						{ label: 'Flows', collapsed: true, items: [{ autogenerate: { directory: 'docs/guides/flows', collapsed: true } }] },
 					],
 				},
 				{
@@ -91,19 +94,19 @@ export default defineConfig({
 								{
 									label: 'App extensions',
 									collapsed: true,
-									autogenerate: { directory: 'docs/develop/extensions/app-extensions' },
+									items: [{ autogenerate: { directory: 'docs/develop/extensions/app-extensions', collapsed: true } }],
 								},
 								{
 									label: 'Server extensions',
 									collapsed: true,
-									autogenerate: { directory: 'docs/develop/extensions/server-extensions' },
+									items: [{ autogenerate: { directory: 'docs/develop/extensions/server-extensions', collapsed: true } }],
 								},
 								{ slug: 'docs/develop/extensions/bundles' },
 							],
 						},
 					],
 				},
-				{ label: 'Manage', collapsed: true, autogenerate: { directory: 'docs/manage' } },
+				{ label: 'Manage', collapsed: true, items: [{ autogenerate: { directory: 'docs/manage', collapsed: true } }] },
 				{
 					label: 'API reference',
 					collapsed: true,
@@ -116,11 +119,11 @@ export default defineConfig({
 						{ slug: 'docs/api/filters-and-queries' },
 						{ slug: 'docs/api/graphql' },
 						{ slug: 'docs/api/sdk' },
-						{ label: 'Realtime', collapsed: true, autogenerate: { directory: 'docs/api/realtime' } },
-						{ label: 'System Collections', collapsed: true, autogenerate: { directory: 'docs/api/system-collections' } },
+						{ label: 'Realtime', collapsed: true, items: [{ autogenerate: { directory: 'docs/api/realtime', collapsed: true } }] },
+						{ label: 'System Collections', collapsed: true, items: [{ autogenerate: { directory: 'docs/api/system-collections', collapsed: true } }] },
 					],
 				},
-				{ label: 'Contributing', collapsed: true, autogenerate: { directory: 'docs/contributing' } },
+				{ label: 'Contributing', collapsed: true, items: [{ autogenerate: { directory: 'docs/contributing', collapsed: true } }] },
 			],
 		}),
 	],
