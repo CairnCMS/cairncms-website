@@ -43,7 +43,7 @@ const modes: Mode[] = [
 		title: 'you@waystone: ~/waystone',
 		prompt: '~/waystone $',
 		lines: [
-			{ k: 'cmd', text: 'cairncms config apply --url https://staging.waystone.dev --yes ./config' },
+			{ k: 'cmd', text: 'cairncms config apply ./config --url https://staging.waystone.dev --yes' },
 			{ k: 'out', text: 'The following changes will be applied:' },
 			{ k: 'out', text: 'Permissions:', cls: 'head' },
 			{ k: 'out', text: '  - Create editor / articles / update', cls: 'create' },
@@ -59,11 +59,11 @@ const modes: Mode[] = [
 		prompt: '$',
 		lines: [
 			{ k: 'note', text: '# CAIRNCMS_TOKEN comes from the repository secrets' },
-			{ k: 'cmd', text: 'cairncms config apply --dry-run --format json \\' },
-			{ k: 'cont', text: '    --url "$PROD_URL" ./config > plan.json || [ $? -eq 1 ]' },
-			{ k: 'cmd', text: `jq -e '.changes | all(.operation != "delete")' plan.json` },
+			{ k: 'cmd', text: 'cairncms config apply ./config --url "$PROD_URL" \\' },
+			{ k: 'cont', text: '    --dry-run --format json > plan.json || [ $? -eq 1 ]' },
+			{ k: 'cmd', text: `jq -e '.protections == [] and all(.changes[]; .operation != "delete")' plan.json` },
 			{ k: 'out', text: 'true' },
-			{ k: 'cmd', text: 'cairncms config apply --url "$PROD_URL" --yes ./config' },
+			{ k: 'cmd', text: 'cairncms config apply ./config --url "$PROD_URL" --yes' },
 			{ k: 'out', text: 'Plan: 2 to create, 0 to update, 0 to delete.', cls: 'plan' },
 		],
 	},
@@ -89,7 +89,7 @@ const edges = [
 ];
 ---
 
-<div class="sv sv-cfg is-mode-local position-relative overflow-hidden rounded" data-sv data-sv-config role="group" aria-label="Config as code: snapshot locally, apply remotely, or apply from CI">
+<div class="sv sv-cfg is-mode-local position-relative overflow-hidden rounded" data-sv data-sv-config role="group" aria-label="Config-as-code: snapshot locally, apply remotely, or apply from CI">
 	<div class="sv-cfg__map position-absolute top-0 start-0 w-100 h-100" aria-hidden="true">
 		<svg class="sv-cfg__edges position-absolute top-0 start-0 w-100 h-100 overflow-visible" viewBox="0 0 400 250">
 			{
@@ -121,7 +121,7 @@ const edges = [
 	<div class="sv-cfg__term position-absolute d-flex flex-column overflow-hidden">
 		<div class="sv-cfg__bar d-flex flex-shrink-0 align-items-center">
 			<span class="sv-cfg__dots d-flex" aria-hidden="true"><i class="rounded-circle"></i><i class="rounded-circle"></i><i class="rounded-circle"></i></span>
-			<div class="sv-cfg__tabs d-flex" role="tablist" aria-label="Ways to run config as code">
+			<div class="sv-cfg__tabs d-flex" role="tablist" aria-label="Ways to run config-as-code">
 				{
 					modes.map((mode, i) => (
 						<button

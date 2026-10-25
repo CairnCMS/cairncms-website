@@ -1,12 +1,12 @@
 ---
 // The Formatter extension at work. Its operation drawer lists three rules; an
-// editor beside it creates a location with untidy values and saves. The
+// editor beside it creates a location with raw values and saves. The
 // blocking flow runs the rules top to bottom, and each field settles into its
 // formatted value as its rule lights.
 import Icon from './Icon.astro';
 
 const rules = [
-	{ path: 'slug', transform: 'text.slugify' },
+	{ path: 'trail_length', transform: 'number.round' },
 	{ path: 'email', transform: 'text.lowercase' },
 	{ path: 'phone', transform: 'phone.format' },
 ];
@@ -14,7 +14,7 @@ const rules = [
 // Fields with a rule show their typed value until that rule runs.
 const fields: { label: string; value: string; typed?: string; rule?: number }[] = [
 	{ label: 'Name', value: 'Black Elk Trailhead' },
-	{ label: 'Slug', typed: 'Black Elk Trailhead!', value: 'black-elk-trailhead', rule: 0 },
+	{ label: 'Trail length (mi)', typed: '3.4728', value: '3.5', rule: 0 },
 	{ label: 'Email', typed: 'Guides@Waystone.DEV', value: 'guides@waystone.dev', rule: 1 },
 	{ label: 'Phone', typed: '(201) 555-0123', value: '+12015550123', rule: 2 },
 ];
@@ -24,7 +24,7 @@ const fields: { label: string; value: string; typed?: string; rule?: number }[] 
 	class="sv sv-fm position-relative overflow-hidden rounded"
 	data-sv
 	role="img"
-	aria-label="A Formatter operation in a CairnCMS flow, with rules that slugify a slug, lowercase an email, and format a phone number. An editor saves a new location with untidy values, and each field is formatted in turn as its rule runs."
+	aria-label="A Formatter operation in a CairnCMS flow, with rules that round a trail length, lowercase an email, and format a phone number. An editor saves a new location with raw values, and each field is formatted in turn as its rule runs."
 >
 	<div class="sv-page sv-fm__op position-absolute d-flex flex-column sv-rise">
 		<div class="sv-head d-flex align-items-center">
