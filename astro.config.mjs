@@ -4,6 +4,47 @@ import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 import starlightPageActions from 'starlight-page-actions';
 import starlightThemeRapide from 'starlight-theme-rapide';
+import { existsSync } from 'node:fs';
+
+// CairnCMS 1.7.0 turns the config-as-code page into a section. Deploys build
+// against whichever cairncms docs were synced, and cairncms main keeps the
+// single page until that release, so Manage lists the section only when it is
+// there. Autogenerate would label its folders by their raw names.
+const hasConfigSection = existsSync(new URL('./src/content/docs/docs/manage/config-as-code/index.md', import.meta.url));
+
+const manageItems = hasConfigSection
+	? [
+			{ slug: 'docs/manage' },
+			{ slug: 'docs/manage/configuration' },
+			{ slug: 'docs/manage/deployment' },
+			{ slug: 'docs/manage/security-hardening' },
+			{ slug: 'docs/manage/backups' },
+			{ slug: 'docs/manage/upgrades' },
+			{ slug: 'docs/manage/migration-between-instances' },
+			{ slug: 'docs/manage/schema-as-code' },
+			{
+				label: 'Config-as-code',
+				collapsed: true,
+				items: [
+					{ slug: 'docs/manage/config-as-code' },
+					{ slug: 'docs/manage/config-as-code/first-apply' },
+					{ slug: 'docs/manage/config-as-code/deployments' },
+					{ slug: 'docs/manage/config-as-code/scope-and-deletions' },
+					{ slug: 'docs/manage/config-as-code/remote' },
+					{ slug: 'docs/manage/config-as-code/cli' },
+					{ slug: 'docs/manage/config-as-code/http-api' },
+					{ slug: 'docs/manage/config-as-code/output' },
+					{ slug: 'docs/manage/config-as-code/recovery' },
+					{ slug: 'docs/manage/config-as-code/migration' },
+					{
+						label: 'Files and resources',
+						collapsed: true,
+						items: [{ autogenerate: { directory: 'docs/manage/config-as-code/resources', collapsed: true } }],
+					},
+				],
+			},
+		]
+	: [{ autogenerate: { directory: 'docs/manage', collapsed: true } }];
 
 export default defineConfig({
 	site: 'https://cairncms.dev',
@@ -91,6 +132,7 @@ export default defineConfig({
 								{ slug: 'docs/develop/extensions' },
 								{ slug: 'docs/develop/extensions/creating-extensions' },
 								{ slug: 'docs/develop/extensions/settings' },
+								{ slug: 'docs/develop/extensions/bundles' },
 								{
 									label: 'App extensions',
 									collapsed: true,
@@ -101,12 +143,11 @@ export default defineConfig({
 									collapsed: true,
 									items: [{ autogenerate: { directory: 'docs/develop/extensions/server-extensions', collapsed: true } }],
 								},
-								{ slug: 'docs/develop/extensions/bundles' },
 							],
 						},
 					],
 				},
-				{ label: 'Manage', collapsed: true, items: [{ autogenerate: { directory: 'docs/manage', collapsed: true } }] },
+				{ label: 'Manage', collapsed: true, items: manageItems },
 				{
 					label: 'API reference',
 					collapsed: true,
